@@ -8,10 +8,13 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
+enum BorderLeftOrRight { left, right }
+
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppUtils.White,
       appBar: AppBar(
         backgroundColor: AppUtils.PrimaryColor,
         automaticallyImplyLeading: false,
@@ -33,55 +36,126 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Wrap(
-              spacing: 15,
-              runSpacing: 15,
-              runAlignment: WrapAlignment.center,
-              children: [
-                categoryCard('Products', Icons.shopping_cart_outlined, 24),
-                categoryCard(
-                    'Clients', Icons.supervised_user_circle_outlined, 16),
-                categoryCard('Invoices', Icons.assignment_outlined, 08),
-                categoryCard('Notifications', Icons.notifications_outlined, 03),
-                categoryCard('Users', Icons.people_outline, 07),
-              ],
-            )
-          ],
+        padding: EdgeInsets.symmetric(vertical: 20),
+        margin: EdgeInsets.only(bottom: 80),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                                'assets/images/img-requests-recieved-request1 (1).png'),
+                            fit: BoxFit.fill),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 13,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Admin Name',
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                          Text(
+                            'admin@email.com',
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppUtils.DarkColor.withOpacity(0.7)),
+                          ),
+                          // Text(
+                          //   '+237 673-827-298',
+                          //   style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          //       fontWeight: FontWeight.w600,
+                          //       color: AppUtils.DarkColor.withOpacity(0.4), fontSize: 10),
+                          // )
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.person_outline, color: AppUtils.DarkColor.withOpacity(0.7),)
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Wrap(
+                runAlignment: WrapAlignment.center,
+                children: [
+                  categoryCard('Products', Icons.shopping_cart, 24,
+                      borderLRSide: BorderLeftOrRight.right),
+                  categoryCard('Clients', Icons.supervised_user_circle, 16,
+                      borderLRSide: BorderLeftOrRight.left),
+                  categoryCard('Invoices', Icons.assignment, 08,
+                      borderLRSide: BorderLeftOrRight.right),
+                  categoryCard('Notifications', Icons.notifications, 03,
+                      borderLRSide: BorderLeftOrRight.left),
+                  categoryCard('Users', Icons.people, 07,
+                      borderLRSide: BorderLeftOrRight.right,
+                      width: double.infinity),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget categoryCard(String title, IconData icon, int count) {
+  Widget categoryCard(String title, IconData icon, int count,
+      {double? width, BorderLeftOrRight? borderLRSide}) {
     return Container(
       height: 140,
-      width: 140,
+      constraints: BoxConstraints(
+          minWidth: width ?? MediaQuery.of(context).size.width * 0.5),
       decoration: BoxDecoration(
-        // color: Color.fromARGB(255, 17, 255, 25).withOpacity(0.3),
-        gradient: LinearGradient(colors: [
-          Color.fromARGB(255, 17, 255, 25).withOpacity(0.6),
-          Color.fromARGB(255, 17, 255, 25).withOpacity(0.1),
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-        // border: Border.all(width: 3, color: AppUtils.SecondaryGray),
-        borderRadius: BorderRadius.circular(20),
+        color: AppUtils.White,
+        border: Border(
+            top: BorderSide(color: AppUtils.SecondaryGray.withOpacity(0.3)),
+            bottom: BorderSide(color: AppUtils.SecondaryGray.withOpacity(0.3)),
+            left: borderLRSide == BorderLeftOrRight.left
+                ? BorderSide(color: AppUtils.SecondaryGray.withOpacity(0.3))
+                : BorderSide.none,
+            right: borderLRSide == BorderLeftOrRight.right
+                ? BorderSide(color: AppUtils.SecondaryGray.withOpacity(0.3))
+                : BorderSide.none),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon),
+          Icon(
+            icon,
+            color: AppUtils.DarkColor.withOpacity(0.4),
+          ),
           Text(
             title,
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                color: AppUtils.DarkColor.withOpacity(0.6),
+                fontWeight: FontWeight.w700),
           ),
           Text(
             '$count',
-            style: Theme.of(context).textTheme.headline5,
+            textAlign: TextAlign.start,
+            style: Theme.of(context)
+                .textTheme
+                .headline3!
+                .copyWith(color: AppUtils.DarkColor),
           )
         ],
       ),

@@ -5,8 +5,6 @@ import 'package:truelife_mobile/widgets/primary_button.dart';
 import 'package:truelife_mobile/widgets/text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/user.dart';
-
 class LogIn extends StatefulWidget {
   @override
   _LogInState createState() => new _LogInState();
@@ -55,11 +53,13 @@ class _LogInState extends State<LogIn> {
             children: [
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.only(top: 35),
-                constraints: BoxConstraints(minHeight: 245),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.only(top: 35),
+                constraints: const BoxConstraints(minHeight: 245),
+                decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/images/top_blue_bg.png'),
+                        image: AssetImage(
+                          'assets/images/top_blue_bg.png',
+                        ),
                         fit: BoxFit.fill)),
                 child: Stack(
                   children: [
@@ -183,8 +183,9 @@ class _LogInState extends State<LogIn> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          final Uri url = Uri.parse('https://example.com'); // Replace with your desired URL
-                          
+                          final Uri url = Uri.parse(
+                              'https://example.com'); // Replace with your desired URL
+
                           _launchInBrowser(url);
                         },
                         child: Align(
@@ -201,7 +202,12 @@ class _LogInState extends State<LogIn> {
                       PrimaryButton(
                         buttonText: 'Login',
                         onClickBtn: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeNav(),),);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeNav(),
+                            ),
+                          );
                         },
                       ),
                       SizedBox(

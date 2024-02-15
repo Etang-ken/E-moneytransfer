@@ -4,7 +4,7 @@ import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class AppUtils {
-  static const Color PrimaryColor = Color(0xff019F01);
+  static const Color PrimaryColor = Color(0xFF008100);
   static Color PrimaryLight = Color(0xffEAE3E8);
   static Color GreenColor = Color(0xff019F01);
   static Color YellowColor = Color(0xffFF9719);
@@ -16,7 +16,7 @@ class AppUtils {
   static const Color PalePink = Color.fromRGBO(252, 228, 236, 1);
   static const Color TertiaryExtraLight = Color.fromARGB(255, 222, 244, 253);
   static Color Secondary = Color(0xFF696969);
-  static Color SecondaryGrayExtraLight = Color(0xFFE4E4E4);
+  static Color SecondaryGrayExtraLight = Color.fromARGB(255, 245, 245, 245);
   static Color White = Color(0xFFFFFFFF);
 
   static showSnackBar(BuildContext context, ContentType type, String message) {

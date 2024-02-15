@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // primarySwatch: MaterialColor(),
         // Define the default brightness and colors.
-        primaryColor: Color(0xff0488DD),
+        primaryColor: Color(0xFF008100),
         hintColor: Color(0xffFF9719),
-        backgroundColor: Color(0xff0488DD).withOpacity(0.03),
+        backgroundColor: Color(0xFF008100).withOpacity(0.03),
         unselectedWidgetColor: Colors.grey,
         primaryColorDark: Color(0xff000000),
         primaryColorLight: Color(0xffffffff),
