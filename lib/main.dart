@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:truelife_mobile/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //print('User granted permission: ${settings.authorizationStatus}');
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Color(0xff0488DD), // navigation bar color
     statusBarColor: Color(0xff0488DD), // status bar color
   ));
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
               fontStyle: FontStyle.normal,
               fontWeight: FontWeight.w500,
               fontSize: 16),
-    
+
           // heading styles
           headline1: TextStyle(
               color: Color(0xff212121),
@@ -61,7 +60,7 @@ class MyApp extends StatelessWidget {
               fontStyle: FontStyle.normal,
               fontSize: 30,
               fontWeight: FontWeight.w700),
-    
+
           // for secondary headers that are black
           headline2: TextStyle(
               color: Color(0xff212121),
@@ -69,7 +68,7 @@ class MyApp extends StatelessWidget {
               fontStyle: FontStyle.normal,
               fontSize: 26,
               fontWeight: FontWeight.w700),
-    
+
           // for secondary headers that are purple
           headline3: TextStyle(
               color: Color(0xff212121),
@@ -77,7 +76,7 @@ class MyApp extends StatelessWidget {
               fontStyle: FontStyle.normal,
               fontSize: 23,
               fontWeight: FontWeight.w700),
-    
+
           // used for buttons
           headline4: TextStyle(
               color: Color(0xff212121),
@@ -86,7 +85,7 @@ class MyApp extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.4),
-    
+
           headline5: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',

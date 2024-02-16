@@ -14,7 +14,7 @@ class AppUtils {
   static const Color RedColor = Color(0xFFEC0000);
   static const Color SecondaryGray = Color(0xFF868686);
   static const Color PalePink = Color.fromRGBO(252, 228, 236, 1);
-  static const Color TertiaryExtraLight = Color.fromARGB(255, 222, 244, 253);
+  static const Color TertiaryExtraLight = Color.fromARGB(255, 231, 255, 234);
   static Color Secondary = Color(0xFF696969);
   static Color SecondaryGrayExtraLight = Color.fromARGB(255, 245, 245, 245);
   static Color White = Color(0xFFFFFFFF);

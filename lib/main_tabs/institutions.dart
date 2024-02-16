@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truelife_mobile/helper/app_utils.dart';
+import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
 
 class Institutions extends StatefulWidget {
   const Institutions({super.key});
@@ -23,10 +24,7 @@ class _InstitutionsState extends State<Institutions> {
                       .textTheme
                       .headline4
                       ?.copyWith(color: Colors.white)),
-              Icon(
-                Icons.notifications_outlined,
-                color: AppUtils.White,
-              )
+              NotificationIcon(context: context)
             ],
           ),
         ),

@@ -58,60 +58,45 @@ class _LogInState extends State<LogIn> {
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(
-                          'assets/images/top_blue_bg.png',
+                          'assets/images/top_bg.png',
                         ),
                         fit: BoxFit.fill)),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 10,
-                      child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.arrow_circle_left_rounded)),
-                    ),
-                    const Center(
-                        child: Padding(
-                      padding: const EdgeInsets.only(top: 25.0),
-                      child: Center(
-                        child: Icon(
-                          Icons.home,
-                          size: 50,
-                        ),
-                      ),
-                    ))
-                  ],
-                ),
+                child: Center(
+                   child: Padding(
+                 padding:  EdgeInsets.only(top: 0.0),
+                 child: Center(
+                   child: Image.asset('assets/images/logo-sm.png', height: 150,),
+                 ),
+                                    )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Container(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 18.0,
                   ),
                   child: Column(
                     children: [
                       Text(
-                        'Welcome Back',
+                        'Welcome',
                         style: Theme.of(context)
                             .textTheme
                             .headline2!
                             .copyWith(fontWeight: FontWeight.w800),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8.0,
                       ),
                       Text(
-                        'Login into your Pro4Home account...',
+                        'Login into your Truelife account...',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: AppUtils.DarkColor.withOpacity(0.6),
                             fontWeight: FontWeight.w400),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50.0,
                       ),
                       Stack(
@@ -123,11 +108,11 @@ class _LogInState extends State<LogIn> {
                               formData['phone'] = value ?? "";
                             },
                             contentPadding:
-                                EdgeInsets.only(left: 45, top: 17, bottom: 17),
+                                const EdgeInsets.only(left: 45, top: 17, bottom: 17),
                           ),
                           Positioned(
                             child: Padding(
-                                padding: EdgeInsets.only(left: 10, top: 15),
+                                padding: const EdgeInsets.only(left: 10, top: 15),
                                 child: Icon(
                                   Icons.call_outlined,
                                   color: AppUtils.DarkColor.withOpacity(0.8),
@@ -135,7 +120,7 @@ class _LogInState extends State<LogIn> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Stack(
@@ -146,12 +131,12 @@ class _LogInState extends State<LogIn> {
                               formData['password'] = value ?? "";
                             },
                             hideText: showPassword,
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 45, vertical: 17),
                           ),
                           Positioned(
                             child: Padding(
-                                padding: EdgeInsets.only(left: 10, top: 15),
+                                padding: const EdgeInsets.only(left: 10, top: 15),
                                 child: Icon(
                                   Icons.lock_outline_rounded,
                                   color: AppUtils.DarkColor.withOpacity(0.8),
@@ -160,7 +145,7 @@ class _LogInState extends State<LogIn> {
                           Positioned(
                             right: 3,
                             child: Padding(
-                                padding: EdgeInsets.only(right: 5, top: 15),
+                                padding: const EdgeInsets.only(right: 5, top: 15),
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -178,7 +163,7 @@ class _LogInState extends State<LogIn> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       GestureDetector(
@@ -196,7 +181,7 @@ class _LogInState extends State<LogIn> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 65,
                       ),
                       PrimaryButton(
@@ -210,10 +195,10 @@ class _LogInState extends State<LogIn> {
                           );
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 80,
                       ),
                     ],

@@ -3,14 +3,14 @@ import 'package:truelife_mobile/helper/app_utils.dart';
 import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
 import 'package:truelife_mobile/main_tabs/widgets/transaction.dart';
 
-class Transactions extends StatefulWidget {
-  const Transactions({super.key});
+class ClientTransactions extends StatefulWidget {
+  const ClientTransactions({super.key});
 
   @override
-  State<Transactions> createState() => _TransactionsState();
+  State<ClientTransactions> createState() => _ClientTransactionsState();
 }
 
-class _TransactionsState extends State<Transactions> {
+class _ClientTransactionsState extends State<ClientTransactions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +22,27 @@ class _TransactionsState extends State<Transactions> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Transactions",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.chevron_left,
+                    color: AppUtils.White,
+                    size: 30,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  "Client Transactions",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline4
+                      ?.copyWith(color: Colors.white),
+                ),
+              ],
             ),
             NotificationIcon(context: context)
           ],
@@ -35,7 +50,7 @@ class _TransactionsState extends State<Transactions> {
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-        margin: const EdgeInsets.only(bottom: 60),
+        // margin: const EdgeInsets.only(bottom: ),
         child: SingleChildScrollView(
           child: Column(
             children: [

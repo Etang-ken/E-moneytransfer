@@ -2,20 +2,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/main_tabs/detail_screens/change_password.dart';
-import 'package:truelife_mobile/main_tabs/detail_screens/edit_profile.dart';
-import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
-import 'package:truelife_mobile/widgets/general_button.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:truelife_mobile/main_tabs/admins.dart';
+import 'package:truelife_mobile/main_tabs/detail_screens/client_institutions.dart';
+import 'package:truelife_mobile/main_tabs/detail_screens/client_transactions.dart';
+import 'package:truelife_mobile/main_tabs/dialogs/add_new_client.dart';
+import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
+import 'package:truelife_mobile/main_tabs/detail_screens/client_invoices.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class ClientDetail extends StatefulWidget {
+  const ClientDetail({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ClientDetail> createState() => _ClientDetailState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ClientDetailState extends State<ClientDetail> {
   late ImagePicker _imagePicker;
   XFile? _imageFile;
 
@@ -45,11 +47,28 @@ class _ProfileState extends State<Profile> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Profile",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    ?.copyWith(color: Colors.white),),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.chevron_left,
+                    color: AppUtils.White,
+                    size: 30,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  "Client Detail",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline4
+                      ?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
             NotificationIcon(context: context)
           ],
         ),
@@ -110,32 +129,33 @@ class _ProfileState extends State<Profile> {
                 height: 13,
               ),
               Text(
-                'Admin Name',
+                'Client Name',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              IntrinsicWidth(
-                child: GeneralButton(
-                  buttonText: 'Change Profile Photo',
-                  btnTextColor: AppUtils.PrimaryColor,
-                  borderColor: AppUtils.PrimaryColor,
-                  btnBgColor: AppUtils.White,
-                  iconPosition: IconPosition.left,
-                  btnIcon: const Icon(Icons.insert_photo),
-                  onClickBtn: _pickImage,
-                ),
-              ),
+
               const SizedBox(
                 height: 25,
               ),
-              
               Column(
                 children: [
-                  profileModificationLink('Edit Profile', Icons.edit, navTo: const EditProfile()),
+                  profileModificationLink('Edit Client', Icons.edit_outlined,
+                      onClick: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AddNewClient(
+                            ctx: context,
+                          );
+                        });
+                  }),
                   profileModificationLink(
-                      'Change Password', Icons.lock_outline, navTo: const ChangePassword()),
+                      'Institutions', Icons.medical_information_outlined,
+                      navTo: ClientInstitutions()),
+                  profileModificationLink('Admins', Icons.people_outline,
+                      navTo: Admins()),
+                  profileModificationLink('Transactions', Icons.money,
+                      navTo: ClientTransactions()),
+                  profileModificationLink('Invoices', Icons.assignment, navTo: ClientInvoices()),
                 ],
               ),
               // ),
@@ -146,13 +166,17 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget profileModificationLink(String title, IconData icon, {Widget? navTo}) {
+  Widget profileModificationLink(String title, IconData icon,
+      {Widget? navTo, VoidCallback? onClick}) {
     return GestureDetector(
       onTap: () {
         if (navTo != null) {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => navTo),
           );
+        }
+        if (onClick != null) {
+          onClick();
         }
       },
       child: Container(

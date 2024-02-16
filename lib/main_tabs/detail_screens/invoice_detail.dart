@@ -4,14 +4,14 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
 import 'package:truelife_mobile/widgets/primary_button.dart';
 
-class TransactionDetails extends StatefulWidget {
-  const TransactionDetails({super.key});
+class InvoiceDetails extends StatefulWidget {
+  const InvoiceDetails({super.key});
 
   @override
-  State<TransactionDetails> createState() => _TransactionDetailsState();
+  State<InvoiceDetails> createState() => _InvoiceDetailsState();
 }
 
-class _TransactionDetailsState extends State<TransactionDetails> {
+class _InvoiceDetailsState extends State<InvoiceDetails> {
   String status = 'success';
 
   Color statusColor() {
@@ -47,7 +47,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  "Transaction",
+                  "Invoice",
                   style: Theme.of(context)
                       .textTheme
                       .headline4
@@ -85,14 +85,14 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                 height: 30.0,
                               ),
                               Text(
-                                'Transaction Successful',
+                                'Invoice Successful',
                                 style: Theme.of(context).textTheme.headline5!,
                               ),
                               const SizedBox(
                                 height: 6,
                               ),
                               Container(
-                                constraints: BoxConstraints(maxWidth: 250),
+                                constraints: const BoxConstraints(maxWidth: 250),
                                 child: Center(
                                   child: Text.rich(
                                     TextSpan(
@@ -201,7 +201,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Transaction Details',
+                                        'Invoice Details',
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context)
                                             .textTheme
@@ -212,24 +212,24 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      transactionTitleAndDetail(
+                                      invoiceTitleAndDetail(
                                           'Product Name', 'Paracetamol'),
-                                      transactionTitleAndDetail(
+                                      invoiceTitleAndDetail(
                                           'Quantity', '12 cards'),
-                                      transactionTitleAndDetail(
+                                      invoiceTitleAndDetail(
                                           'Payment Date', '12-10-2023'),
-                                      transactionTitleAndDetail(
+                                      invoiceTitleAndDetail(
                                           'Transaction Number', '237623762'),
-                                      transactionTitleAndDetail(
+                                      invoiceTitleAndDetail(
                                           'Payment Type', 'MTN MoMo'),
-                                      // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
-                                      transactionTitleAndDetail(
+                                      // invoiceTitleAndDetail('Paymnt Date', 'Paracetamol'),
+                                      invoiceTitleAndDetail(
                                           'Payment Status',
                                           status == 'success'
                                               ? 'Successful'
                                               : 'Failed',
                                           paymentStatus: status),
-                                      transactionTitleAndDetail(
+                                      invoiceTitleAndDetail(
                                           'Amount', 'XAF 3000',
                                           isAmount: true),
                                     ],
@@ -271,153 +271,6 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 15),
-                    decoration: BoxDecoration(
-                        color: AppUtils.White,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Table(
-                      children: [
-                        TableRow(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppUtils.SecondaryGray.withOpacity(0.5),
-                            ),
-                          ),
-                          children: [
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Items',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Quantity',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 3),
-                                child: Center(
-                                  child: Text(
-                                    'Price',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        tableValues('Paracetamol', '12', 3000),
-                        tableValues('Iboprofene', '07', 5000),
-                        tableValues('Damatol', '23', 40000),
-                        tableValues('Azur', '05', 2500),
-                        tableValues('Azul', '02', 500000),
-                        tableValues('Lumerthem', '14', 50000),
-                        tableValues('Panadol', '12', 24000),
-                        TableRow(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppUtils.SecondaryGray.withOpacity(0.5),
-                            ),
-                          ),
-                          children: [
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Total',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '75',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 3),
-                                child: Center(
-                                  child: Text(
-                                    'XAF 624500.0',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(
                     height: 80,
                   )
@@ -449,7 +302,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
     );
   }
 
-  Widget transactionTitleAndDetail(String title, String detail,
+  Widget invoiceTitleAndDetail(String title, String detail,
       {String? paymentStatus, bool isAmount = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 7),
@@ -479,68 +332,6 @@ class _TransactionDetailsState extends State<TransactionDetails> {
           ),
         ],
       ),
-    );
-  }
-
-  TableRow tableValues(String item, String quantity, double price) {
-    return TableRow(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AppUtils.SecondaryGray.withOpacity(0.5),
-        ),
-      ),
-      children: [
-        TableCell(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
-            decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: AppUtils.SecondaryGray.withOpacity(0.5),
-                ),
-              ),
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                item,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
-          ),
-        ),
-        TableCell(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
-            decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: AppUtils.SecondaryGray.withOpacity(0.5),
-                ),
-              ),
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                quantity,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
-          ),
-        ),
-        TableCell(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '$price',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

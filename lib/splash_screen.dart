@@ -29,15 +29,12 @@ class _SplashScreenState extends State<SplashScreen> {
           decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor,
               image: const DecorationImage(
-                  image: AssetImage('assets/images/splash_bg2.png'),
+                  image: AssetImage('assets/images/splash_bg.png'),
                   fit: BoxFit.fill)),
           width: double.infinity,
           height: double.infinity,
-          child: const Center(
-              child: Icon(
-            Icons.home,
-            size: 50,
-          ))),
+          child: Center(
+              child: Image.asset('assets/images/logo-sm.png', height: 250,),),),
     );
   }
 }
