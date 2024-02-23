@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:truelife_mobile/home_nav.dart';
 import 'package:truelife_mobile/onboarding/auth/login.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,30 +13,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storage = FlutterSecureStorage();
+  Future<String?> getToken() async {
+    return await storage.read(key: 'authToken');
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Timer(const Duration(seconds: 4), () {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) => LogIn()), (route) => false);
-      });
+      // print(getToken());
+      // Timer(const Duration(seconds: 4), () {
+      //   if(getToken() == null) {
+
+      //   } else {
+      //   Navigator.pushAndRemoveUntil(context,
+      //       MaterialPageRoute(builder: (context) => LogIn()), (route) => false);}
+      // });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
-              image: const DecorationImage(
-                  image: AssetImage('assets/images/splash_bg.png'),
-                  fit: BoxFit.fill)),
-          width: double.infinity,
-          height: double.infinity,
-          child: Center(
-              child: Image.asset('assets/images/logo-sm.png', height: 250,),),),
+      body: Container()
     );
   }
+
+ 
 }

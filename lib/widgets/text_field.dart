@@ -32,8 +32,8 @@ class _TextInputFieldState extends State<TextInputField> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      // constraints: BoxConstraints(maxHeight: 50),
-      height: 54,
+      constraints: BoxConstraints(minHeight: 50),
+      // height: 54,
       child: TextFormField(
         decoration: InputDecoration(
           contentPadding: widget.contentPadding,
@@ -62,7 +62,7 @@ class _TextInputFieldState extends State<TextInputField> {
             ),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          // constraints: const BoxConstraints(minHeight: 52.0),
+          constraints: const BoxConstraints(minHeight: 52.0),
           filled: true,
           fillColor: widget.bgColor ?? Colors.transparent,
         ),

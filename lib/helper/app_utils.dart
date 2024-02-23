@@ -1,5 +1,9 @@
+import 'package:connectivity/connectivity.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:truelife_mobile/provider/user.dart';
 import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
@@ -92,5 +96,94 @@ class AppUtils {
             ),
           );
         });
+  }
+}
+
+Widget showIsLoading() {
+  return Positioned.fill(
+    child: Container(
+      decoration: BoxDecoration(
+        color: AppUtils.DarkColor.withOpacity(0.5),
+      ),
+      child: Center(
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(10),
+          child: const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppUtils.PrimaryColor),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Future<void> updateSharedPreference(dynamic data) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('name', isNullStringValue(data['name']));
+  prefs.setString('email', isNullStringValue(data['email']));
+  prefs.setString('phone', isNullStringValue(data['phone']));
+  prefs.setInt('admin', isNullIntValue(data['admin']));
+  prefs.setString('profileUrl', isNullStringValue(data['profile']));
+  prefs.setInt('id', isNullIntValue(data['id']));
+}
+
+Future<void> updateUserProvider(dynamic userData, BuildContext context) async {
+  final UserProvider userProvider =
+      Provider.of<UserProvider>(context, listen: false);
+  final data = {
+    'id': userData['id'] ?? 0,
+    'name': userData['name'] ?? '',
+    'admin': userData['admin'] ?? 0,
+    'email': userData['email'] ?? '',
+    'phone': userData['phone'] ?? '',
+    'profileUrl': userData['profile'] ?? ''
+  };
+  userProvider.updateUserData(data);
+}
+
+Future<void> updateUserProviderFromSharedPreference(
+    BuildContext context) async {
+  final UserProvider userProvider =
+      Provider.of<UserProvider>(context, listen: false);
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final data = {
+    'id': prefs.getInt('id') ?? 0,
+    'name': prefs.getString('name') ?? '',
+    'admin': prefs.getInt('admin') ?? 0,
+    'email': prefs.getString('email') ?? '',
+    'phone': prefs.getString('phone') ?? '',
+    'profileUrl': prefs.getString('profileUrl') ?? ''
+  };
+  userProvider.updateUserData(data);
+}
+
+int isNullIntValue(val) {
+  if (val == null) {
+    return 0;
+  } else {
+    return val;
+  }
+}
+
+String isNullStringValue(val) {
+  if (val == null) {
+    return '';
+  } else {
+    return val;
+  }
+}
+
+Future<bool> hasInternetConnectivity(BuildContext context) async {
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.none) {
+    AppUtils.showSnackBar(
+      context,
+      ContentType.failure,
+      'No internet connection. Please check your network.',
+    );
+    return false;
+  } else {
+    return true;
   }
 }

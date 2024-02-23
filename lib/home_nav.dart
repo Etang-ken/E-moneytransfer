@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:truelife_mobile/helper/app_utils.dart';
 import 'package:truelife_mobile/helper/session_manager.dart';
@@ -6,6 +7,7 @@ import 'package:truelife_mobile/main_tabs/clients.dart';
 import 'package:truelife_mobile/main_tabs/home.dart';
 import 'package:truelife_mobile/main_tabs/profile.dart';
 import 'package:truelife_mobile/main_tabs/transactions.dart';
+import 'package:truelife_mobile/onboarding/auth/login.dart';
 
 class HomeNav extends StatefulWidget {
   final int navIndex;
@@ -23,6 +25,24 @@ class _HomeNavState extends State<HomeNav> {
   late PageController _controller;
   var overLayIndex = 0;
   bool showOverLay = false;
+  final storage = FlutterSecureStorage();
+
+  void getToken() async {
+    final hasToken =  await storage.read(key: 'authToken');
+    setState(() {
+      token = hasToken;
+    });
+    if (hasToken == null || hasToken.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LogIn()),
+        );
+      });
+    } else {
+      if(!mounted) return;
+      updateUserProviderFromSharedPreference(context);
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -33,6 +53,7 @@ class _HomeNavState extends State<HomeNav> {
   @override
   void initState() {
     super.initState();
+    getToken();
     _controller = PageController(initialPage: 0);
     _currentIndex = widget.navIndex;
   }
@@ -69,7 +90,6 @@ class _HomeNavState extends State<HomeNav> {
     var mediaQuery = MediaQuery.of(context);
     var themeData = Theme.of(context);
 
-    print(token);
     return Stack(
       children: [
         Scaffold(

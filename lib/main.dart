@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:truelife_mobile/splash_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:truelife_mobile/home_nav.dart';
+import 'package:truelife_mobile/onboarding/auth/login.dart';
+import 'package:truelife_mobile/provider/user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,11 +17,22 @@ Future<void> main() async {
     statusBarColor: Color(0xff0488DD), // status bar color
   ));
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final storage = FlutterSecureStorage();
+
+  Future<String?> getToken() async {
+    return await storage.read(key: 'authToken');
+  }
 
   // This widget is the root of your application.
   @override
@@ -102,8 +117,49 @@ class MyApp extends StatelessWidget {
               letterSpacing: 0.4),
         ),
       ),
-      home: const SplashScreen(),
+      home: Scaffold(
+        body: FutureBuilder<String?>(
+          future: getToken(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              final authToken = snapshot.data;
+              if (authToken != null) {
+                return showSplashScreen(HomeNav(), context);
+              } else {
+                return showSplashScreen(LogIn(), context);
+              }
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+      ),
       routes: {},
+    );
+  }
+
+  Widget showSplashScreen(Widget screen, BuildContext context) {
+    Timer(const Duration(seconds: 5), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => screen, // Change to the desired screen
+        ),
+      );
+    });
+    return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          image: const DecorationImage(
+              image: AssetImage('assets/images/splash_bg.png'),
+              fit: BoxFit.fill)),
+      width: double.infinity,
+      height: double.infinity,
+      child: Center(
+        child: Image.asset(
+          'assets/images/logo-sm.png',
+          height: 250,
+        ),
+      ),
     );
   }
 }
