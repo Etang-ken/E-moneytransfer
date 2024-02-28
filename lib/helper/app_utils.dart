@@ -68,34 +68,25 @@ class AppUtils {
 
   showFilterDialog(BuildContext context, widget) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return Center(
-            child: AlertDialog(
-              insetPadding: EdgeInsets.all(20),
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              title: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Select filters to apply',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Center(
+          child: AlertDialog(
+            insetPadding: EdgeInsets.all(20),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Select filters to apply',
+                style: Theme.of(context).textTheme.headline4,
               ),
-              content: widget,
-              // actions: [
-              //   TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context).pop();
-              //       },
-              //       child: Text(
-              //         "Done",
-              //         style: Theme.of(context).textTheme.headline4,
-              //       )),
-              // ],
             ),
-          );
-        });
+            content: widget,
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -185,5 +176,77 @@ Future<bool> hasInternetConnectivity(BuildContext context) async {
     return false;
   } else {
     return true;
+  }
+}
+
+String textCapitalize(String input) {
+  if (input.isEmpty) return input;
+  return input[0].toUpperCase() + input.substring(1);
+}
+
+double calculateTotalItemPrice(List<dynamic> items) {
+  if (items.isEmpty) {
+    return 0.0;
+  }
+
+  double total = 0.0;
+
+  for (Map<String, dynamic> item in items) {
+    double price = (item['price'] ?? 0.0).toDouble();
+    int quantity = item['quantity'] ?? 0;
+    total += price * quantity;
+  }
+
+  return total;
+}
+
+int calculateTotalItemQuantity(List<dynamic> items) {
+  if (items.isEmpty) {
+    return 0;
+  }
+
+  int total = 0;
+
+  for (Map<String, dynamic> item in items) {
+    int quantity = item['quantity'] ?? 0;
+    total += quantity;
+  }
+
+  return total;
+}
+
+double calculateSingleItemPrice(item) {
+  double total = 0.0;
+  double price = (item['price'] ?? 0.0).toDouble();
+  int quantity = item['quantity'] ?? 0;
+  total += price * quantity;
+  return total;
+}
+
+String formatDateWithSlash(String dateStr) {
+  DateTime dateTime = DateTime.parse(dateStr);
+  String day = dateTime.day.toString().padLeft(2, '0');
+  String month = dateTime.month.toString().padLeft(2, '0');
+  return "$day/$month/${dateTime.year}";
+}
+
+String formatDateWithHyphen(String dateStr) {
+  DateTime dateTime = DateTime.parse(dateStr);
+  String day = dateTime.day.toString().padLeft(2, '0');
+  String month = dateTime.month.toString().padLeft(2, '0');
+  return "$day-$month-${dateTime.year}";
+}
+
+Color transactionStatusColor(String status) {
+  if (status == 'Delivered') {
+    return AppUtils.GreenColor;
+  } else if (status == 'Processing') {
+    return AppUtils.AccentColor;
+  } else if (status == 'Ready') {
+    return Colors.blue[200]!;
+  } else if (status == 'Completed') {
+    return Colors.blue;
+  } else {
+    return AppUtils.YellowColor;
   }
 }

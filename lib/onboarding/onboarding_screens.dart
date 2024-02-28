@@ -29,12 +29,12 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    // ThemeData theme = Theme.of(context);
 
     return Scaffold(
         body: Container(
       height: double.infinity,
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       child: PageView.builder(
         controller: _controller,
         itemCount: content.length,

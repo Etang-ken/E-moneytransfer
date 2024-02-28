@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truelife_mobile/helper/app_utils.dart';
+import 'package:truelife_mobile/main_tabs/detail_screens/transaction_details.dart';
 import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
 import 'package:truelife_mobile/main_tabs/widgets/transaction.dart';
 
@@ -11,6 +12,8 @@ class ClientTransactions extends StatefulWidget {
 }
 
 class _ClientTransactionsState extends State<ClientTransactions> {
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,20 +57,30 @@ class _ClientTransactionsState extends State<ClientTransactions> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              transactionCard(context, 'Paracetamol', '3000', 'Success',
-                  '12 cards', '12/02/2024'),
-              transactionCard(context, 'Cotrim', '5000', 'Failed', '10 cards',
-                  '12/02/2024'),
-              transactionCard(context, 'Mabendazole', '10000', 'Success',
-                  '20 cards', '12/02/2024'),
-              transactionCard(context, 'Cold Cap', '6000', 'Success',
-                  '50 cards', '12/02/2024'),
-              transactionCard(context, 'Paracetamol', '3000', 'Failed',
-                  '12 cards', '12/02/2024'),
-              transactionCard(context, 'Cold Cap', '6000', 'Success',
-                  '50 cards', '12/02/2024'),
-              transactionCard(context, 'Paracetamol', '3000', 'Failed',
-                  '12 cards', '12/02/2024'),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TransactionDetails(),
+                    ),
+                  );
+                },
+                child: transactionCard(
+                    context, 'Paracetamol', '3000', 'Success', '12/02/2024'),
+              ),
+              transactionCard(
+                  context, 'Cotrim', '5000', 'Failed', '12/02/2024'),
+              transactionCard(
+                  context, 'Mabendazole', '10000', 'Success', '12/02/2024'),
+              transactionCard(
+                  context, 'Cold Cap', '6000', 'Success', '12/02/2024'),
+              transactionCard(
+                  context, 'Paracetamol', '3000', 'Failed', '12/02/2024'),
+              transactionCard(
+                  context, 'Cold Cap', '6000', 'Success', '12/02/2024'),
+              transactionCard(
+                  context, 'Paracetamol', '3000', 'Failed', '12/02/2024'),
               const SizedBox(
                 height: 30,
               )

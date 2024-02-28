@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:truelife_mobile/home_nav.dart';
 import 'package:truelife_mobile/onboarding/auth/login.dart';
+import 'package:truelife_mobile/provider/transaction.dart';
 import 'package:truelife_mobile/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -21,6 +22,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => TransactionProvider()),
       ],
       child: MyApp(),
     ),

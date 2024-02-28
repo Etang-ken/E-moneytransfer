@@ -103,15 +103,6 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  // Future<void> _pickImage(ImageSource source) async {
-  //   final pickedFile = await _picker.pickImage(source: source);
-  //   setState(() {
-  //     _imageFile = File(pickedFile!.path);
-  //     print(_imageFile);
-  //   });
-
-  // }
-
   @override
   void initState() {
     super.initState();

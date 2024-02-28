@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:truelife_mobile/helper/app_utils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:truelife_mobile/home_nav.dart';
 import 'package:truelife_mobile/main_tabs/admins.dart';
 import 'package:truelife_mobile/main_tabs/detail_screens/client_institutions.dart';
-import 'package:truelife_mobile/main_tabs/detail_screens/client_transactions.dart';
 import 'package:truelife_mobile/main_tabs/dialogs/add_new_client.dart';
 import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
 import 'package:truelife_mobile/main_tabs/detail_screens/client_invoices.dart';
@@ -154,8 +154,11 @@ class _ClientDetailState extends State<ClientDetail> {
                   profileModificationLink('Admins', Icons.people_outline,
                       navTo: Admins()),
                   profileModificationLink('Transactions', Icons.money,
-                      navTo: ClientTransactions()),
-                  profileModificationLink('Invoices', Icons.assignment, navTo: ClientInvoices()),
+                      navTo: HomeNav(
+                        navIndex: 1,
+                      )),
+                  profileModificationLink('Invoices', Icons.assignment,
+                      navTo: ClientInvoices()),
                 ],
               ),
               // ),

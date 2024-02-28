@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:truelife_mobile/helper/app_utils.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
+import 'package:truelife_mobile/provider/transaction.dart';
 import 'package:truelife_mobile/widgets/primary_button.dart';
 
 class TransactionDetails extends StatefulWidget {
@@ -12,441 +14,501 @@ class TransactionDetails extends StatefulWidget {
 }
 
 class _TransactionDetailsState extends State<TransactionDetails> {
-  String status = 'success';
-
-  Color statusColor() {
-    if (status == 'success') {
-      return AppUtils.PrimaryColor;
-    } else {
-      return AppUtils.RedColor;
+  @override
+  void initState() {
+    super.initState();
+    final TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    if (transactionProvider.transactionDetail.id == null ||
+        transactionProvider.transactionDetail.id == 0) {
+      Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppUtils.SecondaryGrayExtraLight,
-      appBar: AppBar(
-        backgroundColor: AppUtils.PrimaryColor,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.chevron_left,
-                    color: AppUtils.White,
-                    size: 30,
-                  ),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "Transaction",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4
-                      ?.copyWith(color: Colors.white),
-                ),
-              ],
-            ),
-            NotificationIcon(context: context)
-          ],
-        ),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: SingleChildScrollView(
-              child: Column(
+    return Consumer<TransactionProvider>(builder: (_, data, __) {
+      final transactionData = data.transactionDetail;
+      return Scaffold(
+        backgroundColor: AppUtils.SecondaryGrayExtraLight,
+        appBar: AppBar(
+          backgroundColor: AppUtils.PrimaryColor,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: [
-                  Stack(
-                    children: [
-                      IntrinsicHeight(
-                        child: Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(top: 60),
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          constraints: const BoxConstraints(minHeight: 300),
-                          decoration: BoxDecoration(
-                            color: AppUtils.White,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 30.0,
-                              ),
-                              Text(
-                                'Transaction Successful',
-                                style: Theme.of(context).textTheme.headline5!,
-                              ),
-                              const SizedBox(
-                                height: 6,
-                              ),
-                              Container(
-                                constraints: BoxConstraints(maxWidth: 250),
-                                child: Center(
-                                  child: Text.rich(
-                                    TextSpan(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: AppUtils.White,
+                      size: 30,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    "Transaction",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
+              NotificationIcon(context: context)
+            ],
+          ),
+        ),
+        body: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        IntrinsicHeight(
+                          child: Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.only(top: 60),
+                            padding: const EdgeInsets.symmetric(vertical: 30),
+                            constraints: const BoxConstraints(minHeight: 300),
+                            decoration: BoxDecoration(
+                              color: AppUtils.White,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                Text(
+                                  'Transaction Successful',
+                                  style: Theme.of(context).textTheme.headline5!,
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Container(
+                                  constraints: BoxConstraints(maxWidth: 250),
+                                  child: Center(
+                                    child: Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Transfer of ',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppUtils.DarkColor
+                                                      .withOpacity(0.5),
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text: "-XAF 3000 ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: transactionStatusColor(
+                                                      transactionData.status!),
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text: 'to ',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppUtils.DarkColor
+                                                      .withOpacity(0.5),
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text: 'Wisdom Umanah ',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppUtils.DarkColor
+                                                      .withOpacity(0.8),
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text: 'was successful ',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppUtils.DarkColor
+                                                      .withOpacity(0.5),
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              AppUtils.SecondaryGrayExtraLight,
+                                          borderRadius: const BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              bottomRight:
+                                                  Radius.circular(15))),
+                                    ),
+                                    Expanded(
+                                      child: DottedLine(
+                                        lineThickness: 2,
+                                        dashLength: 5,
+                                        dashColor:
+                                            AppUtils.SecondaryGray.withOpacity(
+                                                0.7),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 30,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              AppUtils.SecondaryGrayExtraLight,
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15))),
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                      horizontal: 20,
+                                    ),
+                                    child: Column(
                                       children: [
-                                        TextSpan(
-                                          text: 'Transfer of ',
+                                        Text(
+                                          'Transaction Details',
+                                          textAlign: TextAlign.left,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .headline6!
                                               .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.5),
-                                              ),
+                                                  fontWeight: FontWeight.w500),
                                         ),
-                                        TextSpan(
-                                          text: "-XAF 3000 ",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: statusColor(),
-                                              ),
+                                        const SizedBox(
+                                          height: 15,
                                         ),
-                                        TextSpan(
-                                          text: 'to ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.5),
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text: 'Wisdom Umanah ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.8),
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text: 'was successful ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.5),
-                                              ),
-                                        ),
+                                        transactionTitleAndDetail(
+                                            'Type',
+                                            textCapitalize(
+                                                transactionData.type ?? '')),
+                                        transactionTitleAndDetail(
+                                            'Quantity',
+                                            transactionData.items!.length
+                                                .toString()),
+                                        transactionTitleAndDetail(
+                                            'Date',
+                                            formatDateWithHyphen(
+                                                transactionData.createdAt ??
+                                                    '')),
+                                        transactionTitleAndDetail(
+                                            'Status',
+                                            textCapitalize(
+                                                transactionData.status ?? ''),
+                                            paymentStatus:
+                                                transactionData.status),
+                                        transactionTitleAndDetail('Amount',
+                                            "XAF ${calculateTotalItemPrice(transactionData.items!).toString()}",
+                                            isAmount: true),
                                       ],
                                     ),
-                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          // top: ,
+                          left: 0,
+                          right: 0,
+                          child: Icon(
+                            Icons.receipt_sharp,
+                            color:
+                                transactionStatusColor(transactionData.status!),
+                            size: 100,
+                          ),
+                        ),
+                        Positioned(
+                          top: 75,
+                          left: 60,
+                          right: 0,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: transactionStatusColor(
+                                    transactionData.status!),
+                                shape: BoxShape.circle),
+                            child: Icon(
+                              transactionData.status! == 'Success'
+                                  ? Icons.check
+                                  : transactionData.status! == 'Failed'
+                                      ? Icons.close
+                                      : Icons.info_outline,
+                              color: AppUtils.White,
+                              // size: 40,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 15),
+                      decoration: BoxDecoration(
+                          color: AppUtils.White,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Table(
+                        children: [
+                          TableRow(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppUtils.SecondaryGray.withOpacity(0.5),
+                              ),
+                            ),
+                            children: [
+                              TableCell(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color:
+                                            AppUtils.SecondaryGray.withOpacity(
+                                                0.5),
+                                      ),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Items',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 30,
-                                    width: 15,
-                                    decoration: BoxDecoration(
-                                        color: AppUtils.SecondaryGrayExtraLight,
-                                        borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            bottomRight: Radius.circular(15))),
-                                  ),
-                                  Expanded(
-                                    child: DottedLine(
-                                      lineThickness: 2,
-                                      dashLength: 5,
-                                      dashColor:
-                                          AppUtils.SecondaryGray.withOpacity(
-                                              0.7),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 30,
-                                    width: 15,
-                                    decoration: BoxDecoration(
-                                        color: AppUtils.SecondaryGrayExtraLight,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15))),
-                                  ),
-                                ],
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
+                              TableCell(
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 20,
+                                      vertical: 8.0, horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color:
+                                            AppUtils.SecondaryGray.withOpacity(
+                                                0.5),
+                                      ),
+                                    ),
                                   ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Transaction Details',
-                                        textAlign: TextAlign.left,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      transactionTitleAndDetail(
-                                          'Product Name', 'Paracetamol'),
-                                      transactionTitleAndDetail(
-                                          'Quantity', '12 cards'),
-                                      transactionTitleAndDetail(
-                                          'Payment Date', '12-10-2023'),
-                                      transactionTitleAndDetail(
-                                          'Transaction Number', '237623762'),
-                                      transactionTitleAndDetail(
-                                          'Payment Type', 'MTN MoMo'),
-                                      // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
-                                      transactionTitleAndDetail(
-                                          'Payment Status',
-                                          status == 'success'
-                                              ? 'Successful'
-                                              : 'Failed',
-                                          paymentStatus: status),
-                                      transactionTitleAndDetail(
-                                          'Amount', 'XAF 3000',
-                                          isAmount: true),
-                                    ],
+                                  child: Center(
+                                    child: Text(
+                                      'Quantity',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TableCell(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 3),
+                                  child: Center(
+                                    child: Text(
+                                      'Price',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        // top: ,
-                        left: 0,
-                        right: 0,
-                        child: Icon(
-                          Icons.receipt_sharp,
-                          color: statusColor(),
-                          size: 100,
-                        ),
-                      ),
-                      Positioned(
-                        top: 75,
-                        left: 60,
-                        right: 0,
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                              color: statusColor(), shape: BoxShape.circle),
-                          child: Icon(
-                            status == 'success' ? Icons.check : Icons.close,
-                            color: AppUtils.White,
-                            // size: 40,
+                          if (transactionData.items != null &&
+                              transactionData.items!.isNotEmpty)
+                            ...transactionData.items!.map<TableRow>((item) {
+                              return tableValues(
+                                  item['product']!['name'],
+                                  item['quantity'].toString(),
+                                  calculateSingleItemPrice(item));
+                            }).toList(),
+                          if (transactionData.items == null ||
+                              transactionData.items!.isEmpty)
+                            TableRow(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color:
+                                      AppUtils.SecondaryGray.withOpacity(0.5),
+                                ),
+                              ),
+                              children: [
+                                TableCell(
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 3),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        right: BorderSide(
+                                          color: AppUtils.SecondaryGray
+                                              .withOpacity(0.5),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'No item',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          TableRow(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppUtils.SecondaryGray.withOpacity(0.5),
+                              ),
+                            ),
+                            children: [
+                              TableCell(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color:
+                                            AppUtils.SecondaryGray.withOpacity(
+                                                0.5),
+                                      ),
+                                    ),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Total',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TableCell(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color:
+                                            AppUtils.SecondaryGray.withOpacity(
+                                                0.5),
+                                      ),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      calculateTotalItemQuantity(
+                                              transactionData.items ?? [])
+                                          .toString(),
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TableCell(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 3),
+                                  child: Center(
+                                    child: Text(
+                                      'XAF ${calculateTotalItemPrice(transactionData.items ?? [])}',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 15),
-                    decoration: BoxDecoration(
-                        color: AppUtils.White,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Table(
-                      children: [
-                        TableRow(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppUtils.SecondaryGray.withOpacity(0.5),
-                            ),
-                          ),
-                          children: [
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Items',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Quantity',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 3),
-                                child: Center(
-                                  child: Text(
-                                    'Price',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        tableValues('Paracetamol', '12', 3000),
-                        tableValues('Iboprofene', '07', 5000),
-                        tableValues('Damatol', '23', 40000),
-                        tableValues('Azur', '05', 2500),
-                        tableValues('Azul', '02', 500000),
-                        tableValues('Lumerthem', '14', 50000),
-                        tableValues('Panadol', '12', 24000),
-                        TableRow(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppUtils.SecondaryGray.withOpacity(0.5),
-                            ),
-                          ),
-                          children: [
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Total',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: AppUtils.SecondaryGray.withOpacity(
-                                          0.5),
-                                    ),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '75',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 3),
-                                child: Center(
-                                  child: Text(
-                                    'XAF 624500.0',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 80,
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: const BoxDecoration(
-                color: AppUtils.TertiaryExtraLight,
-              ),
-              child: PrimaryButton(
-                buttonText: 'Download',
-                iconPosition: IconPosition.left,
-                btnIcon: const Icon(
-                  Icons.download,
+                    const SizedBox(
+                      height: 80,
+                    )
+                  ],
                 ),
-                onClickBtn: () {},
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: AppUtils.TertiaryExtraLight,
+                ),
+                child: PrimaryButton(
+                  buttonText: 'Download',
+                  iconPosition: IconPosition.left,
+                  btnIcon: const Icon(
+                    Icons.download,
+                  ),
+                  onClickBtn: () {},
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget transactionTitleAndDetail(String title, String detail,
@@ -472,7 +534,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                 fontSize: isAmount ? 16 : 12,
                 fontWeight: FontWeight.w700,
                 color: paymentStatus != null
-                    ? statusColor()
+                    ? transactionStatusColor(paymentStatus)
                     : (isAmount
                         ? AppUtils.DarkColor.withOpacity(0.7)
                         : AppUtils.SecondaryGray)),
