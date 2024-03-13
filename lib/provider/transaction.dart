@@ -35,5 +35,20 @@ class TransactionProvider extends ChangeNotifier {
       createdAt: dataDetail.createdAt,
       items: dataDetail.items,
     );
+     notifyListeners();
+  }
+
+  void updateTransactionDetailUsingBrackets(dynamic dataDetail) {
+    transactionDetail = TransactionData(
+      id: dataDetail['id'],
+      userId: dataDetail['user_id'],
+      clientId: dataDetail['client_id'],
+      clientInstitutionId: dataDetail['client_institution_id'],
+      type: dataDetail['type'],
+      status: dataDetail['status'],
+      createdAt: dataDetail['created_at'],
+      items: dataDetail['items'],
+    );
+     notifyListeners();
   }
 }

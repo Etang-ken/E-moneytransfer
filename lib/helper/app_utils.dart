@@ -238,15 +238,16 @@ String formatDateWithHyphen(String dateStr) {
 }
 
 Color transactionStatusColor(String status) {
-  if (status == 'Delivered') {
+  String newStatus = status.toLowerCase();
+  if (newStatus == 'completed') {
     return AppUtils.GreenColor;
-  } else if (status == 'Processing') {
-    return AppUtils.AccentColor;
-  } else if (status == 'Ready') {
+  } else if (newStatus == 'processing') {
     return Colors.blue[200]!;
-  } else if (status == 'Completed') {
+  } else if (newStatus == 'pending') {
+    return AppUtils.YellowColor;
+  } else if (newStatus == 'delivered') {
     return Colors.blue;
   } else {
-    return AppUtils.YellowColor;
+    return AppUtils.RedColor;
   }
 }
