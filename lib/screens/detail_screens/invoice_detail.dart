@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
-import 'package:truelife_mobile/widgets/primary_button.dart';
+import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/widgets/primary_button.dart';
 
 class InvoiceDetails extends StatefulWidget {
   const InvoiceDetails({super.key});

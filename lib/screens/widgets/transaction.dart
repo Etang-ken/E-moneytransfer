@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
 
 Widget transactionCard(BuildContext context, String transactionType,
     String price, String status, String date) {

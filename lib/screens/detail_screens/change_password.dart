@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/api/request.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/home_nav.dart';
-import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
-import 'package:truelife_mobile/widgets/primary_button.dart';
-import 'package:truelife_mobile/widgets/text_field.dart';
+import 'package:emoneytransfer/api/request.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/widgets/primary_button.dart';
+import 'package:emoneytransfer/widgets/text_field.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});

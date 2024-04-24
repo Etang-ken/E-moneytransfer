@@ -5,25 +5,25 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:truelife_mobile/api/url.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/home_nav.dart';
-import 'package:truelife_mobile/main_tabs/detail_screens/change_password.dart';
-import 'package:truelife_mobile/main_tabs/detail_screens/edit_profile.dart';
-import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
-import 'package:truelife_mobile/provider/user.dart';
-import 'package:truelife_mobile/widgets/general_button.dart';
+import 'package:emoneytransfer/api/url.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/main_tabs/detail_screens/change_password.dart';
+import 'package:emoneytransfer/main_tabs/detail_screens/edit_profile.dart';
+import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/provider/user.dart';
+import 'package:emoneytransfer/widgets/general_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class Settings extends StatefulWidget {
+  const Settings({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<Settings> createState() => _SettingsState();
 }
 
-class _ProfileState extends State<Profile> {
+class _SettingsState extends State<Settings> {
   late ImagePicker _imagePicker;
   XFile? _imageFile;
   bool isLoading = false;
@@ -125,7 +125,7 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Profile",
+                    "Settings",
                     style: Theme.of(context)
                         .textTheme
                         .headline4
@@ -216,14 +216,32 @@ class _ProfileState extends State<Profile> {
                     const SizedBox(
                       height: 25,
                     ),
-          
+
                     Column(
                       children: [
-                        profileModificationLink('Edit Profile', Icons.edit,
+                        profileModificationLink(
+                            'Profile', Icons.person_outlined,
+                            navTo: const EditProfile()),
+                        profileModificationLink(
+                            'Edit Profile', Icons.edit_outlined,
                             navTo: const EditProfile()),
                         profileModificationLink(
                             'Change Password', Icons.lock_outline,
                             navTo: const ChangePassword()),
+                        profileModificationLink(
+                            'Contact Us', Icons.phone_outlined,
+                            navTo: const ChangePassword()),
+                        profileModificationLink('FAQs', Icons.help_outline,
+                            navTo: const ChangePassword()),
+                        profileModificationLink(
+                            'Privacy Policy', Icons.privacy_tip_outlined,
+                            navTo: const ChangePassword()),
+                        profileModificationLink(
+                            'Terms and Conditions', Icons.description_outlined,
+                            navTo: const ChangePassword()),
+                        profileModificationLink('Logout', Icons.logout,
+                            navTo: const ChangePassword()),
+                        const SizedBox(height: 80,)
                       ],
                     ),
                     // ),
@@ -232,7 +250,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           ),
-          if(isLoading) showIsLoading()
+          if (isLoading) showIsLoading()
         ],
       );
     });

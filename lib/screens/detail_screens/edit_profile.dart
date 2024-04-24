@@ -5,16 +5,16 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:truelife_mobile/api/request.dart';
-import 'package:truelife_mobile/api/url.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
+import 'package:emoneytransfer/api/request.dart';
+import 'package:emoneytransfer/api/url.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:truelife_mobile/helper/validator.dart';
-import 'package:truelife_mobile/home_nav.dart';
-import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
-import 'package:truelife_mobile/provider/user.dart';
-import 'package:truelife_mobile/widgets/primary_button.dart';
-import 'package:truelife_mobile/widgets/text_field.dart';
+import 'package:emoneytransfer/helper/validator.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/provider/user.dart';
+import 'package:emoneytransfer/widgets/primary_button.dart';
+import 'package:emoneytransfer/widgets/text_field.dart';
 import 'package:http/http.dart' as http;
 
 class EditProfile extends StatefulWidget {

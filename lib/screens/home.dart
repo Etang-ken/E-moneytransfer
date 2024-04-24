@@ -1,85 +1,112 @@
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/main_tabs/detail_screens/invoice_detail.dart';
-import 'package:truelife_mobile/main_tabs/widgets/notification_icon.dart';
+import 'package:provider/provider.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/main_tabs/detail_screens/client_invoices.dart';
+import 'package:emoneytransfer/main_tabs/notifications.dart';
+import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/provider/user.dart';
 
-class ClientInvoices extends StatefulWidget {
-  const ClientInvoices({super.key});
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
 
   @override
-  State<ClientInvoices> createState() => _ClientInvoicesState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _ClientInvoicesState extends State<ClientInvoices> {
+enum BorderLeftOrRight { left, right }
+
+class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppUtils.SecondaryGrayExtraLight,
-      appBar: AppBar(
-        backgroundColor: AppUtils.PrimaryColor,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.chevron_left,
-                    color: AppUtils.White,
-                    size: 30,
-                  ),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "Client Invoices",
+    return Consumer<UserProvider>(builder: (_, data, __) {
+      final userData = data.userData;
+      return Scaffold(
+        backgroundColor: AppUtils.White,
+        appBar: AppBar(
+          backgroundColor: AppUtils.PrimaryColor,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Dashboard",
                   style: Theme.of(context)
                       .textTheme
                       .headline4
-                      ?.copyWith(color: Colors.white),
-                ),
-              ],
-            ),
-            NotificationIcon(context: context)
-          ],
-        ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-        // margin: const EdgeInsets.only(bottom: ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              invoiceCard(context, 'Paracetamol', '3000', 'Success',
-                  '12 cards', '12/02/2024'),
-              invoiceCard(context, 'Cotrim', '5000', 'Failed', '10 cards',
-                  '12/02/2024'),
-              invoiceCard(context, 'Mabendazole', '10000', 'Success',
-                  '20 cards', '12/02/2024'),
-              invoiceCard(context, 'Cold Cap', '6000', 'Success',
-                  '50 cards', '12/02/2024'),
-              invoiceCard(context, 'Paracetamol', '3000', 'Failed',
-                  '12 cards', '12/02/2024'),
-              invoiceCard(context, 'Cold Cap', '6000', 'Success',
-                  '50 cards', '12/02/2024'),
-              invoiceCard(context, 'Paracetamol', '3000', 'Failed',
-                  '12 cards', '12/02/2024'),
-              const SizedBox(
-                height: 30,
-              )
+                      ?.copyWith(color: Colors.white)),
+              NotificationIcon(context: context)
             ],
           ),
         ),
-      ),
-    );
+        body: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          margin: EdgeInsets.only(bottom: 80),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Transactions",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  children: [
+                    invoiceCard(context, 'Paracetamol', '3000', 'Success',
+                        '12 cards', '12/02/2024'),
+                    invoiceCard(context, 'Cotrim', '5000', 'Failed', '10 cards',
+                        '12/02/2024'),
+                    invoiceCard(context, 'Mabendazole', '10000', 'Success',
+                        '20 cards', '12/02/2024'),
+                    invoiceCard(context, 'Cold Cap', '6000', 'Success',
+                        '50 cards', '12/02/2024'),
+                    invoiceCard(context, 'Paracetamol', '3000', 'Failed',
+                        '12 cards', '12/02/2024'),
+                    invoiceCard(context, 'Cold Cap', '6000', 'Success',
+                        '50 cards', '12/02/2024'),
+                    invoiceCard(context, 'Paracetamol', '3000', 'Failed',
+                        '12 cards', '12/02/2024'),
+                    const SizedBox(
+                      height: 30,
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 60.0),
+          child: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                // index = (index + 1) % customizations.length;
+              });
+            },
+            foregroundColor: Colors.white,
+            backgroundColor: AppUtils.PrimaryColor,
+            shape: CircleBorder(),
+            child: const Icon(Icons.add),
+          ),
+        ),
+      );
+    });
   }
 
-  Widget invoiceCard(BuildContext context, String productName, String price, String status,
-      String quantity, String date) {
+  Widget invoiceCard(BuildContext context, String productName, String price,
+      String status, String quantity, String date) {
     Color statusColor() {
       if (status == 'Success') {
         return AppUtils.GreenColor;
@@ -90,12 +117,12 @@ class _ClientInvoicesState extends State<ClientInvoices> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const InvoiceDetails(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const InvoiceDetails(),
+        //   ),
+        // );
       },
       child: Container(
         width: double.infinity,
