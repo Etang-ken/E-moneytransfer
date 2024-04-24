@@ -1,10 +1,10 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/network.dart';
-import 'package:truelife_mobile/helper/shared_preference.dart';
-import 'package:truelife_mobile/models/user_image.dart';
+import 'package:emoneytransfer/helper/network.dart';
+import 'package:emoneytransfer/helper/shared_preference.dart';
+import 'package:emoneytransfer/models/user_image.dart';
 
-import 'package:truelife_mobile/helper/custom_snack_bar.dart';
+import 'package:emoneytransfer/helper/custom_snack_bar.dart';
 
 class User {
   int id;

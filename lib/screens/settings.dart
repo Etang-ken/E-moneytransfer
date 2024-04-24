@@ -2,15 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:emoneytransfer/screens/detail_screens/contact_us.dart';
+import 'package:emoneytransfer/screens/detail_screens/faqs.dart';
+import 'package:emoneytransfer/screens/detail_screens/privacy_policy.dart';
+import 'package:emoneytransfer/screens/detail_screens/term_conditions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:emoneytransfer/api/url.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/main_tabs/detail_screens/change_password.dart';
-import 'package:emoneytransfer/main_tabs/detail_screens/edit_profile.dart';
-import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/screens/detail_screens/change_password.dart';
+import 'package:emoneytransfer/screens/detail_screens/edit_profile.dart';
+import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
 import 'package:emoneytransfer/provider/user.dart';
 import 'package:emoneytransfer/widgets/general_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -230,17 +234,17 @@ class _SettingsState extends State<Settings> {
                             navTo: const ChangePassword()),
                         profileModificationLink(
                             'Contact Us', Icons.phone_outlined,
-                            navTo: const ChangePassword()),
+                            navTo: const ContactUs()),
                         profileModificationLink('FAQs', Icons.help_outline,
-                            navTo: const ChangePassword()),
+                            navTo: const FAQs()),
                         profileModificationLink(
                             'Privacy Policy', Icons.privacy_tip_outlined,
-                            navTo: const ChangePassword()),
+                            navTo: const PrivacyPolicy()),
                         profileModificationLink(
                             'Terms and Conditions', Icons.description_outlined,
-                            navTo: const ChangePassword()),
+                            navTo: const TermsAndConditions()),
                         profileModificationLink('Logout', Icons.logout,
-                            navTo: const ChangePassword()),
+                            navTo: null),
                         const SizedBox(height: 80,)
                       ],
                     ),

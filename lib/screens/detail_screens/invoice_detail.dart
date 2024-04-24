@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
 import 'package:emoneytransfer/widgets/primary_button.dart';
 
 class InvoiceDetails extends StatefulWidget {

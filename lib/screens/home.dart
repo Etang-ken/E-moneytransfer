@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/main_tabs/detail_screens/client_invoices.dart';
-import 'package:emoneytransfer/main_tabs/notifications.dart';
-import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/screens/detail_screens/client_invoices.dart';
+import 'package:emoneytransfer/screens/notifications.dart';
+import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
 import 'package:emoneytransfer/provider/user.dart';
 
 class Dashboard extends StatefulWidget {

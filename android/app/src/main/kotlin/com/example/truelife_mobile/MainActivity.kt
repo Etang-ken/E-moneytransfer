@@ -1,4 +1,4 @@
-package com.afrovisiongroup.truelife_mobile
+package com.emoneytransfer.app
 
 import io.flutter.embedding.android.FlutterActivity
 

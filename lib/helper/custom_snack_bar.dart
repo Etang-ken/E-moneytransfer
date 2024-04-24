@@ -1,6 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
 
 customSnackBar(
     {required BuildContext context,

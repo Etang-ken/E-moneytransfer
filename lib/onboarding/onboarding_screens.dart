@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/onboarding/auth/login.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/onboarding/auth/login.dart';
 import '../models/onbording_model.dart';
 
 class OnboardingScreens extends StatefulWidget {

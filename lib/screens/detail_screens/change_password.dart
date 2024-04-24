@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:emoneytransfer/api/request.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
 import 'package:emoneytransfer/widgets/primary_button.dart';
 import 'package:emoneytransfer/widgets/text_field.dart';
 

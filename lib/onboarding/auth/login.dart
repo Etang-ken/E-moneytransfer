@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:emoneytransfer/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:truelife_mobile/api/request.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/helper/validator.dart';
-import 'package:truelife_mobile/home_nav.dart';
-import 'package:truelife_mobile/widgets/primary_button.dart';
-import 'package:truelife_mobile/widgets/text_field.dart';
+import 'package:emoneytransfer/api/request.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/helper/validator.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/widgets/primary_button.dart';
+import 'package:emoneytransfer/widgets/text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LogIn extends StatefulWidget {
@@ -138,7 +139,7 @@ class _LogInState extends State<LogIn> {
                         padding: EdgeInsets.only(top: 0.0),
                         child: Center(
                           child: Image.asset(
-                            'assets/images/logo-sm.png',
+                            'assets/images/logo/elcrypto.png',
                             height: 150,
                           ),
                         ),
@@ -165,7 +166,7 @@ class _LogInState extends State<LogIn> {
                               height: 8.0,
                             ),
                             Text(
-                              'Login into your Truelife account...',
+                              'Login into your ElCrypto account...',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -319,15 +320,52 @@ class _LogInState extends State<LogIn> {
                             PrimaryButton(
                               buttonText: 'Login',
                               onClickBtn: () {
-                                if (_formkey.currentState!.validate()) {
-                                  loginUser();
-                                } else {
-                                  print("Invalid form Data");
-                                }
+                                // if (_formkey.currentState!.validate()) {
+                                // loginUser();
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeNav(),
+                                  ),
+                                  (route) => false,
+                                );
+                                // } else {
+                                //   print("Invalid form Data");
+                                // }
                               },
                             ),
                             const SizedBox(
-                              height: 50,
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account? ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(fontSize: 12),
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Register()));
+                                    },
+                                    child: Text(
+                                      "Sign Up",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                            fontSize: 12,
+                                            color: AppUtils.PrimaryColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    )),
+                              ],
                             ),
                             const SizedBox(
                               height: 80,

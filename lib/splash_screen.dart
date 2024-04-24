@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/home_nav.dart';
-import 'package:truelife_mobile/onboarding/auth/login.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/onboarding/auth/login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {

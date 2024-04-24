@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:emoneytransfer/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:truelife_mobile/home_nav.dart';
-import 'package:truelife_mobile/onboarding/auth/login.dart';
-import 'package:truelife_mobile/provider/transaction.dart';
-import 'package:truelife_mobile/provider/user.dart';
+import 'package:emoneytransfer/home_nav.dart';
+import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:emoneytransfer/provider/transaction.dart';
+import 'package:emoneytransfer/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> main() async {
@@ -126,9 +127,9 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               final authToken = snapshot.data;
               if (authToken != null) {
-                return showSplashScreen(HomeNav(), context);
+                return showSplashScreen(Register(), context);
               } else {
-                return showSplashScreen(LogIn(), context);
+                return showSplashScreen(Register(), context);
               }
             } else {
               return Center(child: CircularProgressIndicator());
@@ -158,7 +159,7 @@ class MyApp extends StatelessWidget {
       height: double.infinity,
       child: Center(
         child: Image.asset(
-          'assets/images/logo-sm.png',
+          'assets/images/logo/elcrypto.png',
           height: 250,
         ),
       ),

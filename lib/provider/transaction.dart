@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/models/transaction.dart';
+import 'package:emoneytransfer/models/transaction.dart';
 
 class TransactionProvider extends ChangeNotifier {
   List<TransactionData> _transactions = [];

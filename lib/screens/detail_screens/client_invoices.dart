@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/main_tabs/detail_screens/invoice_detail.dart';
-import 'package:emoneytransfer/main_tabs/widgets/notification_icon.dart';
+import 'package:emoneytransfer/screens/detail_screens/invoice_detail.dart';
+import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
 
 class ClientInvoices extends StatefulWidget {
   const ClientInvoices({super.key});

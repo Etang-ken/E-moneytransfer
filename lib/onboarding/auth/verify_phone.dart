@@ -1,9 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:truelife_mobile/helper/app_utils.dart';
-import 'package:truelife_mobile/widgets/general_button.dart';
-import 'package:truelife_mobile/widgets/primary_button.dart';
-import 'package:truelife_mobile/widgets/text_field.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/widgets/general_button.dart';
+import 'package:emoneytransfer/widgets/primary_button.dart';
+import 'package:emoneytransfer/widgets/text_field.dart';
 
 class VerifyPhoneOrEmail extends StatefulWidget {
   @override
