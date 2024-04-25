@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emoneytransfer/provider/user.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
@@ -87,6 +88,15 @@ class AppUtils {
         );
       },
     );
+  }
+}
+
+Future<void> launchInApp(Uri url) async {
+  if (!await launchUrl(
+    url,
+    mode: LaunchMode.inAppBrowserView,
+  )) {
+    throw Exception('Could not launch $url');
   }
 }
 

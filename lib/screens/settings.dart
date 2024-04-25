@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
 
   Future<void> _pickImage() async {
     XFile? pickedImage =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
+    await _imagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imageFile = pickedImage;
@@ -76,7 +76,8 @@ class _SettingsState extends State<Settings> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: ((context) => HomeNav(
+            builder: ((context) =>
+                HomeNav(
                   navIndex: 3,
                 )),
           ),
@@ -120,153 +121,169 @@ class _SettingsState extends State<Settings> {
       return Stack(
         children: [
           Scaffold(
-            backgroundColor: AppUtils.SecondaryGrayExtraLight,
-            appBar: AppBar(
-              backgroundColor: AppUtils.PrimaryColor,
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Settings",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        ?.copyWith(color: Colors.white),
-                  ),
-                  NotificationIcon(context: context)
-                ],
-              ),
-            ),
-            body: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-              child: SingleChildScrollView(
-                child: Column(
+              backgroundColor: AppUtils.SecondaryGrayExtraLight,
+              appBar: AppBar(
+                backgroundColor: AppUtils.PrimaryColor,
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Center(
-                      child: Stack(
-                        children: [
-                          Container(
-                            height: 140,
-                            width: 140,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppUtils.White,
-                              image: _imageFile != null
-                                  ? DecorationImage(
-                                      image: FileImage(
-                                        File(_imageFile!.path),
-                                      ),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : userData.profileUrl == ''
-                                      ? const DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/user-profile-avatar@3x-1.png'),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : DecorationImage(
-                                          image: NetworkImage(
-                                              userData.profileUrl ?? ''),
-                                          fit: BoxFit.fill),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            left: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: _pickImage,
-                              child: Center(
-                                child: Container(
-                                  height: 35,
-                                  width: 35,
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppUtils.White,
-                                  ),
-                                  child: const Icon(Icons.edit_outlined,
-                                      color: AppUtils.PrimaryColor),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
                     Text(
-                      userData.name ?? '',
-                      style: Theme.of(context).textTheme.headline4,
+                      "Settings",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline4
+                          ?.copyWith(color: Colors.white),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    IntrinsicWidth(
-                      child: GeneralButton(
-                        buttonText: 'Change Profile Photo',
-                        btnTextColor: AppUtils.PrimaryColor,
-                        borderColor: AppUtils.PrimaryColor,
-                        btnBgColor: AppUtils.White,
-                        iconPosition: IconPosition.left,
-                        btnIcon: const Icon(Icons.insert_photo),
-                        onClickBtn: _saveImage,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-
-                    Column(
-                      children: [
-                        profileModificationLink(
-                            'Profile', Icons.person_outlined,
-                            navTo: const EditProfile()),
-                        profileModificationLink(
-                            'Edit Profile', Icons.edit_outlined,
-                            navTo: const EditProfile()),
-                        profileModificationLink(
-                            'Change Password', Icons.lock_outline,
-                            navTo: const ChangePassword()),
-                        profileModificationLink(
-                            'Contact Us', Icons.phone_outlined,
-                            navTo: const ContactUs()),
-                        profileModificationLink('FAQs', Icons.help_outline,
-                            navTo: const FAQs()),
-                        profileModificationLink(
-                            'Privacy Policy', Icons.privacy_tip_outlined,
-                            navTo: const PrivacyPolicy()),
-                        profileModificationLink(
-                            'Terms and Conditions', Icons.description_outlined,
-                            navTo: const TermsAndConditions()),
-                        profileModificationLink('Logout', Icons.logout,
-                            navTo: null),
-                        const SizedBox(height: 80,)
-                      ],
-                    ),
-                    // ),
+                    NotificationIcon(context: context)
                   ],
                 ),
               ),
-            ),
-          ),
-          if (isLoading) showIsLoading()
+              body: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 15, vertical: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                  Center(
+                  child: Stack(
+                  children: [
+                    Container(
+                    height: 140,
+                    width: 140,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppUtils.White,
+                      image: _imageFile != null
+                          ? DecorationImage(
+                        image: FileImage(
+                          File(_imageFile!.path),
+                        ),
+                        fit: BoxFit.cover,
+                      )
+                          : userData.profileUrl == ''
+                          ? const DecorationImage(
+                        image: AssetImage(
+                            'assets/images/user-profile-avatar@3x-1.png'),
+                        fit: BoxFit.cover,
+                      )
+                          : DecorationImage(
+                          image: NetworkImage(
+                              userData.profileUrl ?? ''),
+                          fit: BoxFit.fill),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    left: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: _pickImage,
+                      child: Center(
+                        child: Container(
+                          height: 35,
+                          width: 35,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppUtils.White,
+                          ),
+                          child: const Icon(Icons.edit_outlined,
+                              color: AppUtils.PrimaryColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 13,
+              ),
+              Text(
+                userData.name ?? '',
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              IntrinsicWidth(
+                child: GeneralButton(
+                  buttonText: 'Change Profile Photo',
+                  btnTextColor: AppUtils.PrimaryColor,
+                  borderColor: AppUtils.PrimaryColor,
+                  btnBgColor: AppUtils.White,
+                  iconPosition: IconPosition.left,
+                  btnIcon: const Icon(Icons.insert_photo),
+                  onClickBtn: _saveImage,
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+
+              Column(
+                  children: [
+                  profileModificationLink(
+                  'Profile', Icons.person_outlined,
+                  navTo: const EditProfile()),
+              profileModificationLink(
+                  'Edit Profile', Icons.edit_outlined,
+                  navTo: const EditProfile()),
+              profileModificationLink(
+                  'Change Password', Icons.lock_outline,
+                  navTo: const ChangePassword()),
+              profileModificationLink(
+                  'Contact Us', Icons.phone_outlined,
+                  browseTo: "https://google.com"),
+              profileModificationLink('FAQs', Icons.help_outline,
+                  browseTo: "https://google.com"),
+              profileModificationLink(
+                  'Privacy Policy', Icons.privacy_tip_outlined,
+                  browseTo: "https://google.com"),
+          profileModificationLink(
+              'Terms and Conditions', Icons.description_outlined,
+              browseTo: "https://google.com"),
+          profileModificationLink('Logout', Icons.logout,
+              navTo: null),
+          const SizedBox(
+            height: 80,
+          )
         ],
+      ),
+      // ),
+      ],
+      ),
+      ),
+      ),
+      ),
+      if (isLoading) showIsLoading()
+      ],
       );
     });
   }
 
-  Widget profileModificationLink(String title, IconData icon, {Widget? navTo}) {
+  Widget profileModificationLink(String title,
+      IconData icon, {
+        Widget? navTo,
+        String? browseTo,
+      }) {
     return GestureDetector(
       onTap: () {
         if (navTo != null) {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => navTo),
           );
+        }
+        if (browseTo != null) {
+          final Uri url = Uri.parse(browseTo);
+
+          launchInApp(url);
         }
       },
       child: Container(
@@ -292,9 +309,13 @@ class _SettingsState extends State<Settings> {
                 ),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),

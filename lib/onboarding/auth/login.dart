@@ -10,7 +10,7 @@ import 'package:emoneytransfer/helper/validator.dart';
 import 'package:emoneytransfer/home_nav.dart';
 import 'package:emoneytransfer/widgets/primary_button.dart';
 import 'package:emoneytransfer/widgets/text_field.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -100,15 +100,6 @@ class _LogInState extends State<LogIn> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw Exception('Could not launch $url');
-    }
   }
 
   @override
@@ -300,11 +291,11 @@ class _LogInState extends State<LogIn> {
                               height: 15.0,
                             ),
                             GestureDetector(
-                              onTap: () async {
+                              onTap: () {
                                 final Uri url = Uri.parse(
-                                    'https://example.com'); // Replace with your desired URL
+                                    'https://google.com'); // Replace with your desired URL
 
-                                _launchInBrowser(url);
+                                launchInApp(url);
                               },
                               child: Align(
                                 alignment: Alignment.topRight,
