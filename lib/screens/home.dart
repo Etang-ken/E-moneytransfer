@@ -1,3 +1,4 @@
+import 'package:emoneytransfer/screens/detail_screens/add_new_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
@@ -42,7 +43,8 @@ class _DashboardState extends State<Dashboard> {
         body: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 20),
-          margin: EdgeInsets.only(bottom: 80),
+          margin: EdgeInsets.only(bottom: 100),
+          height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -91,9 +93,7 @@ class _DashboardState extends State<Dashboard> {
           padding: const EdgeInsets.only(bottom: 60.0),
           child: FloatingActionButton(
             onPressed: () {
-              setState(() {
-                // index = (index + 1) % customizations.length;
-              });
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewTransaction()));
             },
             foregroundColor: Colors.white,
             backgroundColor: AppUtils.PrimaryColor,
