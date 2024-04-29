@@ -159,7 +159,7 @@ class MyApp extends StatelessWidget {
       height: double.infinity,
       child: Center(
         child: Image.asset(
-          'assets/images/logo/elcrypto.png',
+          'assets/images/logo/eltransfer.png',
           height: 250,
         ),
       ),

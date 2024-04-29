@@ -124,14 +124,14 @@ class _LogInState extends State<LogIn> {
                               fit: BoxFit.fill)),
                       child: Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 0.0),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/images/logo/elcrypto.png',
-                                height: 150,
-                              ),
-                            ),
-                          )),
+                        padding: EdgeInsets.only(top: 0.0),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/logo/eltransfer.png',
+                            height: 150,
+                          ),
+                        ),
+                      )),
                     ),
                     const SizedBox(
                       height: 50,
