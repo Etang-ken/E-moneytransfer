@@ -262,18 +262,62 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                 const SizedBox(height: 40),
                               ],
                             ),
-                          ),
-                          PrimaryButton(
-                            buttonText: 'Save & Continue',
-                            onClickBtn: () {
-                              if (_formKey.currentState!.validate()) {
-                                saveTransaction();
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 35),
-                        ],
-                      ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Add New Transaction',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3!
+                                  .copyWith(fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        Text(
+                          "Client ID",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  fontSize: 12, fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 5),
+                        TextInputField(placeholderText: '***********2342'),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Amount to receive",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  fontSize: 12, fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 5),
+                        TextInputField(
+                          placeholderText: '50000',
+                          textInputType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Amount to  send',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  fontSize: 12, fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 5),
+                        TextInputField(
+                          placeholderText: '50000',
+                          textInputType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 40),
+                      ],
                     ),
                   ),
                 ),
