@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/app_utils.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
+import 'package:eltransfer/screens/widgets/notification_icon.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
 
 class InvoiceDetails extends StatefulWidget {
   const InvoiceDetails({super.key});

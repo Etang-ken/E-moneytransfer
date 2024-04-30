@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/session_manager.dart';
-import 'package:emoneytransfer/screens/home.dart';
-import 'package:emoneytransfer/screens/settings.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/session_manager.dart';
+import 'package:eltransfer/screens/home.dart';
+import 'package:eltransfer/screens/settings.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
 
 class HomeNav extends StatefulWidget {
   final int navIndex;

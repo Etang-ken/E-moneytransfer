@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:emoneytransfer/api/url.dart';
+import 'package:eltransfer/api/url.dart';
 
 class APIRequest {
   postRequest(

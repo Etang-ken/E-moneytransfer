@@ -1,18 +1,19 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
-import 'package:emoneytransfer/onboarding/auth/phone_number.dart';
+import 'package:eltransfer/onboarding/auth/phone_number.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/validator.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'login.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -47,6 +48,7 @@ class _RegisterState extends State<Register> {
     final password = passwordController.text;
     final firstName = firstNameController.text;
     final lastName = lastNameController.text;
+
     if (hasConnectivity) {
       final data = {
         'email': email,
@@ -128,7 +130,7 @@ class _RegisterState extends State<Register> {
                               height: 8.0,
                             ),
                             Text(
-                              'Create your ElCrypto account...',
+                              'Create your eltransfer account...',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!

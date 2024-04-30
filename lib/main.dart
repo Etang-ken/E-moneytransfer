@@ -1,15 +1,16 @@
 import 'dart:async';
 
-import 'package:emoneytransfer/onboarding/auth/register.dart';
+
+import 'package:eltransfer/onboarding/auth/register.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/provider/transaction.dart';
+import 'package:eltransfer/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'firebase_options.dart';
