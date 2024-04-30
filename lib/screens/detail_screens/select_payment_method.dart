@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:emoneytransfer/screens/detail_screens/add_payment_proof.dart';
+import 'package:eltransfer/screens/detail_screens/add_payment_proof.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/widgets/general_button.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 import 'package:clipboard/clipboard.dart';
 
 class ChoosePaymentMethod extends StatefulWidget {

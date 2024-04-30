@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/screens/detail_screens/add_new_transaction.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/api/url.dart';
+import 'package:eltransfer/provider/transaction.dart';
+import 'package:eltransfer/screens/detail_screens/add_new_transaction.dart';\
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/detail_screens/client_invoices.dart';
-import 'package:emoneytransfer/screens/notifications.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/screens/detail_screens/client_invoices.dart';
+import 'package:eltransfer/screens/notifications.dart';
+import 'package:eltransfer/screens/widgets/notification_icon.dart';
+import 'package:eltransfer/provider/user.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});

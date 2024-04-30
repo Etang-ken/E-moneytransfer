@@ -1,11 +1,11 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:eltransfer/provider/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
