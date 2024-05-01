@@ -168,11 +168,11 @@ class _EditProfileState extends State<EditProfile> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       requestPermission();
-      _imagePicker = ImagePicker();
+
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       getfirstname();
-      print(userProvider.userData.firstName);
+
       firstNameController.text = userProvider.userData.firstName ?? '';
       lastNameController.text = userProvider.userData.lastName ?? '';
       emailController.text = userProvider.userData.email ?? '';
@@ -181,14 +181,6 @@ class _EditProfileState extends State<EditProfile> {
   }
   Future<void> requestPermission() async {
     var status = await Permission.photos.request();
-    if (status.isGranted) {
-      // Permission granted
-    } else if (status.isDenied) {
-      // Permission denied
-    } else if (status.isPermanentlyDenied) {
-      // Permission permanently denied, navigate to app settings
-      openAppSettings();
-    }
   }
 
 

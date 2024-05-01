@@ -62,52 +62,48 @@ class _RegisterState extends State<Register> {
         };
         final response =
             await APIRequest().postRequest(route: '/register', data: data);
-        final decodedResponse = jsonDecode(response.body);
-        print(decodedResponse);
-        if (response.statusCode == 200) {
-          final userData = decodedResponse['user'];
-          setState(() {
-            isLoading = false;
-          });
-          await storage.write(
-              key: 'authToken', value: decodedResponse['token']);
-          await updateSharedPreference(userData);
-          if (!mounted) return;
-          updateUserProvider(userData, context);
-          print('Successful Registration');
-          if (!mounted) return;
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeNav(),
-            ),
-            (route) => false,
-          );
-        } else if (response.statusCode == 409) {
-          setState(() {
-            isLoading = false;
-          });
-          if (!mounted) return;
+
+        if (response == "error") {
           AppUtils.showSnackBar(
-            context,
-            ContentType.failure,
-            'This phone Number has taken, please enter a different phone number.',
+              context,
+              ContentType.failure,
+              'Network error. Please try again.'
           );
-          print('Failed login');
-          print('user: $decodedResponse');
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-          if (!mounted) return;
-          AppUtils.showSnackBar(
-            context,
-            ContentType.failure,
-            'Network error. Please try again.',
-          );
-          print('Failed login');
-          print('user: $response');
         }
+        else {
+          final decodedResponse = jsonDecode(response.body);
+          if (decodedResponse["success"]) {
+            final userData = decodedResponse['user'];
+            AppUtils.showSnackBar(
+                context,
+                ContentType.success,
+                decodedResponse["message"]
+            );
+            await storage.write(
+                key: 'authToken', value: decodedResponse['token']);
+            await updateSharedPreference(userData);
+
+            updateUserProvider(userData, context);
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeNav(),
+              ),
+                  (route) => false,
+            );
+          } else {
+            AppUtils.showSnackBar(
+                context,
+                ContentType.failure,
+                decodedResponse["message"]
+            );
+          }
+        }
+
+        setState(() {
+          isLoading = false;
+        });
       } else {
         setState(() {
           isLoading = false;

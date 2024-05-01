@@ -195,10 +195,21 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(
                       height: 13,
                     ),
-                    Text(
-                      userData.name ?? '',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
+
+                    Center(
+                        child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                          Text(userData.firstName ?? ""),
+                          SizedBox(width: 10),
+                          Text(userData.lastName ?? ""),
+                        ]),
+                        Text(userData.phone ?? "")
+                      ],
+                    )),
+
                     const SizedBox(
                       height: 8,
                     ),
@@ -240,9 +251,9 @@ class _SettingsState extends State<Settings> {
                             'Terms and Conditions', Icons.description_outlined,
                             browseTo: "https://google.com"),
                         profileModificationLink('Logout', Icons.logout,
-                            onClick: () async{
+                            onClick: () async {
                           await appLogOut(context);
-                            }),
+                        }),
                         const SizedBox(
                           height: 80,
                         )
@@ -260,13 +271,8 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  Widget profileModificationLink(
-    String title,
-    IconData icon, {
-    Widget? navTo,
-    String? browseTo,
-        VoidCallback? onClick
-  }) {
+  Widget profileModificationLink(String title, IconData icon,
+      {Widget? navTo, String? browseTo, VoidCallback? onClick}) {
     return GestureDetector(
       onTap: () {
         if (navTo != null) {
@@ -279,7 +285,7 @@ class _SettingsState extends State<Settings> {
 
           launchInApp(url);
         }
-        if(onClick != null) {
+        if (onClick != null) {
           onClick();
         }
       },
