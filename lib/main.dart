@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:eltransfer/onboarding/auth/register.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +13,7 @@ import 'package:eltransfer/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'firebase_options.dart';
+import 'helper/app_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,9 +57,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // primarySwatch: MaterialColor(),
         // Define the default brightness and colors.
-        primaryColor: Color(0xFF008100),
+        primaryColor: AppUtils.PrimaryColor,
         hintColor: Color(0xffFF9719),
-        backgroundColor: Color(0xFF008100).withOpacity(0.03),
+        backgroundColor: AppUtils.PrimaryColor.withOpacity(0.03),
         unselectedWidgetColor: Colors.grey,
         primaryColorDark: Color(0xff000000),
         primaryColorLight: Color(0xffffffff),
@@ -162,10 +162,11 @@ class MyApp extends StatelessWidget {
     });
     return Container(
       decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-          image: const DecorationImage(
-              image: AssetImage('assets/images/splash_bg.png'),
-              fit: BoxFit.fill)),
+        color: AppUtils.PrimaryColor.withOpacity(0.3),
+        // image: const DecorationImage(
+        //     image: AssetImage('assets/images/splash_bg.png'),
+        //     fit: BoxFit.fill)
+      ),
       width: double.infinity,
       height: double.infinity,
       child: Center(
