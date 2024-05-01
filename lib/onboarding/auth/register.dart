@@ -174,12 +174,15 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 35),
                       constraints: const BoxConstraints(minHeight: 245),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/top_bg.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              AppUtils.PrimaryColor.withOpacity(0.6),
+                              AppUtils.White
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
                       child: Center(
                           child: Padding(
                         padding: EdgeInsets.only(top: 0.0),
