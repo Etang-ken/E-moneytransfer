@@ -13,7 +13,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 final storage = FlutterSecureStorage();
 
 class AppUtils {
-  static const Color PrimaryColor = Color(0xFF008100);
+  static const Color PrimaryColor = Color(0xFF378786);
   static Color PrimaryLight = Color(0xffEAE3E8);
   static Color GreenColor = Color(0xff019F01);
   static Color YellowColor = Color(0xffFF9719);
