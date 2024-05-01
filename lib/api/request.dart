@@ -9,21 +9,29 @@ class APIRequest {
       {required String route, required Map<String, dynamic> data}) async {
     String url = "${AppUrl.baseUrl}$route";
     Map<String, String>? headers = await _header();
-    var response = await http.post(
-      Uri.parse(url),
-      body: jsonEncode(data),
-      headers: headers,
-    );
-    print(url);
-    // If the server returns a 200 OK response, you can print the response body
-    return response;
+    try{
+      var response = await http.post(
+        Uri.parse(url),
+        body: jsonEncode(data),
+        headers: headers,
+      );
+      return response;
+    }catch(e){
+      return  "error";
+    }
+
   }
 
   Future<dynamic> getRequest({required String route}) async {
     String url = "${AppUrl.baseUrl}$route";
     Map<String, String>? headers = await _header();
-    final result = await http.get(Uri.parse(url), headers: headers);
-    return result;
+    try{
+      final result = await http.get(Uri.parse(url), headers: headers);
+      return result;
+    }catch(e){
+      return  "error";
+    }
+
   }
 
   _header() async {

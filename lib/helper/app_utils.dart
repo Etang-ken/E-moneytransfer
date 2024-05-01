@@ -276,5 +276,7 @@ Future<void> appLogOut(BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await storage.deleteAll();
   await prefs.clear();
-  Navigator.push(context, MaterialPageRoute(builder: (context) => LogIn()));
+  Navigator.pushAndRemoveUntil(context,
+      MaterialPageRoute(builder: (context) => LogIn())
+  );
 }
