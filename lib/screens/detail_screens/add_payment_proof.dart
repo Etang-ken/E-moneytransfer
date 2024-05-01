@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/widgets/general_button.dart';
+import 'package:elcrypto/widgets/primary_button.dart';
 
 class AddPaymentProof extends StatefulWidget {
   @override

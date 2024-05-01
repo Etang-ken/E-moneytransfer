@@ -1,5 +1,5 @@
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/screens/widgets/notification_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

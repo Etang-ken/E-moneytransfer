@@ -1,18 +1,12 @@
-import 'dart:convert';
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
-import 'package:emoneytransfer/onboarding/auth/phone_number.dart';
+import 'package:elcrypto/onboarding/auth/login.dart';
+import 'package:elcrypto/onboarding/auth/phone_number.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/helper/validator.dart';
+import 'package:elcrypto/widgets/primary_button.dart';
+import 'package:elcrypto/widgets/text_field.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -90,18 +84,21 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 35),
                       constraints: const BoxConstraints(minHeight: 245),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/top_bg.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              AppUtils.PrimaryColor.withOpacity(0.6),
+                              AppUtils.White
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
                       child: Center(
                           child: Padding(
                         padding: EdgeInsets.only(top: 0.0),
                         child: Center(
                           child: Image.asset(
-                            'assets/images/logo/eltransfer.png',
+                            'assets/images/logo/elcrypto.png',
                             height: 150,
                           ),
                         ),

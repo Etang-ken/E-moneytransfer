@@ -1,16 +1,17 @@
 import 'dart:async';
 
-import 'package:emoneytransfer/onboarding/auth/register.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:elcrypto/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:elcrypto/home_nav.dart';
+import 'package:elcrypto/onboarding/auth/login.dart';
+import 'package:elcrypto/provider/transaction.dart';
+import 'package:elcrypto/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:elcrypto/helper/app_utils.dart';
 
 import 'firebase_options.dart';
 
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // primarySwatch: MaterialColor(),
         // Define the default brightness and colors.
-        primaryColor: Color(0xFF008100),
+        primaryColor: AppUtils.PrimaryColor,
         hintColor: Color(0xffFF9719),
         backgroundColor: Color(0xFF008100).withOpacity(0.03),
         unselectedWidgetColor: Colors.grey,
@@ -161,10 +162,10 @@ class MyApp extends StatelessWidget {
     });
     return Container(
       decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-          image: const DecorationImage(
-              image: AssetImage('assets/images/splash_bg.png'),
-              fit: BoxFit.fill)),
+        color: AppUtils.PrimaryColor.withOpacity(0.3),
+      //   image: const DecorationImage(
+      //       image: AssetImage('assets/images/splash_bg.png'), fit: BoxFit.fill),
+      ),
       width: double.infinity,
       height: double.infinity,
       child: Center(

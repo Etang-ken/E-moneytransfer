@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/screens/detail_screens/add_new_transaction.dart';
+import 'package:elcrypto/api/request.dart';
+import 'package:elcrypto/api/url.dart';
+import 'package:elcrypto/provider/transaction.dart';
+import 'package:elcrypto/screens/detail_screens/add_new_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/detail_screens/client_invoices.dart';
-import 'package:emoneytransfer/screens/notifications.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/home_nav.dart';
+import 'package:elcrypto/screens/detail_screens/client_invoices.dart';
+import 'package:elcrypto/screens/notifications.dart';
+import 'package:elcrypto/screens/widgets/notification_icon.dart';
+import 'package:elcrypto/provider/user.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});

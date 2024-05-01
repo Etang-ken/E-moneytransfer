@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/onboarding/auth/register.dart';
+import 'package:elcrypto/onboarding/auth/register.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../helper/app_utils.dart';
 import '../../helper/custom_snack_bar.dart';
 import '../../helper/session_manager.dart';
 import '../../helper/shared_preference.dart';

@@ -1,11 +1,11 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:elcrypto/onboarding/auth/login.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:elcrypto/provider/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -13,11 +13,11 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 final storage = FlutterSecureStorage();
 
 class AppUtils {
-  static const Color PrimaryColor = Color(0xFF008100);
-  static Color PrimaryLight = Color(0xffEAE3E8);
+  static const Color PrimaryColor = Color(0xffce4600);
+  static Color PrimaryLight = Color(0xffef895e);
   static Color GreenColor = Color(0xff019F01);
   static Color YellowColor = Color(0xffFF9719);
-  static const Color AccentColor = Color(0xFFFF6908);
+  static const Color AccentColor = Color(0xFFf47434);
   static const Color DarkColor = Color(0xFF212121);
   static const Color PaleGreenColor = Color(0xFF33CCAA);
   static const Color RedColor = Color(0xFFEC0000);
