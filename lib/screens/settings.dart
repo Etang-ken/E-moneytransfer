@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
 
   Future<void> _pickImage() async {
     XFile? pickedImage =
-    await _imagePicker.pickImage(source: ImageSource.gallery);
+        await _imagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imageFile = pickedImage;
@@ -47,7 +47,7 @@ class _SettingsState extends State<Settings> {
         isLoading = true;
       });
 
-      var uri = Uri.parse("${AppUrl.baseUrl}/user/update-user-img");
+      var uri = Uri.parse("${AppUrl.baseUrl}/profile/save_profile_image");
       var request = http.MultipartRequest('POST', uri);
       final storage = FlutterSecureStorage();
       final token = await storage.read(key: 'authToken');
@@ -58,7 +58,7 @@ class _SettingsState extends State<Settings> {
         request.headers['Accept'] = 'application/json';
       }
 
-      var file = await http.MultipartFile.fromPath('image', _imageFile!.path);
+      var file = await http.MultipartFile.fromPath('profile', _imageFile!.path);
       request.files.add(file);
       print(_imageFile!.path);
 
@@ -76,9 +76,8 @@ class _SettingsState extends State<Settings> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: ((context) =>
-                HomeNav(
-                  navIndex: 3,
+            builder: ((context) => HomeNav(
+                  navIndex: 1,
                 )),
           ),
         );
@@ -121,158 +120,157 @@ class _SettingsState extends State<Settings> {
       return Stack(
         children: [
           Scaffold(
-              backgroundColor: AppUtils.SecondaryGrayExtraLight,
-              appBar: AppBar(
-                backgroundColor: AppUtils.PrimaryColor,
-                automaticallyImplyLeading: false,
-                elevation: 0,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Settings",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headline4
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    NotificationIcon(context: context)
-                  ],
-                ),
-              ),
-              body: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 15, vertical: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                  Center(
-                  child: Stack(
-                  children: [
-                    Container(
-                    height: 140,
-                    width: 140,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppUtils.White,
-                      image: _imageFile != null
-                          ? DecorationImage(
-                        image: FileImage(
-                          File(_imageFile!.path),
-                        ),
-                        fit: BoxFit.cover,
-                      )
-                          : userData.profileUrl == ''
-                          ? const DecorationImage(
-                        image: AssetImage(
-                            'assets/images/user-profile-avatar@3x-1.png'),
-                        fit: BoxFit.cover,
-                      )
-                          : DecorationImage(
-                          image: NetworkImage(
-                              userData.profileUrl ?? ''),
-                          fit: BoxFit.fill),
-                    ),
+            backgroundColor: AppUtils.SecondaryGrayExtraLight,
+            appBar: AppBar(
+              backgroundColor: AppUtils.PrimaryColor,
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Settings",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4
+                        ?.copyWith(color: Colors.white),
                   ),
-                  Positioned(
-                    bottom: 10,
-                    left: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: _pickImage,
-                      child: Center(
-                        child: Container(
-                          height: 35,
-                          width: 35,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppUtils.White,
+                  NotificationIcon(context: context)
+                ],
+              ),
+            ),
+            body: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 140,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppUtils.White,
+                              image: _imageFile != null
+                                  ? DecorationImage(
+                                      image: FileImage(
+                                        File(_imageFile!.path),
+                                      ),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : userData.profileUrl == ''
+                                      ? const DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/user-profile-avatar@3x-1.png'),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : DecorationImage(
+                                          image: NetworkImage(
+                                              userData.profileUrl ?? ''),
+                                          fit: BoxFit.fill),
+                            ),
                           ),
-                          child: const Icon(Icons.edit_outlined,
-                              color: AppUtils.PrimaryColor),
-                        ),
+                          Positioned(
+                            bottom: 10,
+                            left: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: _pickImage,
+                              child: Center(
+                                child: Container(
+                                  height: 35,
+                                  width: 35,
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppUtils.White,
+                                  ),
+                                  child: const Icon(Icons.edit_outlined,
+                                      color: AppUtils.PrimaryColor),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 13,
+                    ),
+                    Text(
+                      userData.name ?? '',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    IntrinsicWidth(
+                      child: GeneralButton(
+                        buttonText: 'Change Profile Photo',
+                        btnTextColor: AppUtils.PrimaryColor,
+                        borderColor: AppUtils.PrimaryColor,
+                        btnBgColor: AppUtils.White,
+                        iconPosition: IconPosition.left,
+                        btnIcon: const Icon(Icons.insert_photo),
+                        onClickBtn: _saveImage,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+
+                    Column(
+                      children: [
+                        // profileModificationLink(
+                        //     'Profile', Icons.person_outlined,
+                        //     navTo: const EditProfile()),
+                        profileModificationLink(
+                            'Edit Profile', Icons.edit_outlined,
+                            navTo: const EditProfile()),
+                        profileModificationLink(
+                            'Change Password', Icons.lock_outline,
+                            navTo: const ChangePassword()),
+                        profileModificationLink(
+                            'Contact Us', Icons.phone_outlined,
+                            browseTo: "https://google.com"),
+                        profileModificationLink('FAQs', Icons.help_outline,
+                            browseTo: "https://google.com"),
+                        profileModificationLink(
+                            'Privacy Policy', Icons.privacy_tip_outlined,
+                            browseTo: "https://google.com"),
+                        profileModificationLink(
+                            'Terms and Conditions', Icons.description_outlined,
+                            browseTo: "https://google.com"),
+                        profileModificationLink('Logout', Icons.logout,
+                            onClick: () async{
+                          await appLogOut(context);
+                            }),
+                        const SizedBox(
+                          height: 80,
+                        )
+                      ],
+                    ),
+                    // ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 13,
-              ),
-              Text(
-                userData.name ?? '',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline4,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              IntrinsicWidth(
-                child: GeneralButton(
-                  buttonText: 'Change Profile Photo',
-                  btnTextColor: AppUtils.PrimaryColor,
-                  borderColor: AppUtils.PrimaryColor,
-                  btnBgColor: AppUtils.White,
-                  iconPosition: IconPosition.left,
-                  btnIcon: const Icon(Icons.insert_photo),
-                  onClickBtn: _saveImage,
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-
-              Column(
-                  children: [
-                  profileModificationLink(
-                  'Profile', Icons.person_outlined,
-                  navTo: const EditProfile()),
-              profileModificationLink(
-                  'Edit Profile', Icons.edit_outlined,
-                  navTo: const EditProfile()),
-              profileModificationLink(
-                  'Change Password', Icons.lock_outline,
-                  navTo: const ChangePassword()),
-              profileModificationLink(
-                  'Contact Us', Icons.phone_outlined,
-                  browseTo: "https://google.com"),
-              profileModificationLink('FAQs', Icons.help_outline,
-                  browseTo: "https://google.com"),
-              profileModificationLink(
-                  'Privacy Policy', Icons.privacy_tip_outlined,
-                  browseTo: "https://google.com"),
-          profileModificationLink(
-              'Terms and Conditions', Icons.description_outlined,
-              browseTo: "https://google.com"),
-          profileModificationLink('Logout', Icons.logout,
-              navTo: null),
-          const SizedBox(
-            height: 80,
-          )
+            ),
+          ),
+          if (isLoading) showIsLoading()
         ],
-      ),
-      // ),
-      ],
-      ),
-      ),
-      ),
-      ),
-      if (isLoading) showIsLoading()
-      ],
       );
     });
   }
 
-  Widget profileModificationLink(String title,
-      IconData icon, {
-        Widget? navTo,
-        String? browseTo,
-      }) {
+  Widget profileModificationLink(
+    String title,
+    IconData icon, {
+    Widget? navTo,
+    String? browseTo,
+        VoidCallback? onClick
+  }) {
     return GestureDetector(
       onTap: () {
         if (navTo != null) {
@@ -284,6 +282,9 @@ class _SettingsState extends State<Settings> {
           final Uri url = Uri.parse(browseTo);
 
           launchInApp(url);
+        }
+        if(onClick != null) {
+          onClick();
         }
       },
       child: Container(
@@ -309,13 +310,9 @@ class _SettingsState extends State<Settings> {
                 ),
                 Text(
                   title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
               ],
             ),

@@ -1,5 +1,7 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:emoneytransfer/onboarding/auth/login.dart';
 import "package:flutter/material.dart";
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +9,8 @@ import 'package:emoneytransfer/provider/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
+final storage = FlutterSecureStorage();
 
 class AppUtils {
   static const Color PrimaryColor = Color(0xFF008100);
@@ -126,6 +130,8 @@ Future<void> updateSharedPreference(dynamic data) async {
   prefs.setString('phone', isNullStringValue(data['phone']));
   prefs.setInt('admin', isNullIntValue(data['admin']));
   prefs.setString('profileUrl', isNullStringValue(data['profile']));
+  prefs.setString('firstName', isNullStringValue(data['first_name']));
+  prefs.setString('lastName', isNullStringValue(data['last_name']));
   prefs.setInt('id', isNullIntValue(data['id']));
 }
 
@@ -138,6 +144,8 @@ Future<void> updateUserProvider(dynamic userData, BuildContext context) async {
     'admin': userData['admin'] ?? 0,
     'email': userData['email'] ?? '',
     'phone': userData['phone'] ?? '',
+    'firstName': userData['first_name'] ?? '',
+    'lastName': userData['last_name'] ?? '',
     'profileUrl': userData['profile'] ?? ''
   };
   userProvider.updateUserData(data);
@@ -154,6 +162,8 @@ Future<void> updateUserProviderFromSharedPreference(
     'admin': prefs.getInt('admin') ?? 0,
     'email': prefs.getString('email') ?? '',
     'phone': prefs.getString('phone') ?? '',
+    'firstName': prefs.getString('firstName') ?? '',
+    'lastName': prefs.getString('lastName') ?? '',
     'profileUrl': prefs.getString('profileUrl') ?? ''
   };
   userProvider.updateUserData(data);
@@ -260,4 +270,11 @@ Color transactionStatusColor(String status) {
   } else {
     return AppUtils.RedColor;
   }
+}
+
+Future<void> appLogOut(BuildContext context) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await storage.deleteAll();
+  await prefs.clear();
+  Navigator.push(context, MaterialPageRoute(builder: (context) => LogIn()));
 }

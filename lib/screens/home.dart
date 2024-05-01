@@ -43,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
         body: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 20),
-          margin: EdgeInsets.only(bottom: 100),
+          // margin: EdgeInsets.only(bottom: 100),
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Column(
@@ -83,14 +83,14 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 100,
                 ),
               ],
             ),
           ),
         ),
         floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 60.0),
+          padding: const EdgeInsets.only(bottom: 100.0),
           child: FloatingActionButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewTransaction()));

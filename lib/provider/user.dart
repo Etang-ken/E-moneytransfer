@@ -7,6 +7,8 @@ class UserData {
   String? phone;
   int? admin;
   String? profileUrl;
+  String? firstName;
+  String? lastName;
 }
 
 class UserProvider extends ChangeNotifier {
@@ -18,6 +20,8 @@ class UserProvider extends ChangeNotifier {
     userData.email = data['email'];
     userData.phone = data['phone'];
     userData.admin = data['admin'];
+    userData.firstName = data['firstName'];
+    userData.lastName = data['lastName'];
     userData.profileUrl = data['profileUrl'];
 
     notifyListeners();

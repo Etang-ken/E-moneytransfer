@@ -31,16 +31,16 @@ class _HomeNavState extends State<HomeNav> {
     setState(() {
       token = hasToken;
     });
-    // if (hasToken == null || hasToken.isEmpty) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     Navigator.of(context).pushReplacement(
-    //       MaterialPageRoute(builder: (context) => LogIn()),
-    //     );
-    //   });
-    // } else {
-    //   if(!mounted) return;
-    //   updateUserProviderFromSharedPreference(context);
-    // }
+    if (hasToken == null || hasToken.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LogIn()),
+        );
+      });
+    } else {
+      if(!mounted) return;
+      updateUserProviderFromSharedPreference(context);
+    }
   }
 
   @override

@@ -127,9 +127,9 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               final authToken = snapshot.data;
               if (authToken != null) {
-                return showSplashScreen(Register(), context);
+                return showSplashScreen(HomeNav(), context);
               } else {
-                return showSplashScreen(Register(), context);
+                return showSplashScreen(LogIn(), context);
               }
             } else {
               return Center(child: CircularProgressIndicator());

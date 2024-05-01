@@ -19,7 +19,7 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool showPassword = true;
   bool isLoading = false;
@@ -38,13 +38,14 @@ class _LogInState extends State<LogIn> {
     });
 
     final hasConnectivity = await hasInternetConnectivity(context);
-    final email = emailController.text;
+    final phone = phoneController.text;
     final password = passwordController.text;
     if (hasConnectivity) {
-      final data = {'email': email, 'password': password};
+      final data = {'phone': phone, 'password': password};
       final response =
-          await APIRequest().postRequest(route: '/user-login', data: data);
+          await APIRequest().postRequest(route: '/login', data: data);
       final decodedResponse = jsonDecode(response.body);
+      print(decodedResponse);
       if (response.statusCode == 200) {
         final userData = decodedResponse['user'];
         setState(() {
@@ -173,20 +174,15 @@ class _LogInState extends State<LogIn> {
                             Stack(
                               children: [
                                 TextInputField(
-                                  placeholderText: 'Email',
-                                  inputController: emailController,
-                                  textInputType: TextInputType.emailAddress,
-                                  onChanged: (value) {
-                                    formData['phone'] = value ?? "";
-                                  },
+                                  placeholderText: 'Phone Number *',
+                                  inputController: phoneController,
+                                  textInputType: TextInputType.number,
+                                  onChanged: (value) {},
                                   contentPadding: const EdgeInsets.only(
                                       left: 45, top: 17, bottom: 17),
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
-                                      return 'Email is Required';
-                                    }
-                                    if (!isEmailValid(val)) {
-                                      return 'Invalid email format.';
+                                      return 'Phone Number is Required';
                                     }
                                     return null;
                                   },
@@ -236,11 +232,9 @@ class _LogInState extends State<LogIn> {
                             Stack(
                               children: [
                                 TextInputField(
-                                  placeholderText: 'Password',
+                                  placeholderText: 'Password *',
                                   inputController: passwordController,
-                                  onChanged: (value) {
-                                    formData['password'] = value ?? "";
-                                  },
+                                  onChanged: (value) {},
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
                                       return 'Password is Required';
@@ -311,18 +305,10 @@ class _LogInState extends State<LogIn> {
                             PrimaryButton(
                               buttonText: 'Login',
                               onClickBtn: () {
-                                // if (_formkey.currentState!.validate()) {
-                                // loginUser();
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeNav(),
-                                  ),
-                                  (route) => false,
-                                );
-                                // } else {
-                                //   print("Invalid form Data");
-                                // }
+                                if (_formkey.currentState!.validate()) {
+                                  loginUser();
+                                  print("Invalid form Data");
+                                }
                               },
                             ),
                             const SizedBox(

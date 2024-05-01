@@ -24,10 +24,13 @@ class _RegisterState extends State<Register> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController repeatPasswordController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   bool hidePassword = true;
   bool hideRepeatPassword = true;
   bool isLoading = false;
-  bool showInvalidCreds = false;
+  bool phoneNumberTaken = false;
+  bool showPasswordsUnmatched = false;
   final storage = FlutterSecureStorage();
 
   Map<String, String> formData = {
@@ -35,68 +38,85 @@ class _RegisterState extends State<Register> {
     'password': '',
   };
 
-  void loginUser() async {
+  void registerUser() async {
     setState(() {
       isLoading = true;
-      showInvalidCreds = false;
+      showPasswordsUnmatched = false;
     });
 
     final hasConnectivity = await hasInternetConnectivity(context);
     final email = emailController.text;
     final password = passwordController.text;
-    if (hasConnectivity) {
-      final data = {'email': email, 'password': password};
-      final response =
-          await APIRequest().postRequest(route: '/user-login', data: data);
-      final decodedResponse = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        final userData = decodedResponse['user'];
-        setState(() {
-          isLoading = false;
-        });
-        await storage.write(key: 'authToken', value: decodedResponse['token']);
-        await updateSharedPreference(userData);
-        if (!mounted) return;
-        updateUserProvider(userData, context);
-        print('Successful login');
-        if (!mounted) return;
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeNav(),
-          ),
-          (route) => false,
-        );
-      } else if (response.statusCode == 500) {
-        setState(() {
-          isLoading = false;
-          showInvalidCreds = true;
-        });
-        if (!mounted) return;
-        AppUtils.showSnackBar(
-          context,
-          ContentType.failure,
-          'Invalid Credentials.',
-        );
-        print('Failed login');
-        print('user: $decodedResponse');
+    final repeatPassword = repeatPasswordController.text;
+    final phoneNumber = phoneController.text;
+    final firstName = firstNameController.text;
+    final lastName = lastNameController.text;
+    if (password == repeatPassword) {
+      if (hasConnectivity) {
+        final data = {
+          'email': email,
+          'phone': phoneNumber,
+          'password': password,
+          'first_name': firstName,
+          'last_name': lastName
+        };
+        final response =
+            await APIRequest().postRequest(route: '/register', data: data);
+        final decodedResponse = jsonDecode(response.body);
+        print(decodedResponse);
+        if (response.statusCode == 200) {
+          final userData = decodedResponse['user'];
+          setState(() {
+            isLoading = false;
+          });
+          await storage.write(
+              key: 'authToken', value: decodedResponse['token']);
+          await updateSharedPreference(userData);
+          if (!mounted) return;
+          updateUserProvider(userData, context);
+          print('Successful Registration');
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+            (route) => false,
+          );
+        } else if (response.statusCode == 409) {
+          setState(() {
+            isLoading = false;
+          });
+          if (!mounted) return;
+          AppUtils.showSnackBar(
+            context,
+            ContentType.failure,
+            'This phone Number has taken, please enter a different phone number.',
+          );
+          print('Failed login');
+          print('user: $decodedResponse');
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+          if (!mounted) return;
+          AppUtils.showSnackBar(
+            context,
+            ContentType.failure,
+            'Network error. Please try again.',
+          );
+          print('Failed login');
+          print('user: $response');
+        }
       } else {
         setState(() {
           isLoading = false;
-          showInvalidCreds = false;
         });
-        if (!mounted) return;
-        AppUtils.showSnackBar(
-          context,
-          ContentType.failure,
-          'Network error. Please try again.',
-        );
-        print('Failed login');
-        print('user: $decodedResponse');
       }
     } else {
       setState(() {
         isLoading = false;
+        showPasswordsUnmatched = true;
       });
     }
   }
@@ -143,7 +163,7 @@ class _RegisterState extends State<Register> {
                         padding: EdgeInsets.only(top: 0.0),
                         child: Center(
                           child: Image.asset(
-                            'assets/images/logo/elcrypto.png',
+                            'assets/images/logo/eltransfer.png',
                             height: 150,
                           ),
                         ),
@@ -183,73 +203,13 @@ class _RegisterState extends State<Register> {
                             const SizedBox(
                               height: 50.0,
                             ),
-                            Stack(
-                              children: [
-                                TextInputField(
-                                  placeholderText: 'Email',
-                                  inputController: emailController,
-                                  textInputType: TextInputType.emailAddress,
-                                  onChanged: (value) {
-                                    formData['phone'] = value ?? "";
-                                  },
-                                  contentPadding: const EdgeInsets.only(
-                                      left: 45, top: 17, bottom: 17),
-                                  inputValidator: (val) {
-                                    if (val!.isEmpty) {
-                                      return 'Email is Required';
-                                    }
-                                    if (!isEmailValid(val)) {
-                                      return 'Invalid email format.';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                Positioned(
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 15),
-                                      child: Icon(
-                                        Icons.email_outlined,
-                                        color:
-                                            AppUtils.DarkColor.withOpacity(0.8),
-                                      )),
-                                ),
-                              ],
-                            ),
-                            if (showInvalidCreds)
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10, top: 5),
-                                alignment: Alignment.topLeft,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.info_outline,
-                                      color: AppUtils.RedColor,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      'Invalid Credentials.',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                            fontSize: 11,
-                                            color: AppUtils.RedColor,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             const SizedBox(
                               height: 15,
                             ),
                             Stack(
                               children: [
                                 TextInputField(
-                                  placeholderText: 'Phone Number',
+                                  placeholderText: 'Phone Number *',
                                   inputController: phoneController,
                                   textInputType: TextInputType.number,
                                   onChanged: (value) {
@@ -260,9 +220,6 @@ class _RegisterState extends State<Register> {
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
                                       return 'Phone is Required';
-                                    }
-                                    if (!isEmailValid(val)) {
-                                      return 'Invalid email format.';
                                     }
                                     return null;
                                   },
@@ -282,13 +239,137 @@ class _RegisterState extends State<Register> {
                                 ),
                               ],
                             ),
+                            if (phoneNumberTaken)
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10, top: 5),
+                                alignment: Alignment.topLeft,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.info_outline,
+                                      color: AppUtils.RedColor,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      'Phone number has been taken.',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                            fontSize: 11,
+                                            color: AppUtils.RedColor,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             const SizedBox(
                               height: 15,
                             ),
                             Stack(
                               children: [
                                 TextInputField(
-                                  placeholderText: 'Password',
+                                  placeholderText: 'First Name *',
+                                  inputController: firstNameController,
+                                  textInputType: TextInputType.emailAddress,
+                                  onChanged: (value) {},
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 45, top: 17, bottom: 17),
+                                  inputValidator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'First name is Required';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Positioned(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, top: 15),
+                                      child: Icon(
+                                        Icons.person_2_outlined,
+                                        color:
+                                            AppUtils.DarkColor.withOpacity(0.8),
+                                      )),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Stack(
+                              children: [
+                                TextInputField(
+                                  placeholderText: 'Last Name *',
+                                  inputController: lastNameController,
+                                  textInputType: TextInputType.emailAddress,
+                                  onChanged: (value) {},
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 45, top: 17, bottom: 17),
+                                  inputValidator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Last Name is Required';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Positioned(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, top: 15),
+                                      child: Icon(
+                                        Icons.person_outline,
+                                        color:
+                                            AppUtils.DarkColor.withOpacity(0.8),
+                                      )),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Stack(
+                              children: [
+                                TextInputField(
+                                  placeholderText: 'Email',
+                                  inputController: emailController,
+                                  textInputType: TextInputType.emailAddress,
+                                  onChanged: (value) {
+                                    formData['phone'] = value ?? "";
+                                  },
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 45, top: 17, bottom: 17),
+                                  inputValidator: (val) {
+                                    if (val!.isNotEmpty) {
+                                      if (!isEmailValid(val)) {
+                                        return 'Invalid email format.';
+                                      }
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Positioned(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, top: 15),
+                                      child: Icon(
+                                        Icons.email_outlined,
+                                        color:
+                                            AppUtils.DarkColor.withOpacity(0.8),
+                                      )),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Stack(
+                              children: [
+                                TextInputField(
+                                  placeholderText: 'Password *',
                                   inputController: passwordController,
                                   onChanged: (value) {
                                     formData['password'] = value ?? "";
@@ -345,7 +426,7 @@ class _RegisterState extends State<Register> {
                             Stack(
                               children: [
                                 TextInputField(
-                                    placeholderText: 'Repeat Password',
+                                    placeholderText: 'Repeat Password *',
                                     inputController: repeatPasswordController,
                                     onChanged: (value) {
                                       formData['password'] = value ?? "";
@@ -394,24 +475,36 @@ class _RegisterState extends State<Register> {
                                 ),
                               ],
                             ),
+                            if (showPasswordsUnmatched)
+                              Text(
+                                'Passwords do not match.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                      fontSize: 12,
+                                      color: AppUtils.RedColor,
+                                    ),
+                              ),
                             const SizedBox(
                               height: 65,
                             ),
                             PrimaryButton(
                               buttonText: 'Register',
                               onClickBtn: () {
-                                // if (_formkey.currentState!.validate()) {
-                                // loginUser();
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeNav(),
-                                  ),
-                                  (route) => false,
-                                );
-                                // } else {
-                                //   print("Invalid form Data");
-                                // }
+                                if (_formkey.currentState!.validate()) {
+                                  print('All Good');
+                                  registerUser();
+                                  // Navigator.pushAndRemoveUntil(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => HomeNav(),
+                                  //   ),
+                                  //   (route) => false,
+                                  // );
+                                } else {
+                                  print("Invalid form Data");
+                                }
                               },
                             ),
                             const SizedBox(

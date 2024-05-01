@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:emoneytransfer/api/request.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
@@ -34,25 +35,32 @@ class _ChangePasswordState extends State<ChangePassword> {
     final hasConnectivity = await hasInternetConnectivity(context);
     if (hasConnectivity) {
       final data = {
-        'old_password': currentPasswordController.text,
+        'password': currentPasswordController.text,
         'new_password': newPasswordController.text
       };
       final response = await APIRequest()
-          .postRequest(route: '/user/change-password', data: data);
+          .postRequest(route: '/profile/change_password', data: data);
       final decodedResponse = jsonDecode(response.body);
-
+      print('response: $decodedResponse');
       if (response.statusCode == 200) {
         updateSharedPreference(decodedResponse['user']);
         if (!mounted) return;
         updateUserProvider(decodedResponse['user'], context);
+
         setState(() {
           isLoading = false;
         });
+
+        AppUtils.showSnackBar(
+          context,
+          ContentType.success,
+          'Password Modified Successfully.',
+        );
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => HomeNav(
-              navIndex: 3,
+              navIndex: 1,
             ),
           ),
         );
@@ -61,6 +69,11 @@ class _ChangePasswordState extends State<ChangePassword> {
           isLoading = false;
           showCurrentPinMatchError = true;
         });
+        AppUtils.showSnackBar(
+          context,
+          ContentType.failure,
+          'Invalid Old Password.',
+        );
       } else {
         print(response.body);
         setState(() {
@@ -338,7 +351,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ),
               ),
               Positioned(
-                bottom: 0,
+                bottom: 30,
                 left: 0,
                 right: 0,
                 child: Container(
