@@ -88,55 +88,55 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      setActivePayment(1);
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      decoration: BoxDecoration(
-                          color: activePayment == 1
-                              ? Colors.blue.withOpacity(0.3)
-                              : null,
-                          border: Border.all(
-                              color: AppUtils.SecondaryGray.withOpacity(0.4)),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                        children: [
-                          ClipRect(
-                            child: Image.asset("assets/images/mtn-momo.png"),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "MTN MobileMoney",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                "+237 672349837",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(fontSize: 12),
-                              ),
-                            ],
-                          )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     setActivePayment(1);
+                  //   },
+                  //   child: Container(
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  //     decoration: BoxDecoration(
+                  //         color: activePayment == 1
+                  //             ? Colors.blue.withOpacity(0.3)
+                  //             : null,
+                  //         border: Border.all(
+                  //             color: AppUtils.SecondaryGray.withOpacity(0.4)),
+                  //         borderRadius: BorderRadius.circular(10)),
+                  //     child: Row(
+                  //       children: [
+                  //         ClipRect(
+                  //           child: Image.asset("assets/images/mtn-momo.png"),
+                  //         ),
+                  //         const SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Expanded(
+                  //             child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Text(
+                  //               "MTN MobileMoney",
+                  //               style: Theme.of(context)
+                  //                   .textTheme
+                  //                   .bodyText2!
+                  //                   .copyWith(fontWeight: FontWeight.w600),
+                  //             ),
+                  //             Text(
+                  //               "+237 672349837",
+                  //               style: Theme.of(context)
+                  //                   .textTheme
+                  //                   .bodyText1!
+                  //                   .copyWith(fontSize: 12),
+                  //             ),
+                  //           ],
+                  //         )),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     decoration: BoxDecoration(
