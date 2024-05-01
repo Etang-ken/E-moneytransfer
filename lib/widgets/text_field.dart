@@ -6,22 +6,25 @@ class TextInputField extends StatefulWidget {
   final int maxLines;
   final TextInputType? textInputType;
   final bool hideText;
+  final bool enabled;
   final TextEditingController? inputController;
   final EdgeInsetsGeometry? contentPadding;
   final Color? bgColor;
   final String? Function(String?)? inputValidator;
   final void Function(String?)? onChanged;
 
-  TextInputField(
-      {this.placeholderText,
-      this.textInputType,
-      this.inputController,
-      this.contentPadding,
-      this.bgColor,
-      this.hideText = false,
-      this.onChanged,
-      this.inputValidator,
-      this.maxLines = 1});
+  TextInputField({
+    this.placeholderText,
+    this.textInputType,
+    this.inputController,
+    this.contentPadding,
+    this.bgColor,
+    this.hideText = false,
+    this.onChanged,
+    this.inputValidator,
+    this.maxLines = 1,
+    this.enabled = true,
+  });
 
   @override
   State<TextInputField> createState() => _TextInputFieldState();
@@ -35,14 +38,15 @@ class _TextInputFieldState extends State<TextInputField> {
       constraints: BoxConstraints(minHeight: 50),
       // height: 54,
       child: TextFormField(
+
         decoration: InputDecoration(
+
           contentPadding: widget.contentPadding,
           labelText: widget.placeholderText,
           labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
                 color: AppUtils.DarkColor.withOpacity(0.8),
                 fontSize: 14.0,
               ),
-
           floatingLabelBehavior: FloatingLabelBehavior.never,
           border: OutlineInputBorder(
               borderSide: const BorderSide(
@@ -50,7 +54,6 @@ class _TextInputFieldState extends State<TextInputField> {
                 color: Color.fromARGB(66, 65, 65, 65),
               ),
               borderRadius: BorderRadius.circular(8.0)),
-
           errorStyle: TextStyle(),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(width: 1, color: AppUtils.PrimaryColor),
@@ -64,7 +67,7 @@ class _TextInputFieldState extends State<TextInputField> {
           ),
           constraints: const BoxConstraints(minHeight: 52.0),
           filled: true,
-          fillColor: widget.bgColor ?? Colors.transparent,
+          fillColor: widget.enabled?(widget.bgColor ?? Colors.transparent):Color(0xfff1f1f1)
         ),
         controller: widget.inputController,
         maxLines: widget.maxLines,
@@ -73,6 +76,7 @@ class _TextInputFieldState extends State<TextInputField> {
             .bodyText1!
             .copyWith(fontWeight: FontWeight.w600),
         cursorColor: AppUtils.PrimaryColor,
+        enabled: widget.enabled,
         validator: widget.inputValidator,
         obscureText: widget.hideText,
         keyboardType: widget.textInputType,

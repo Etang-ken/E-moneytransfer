@@ -32,18 +32,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  late ImagePicker _imagePicker;
-  XFile? _imageFile;
   bool isLoading = false;
-
-  Future<void> _pickImage() async {
-    XFile? pickedImage =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _imageFile = pickedImage;
-    });
-  }
 
   void updateUserData(BuildContext ctx) async {
     setState(() {
@@ -56,109 +45,45 @@ class _EditProfileState extends State<EditProfile> {
       });
       return;
     }
-    if (_imageFile != null) {
-      var uri = Uri.parse(
-          "${AppUrl.baseUrl}/user/update"); // Replace with your API endpoint
-      var request = http.MultipartRequest('POST', uri);
-      request.fields['first_name'] = firstNameController.text;
-      request.fields['last_name'] = lastNameController.text;
-      request.fields['phone'] = phoneController.text;
-      request.fields['email'] = emailController.text;
+    var data = {
+      'first_name': firstNameController.text,
+      'lsat_name': lastNameController.text,
+      'email': emailController.text
+    };
 
-      final storage = FlutterSecureStorage();
-      final token = await storage.read(key: 'authToken');
-
-      if (token != null) {
-        request.headers['Authorization'] = 'Bearer $token';
-        request.headers['Content-type'] = 'application/json';
-        request.headers['Accept'] = 'application/json';
-      }
-
-      var file = await http.MultipartFile.fromPath('image', _imageFile!.path);
-      request.files.add(file);
-
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode == 200) {
-        var user = jsonDecode(response.body);
-        await updateSharedPreference(user['user']);
-        updateUserProvider(user['user'], context);
-        print(user['user']);
-
-        setState(() {
-          isLoading = false;
-        });
-        if (!mounted) return;
-        Navigator.push(
-          ctx,
-          MaterialPageRoute(
-            builder: ((context) => HomeNav(
-                  navIndex: 3,
-                )),
-          ),
-        );
-        AppUtils.showSnackBar(
-            ctx, ContentType.success, 'Profile updated successfully.');
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-
-        print("result: ${response.body}");
-        AppUtils.showSnackBar(
-            ctx, ContentType.failure, 'Network Error, please try again.');
-      }
+    final response = await APIRequest()
+        .postRequest(route: "/profile/update_profile", data: data);
+    if (response == "error") {
+      AppUtils.showSnackBar(
+          context, ContentType.failure, 'Network error. Please try again.');
     } else {
-      var data = {
-        'first_name': firstNameController.text,
-        'lsat_name': lastNameController.text,
-        'phone': phoneController.text,
-        'email': emailController.text
-      };
-      final currentContext = ctx;
-      final result =
-          await APIRequest().postRequest(route: "/user/update", data: data);
-      if (result.statusCode == 200) {
-        var user = jsonDecode(result.body);
-        await updateSharedPreference(user['user']);
-        if (!mounted) return;
-        updateUserProvider(user['user'], context);
-        setState(() {
-          isLoading = false;
-        });
+      final decodedResponse = jsonDecode(response.body);
+      if (decodedResponse["success"]) {
+        final userData = decodedResponse['user'];
+        await updateSharedPreference(userData);
 
-        if (!mounted) return;
-        Navigator.push(
-          currentContext,
-          MaterialPageRoute(
-            builder: ((context) => HomeNav(
-                  navIndex: 3,
-                )),
-          ),
-        );
+        updateUserProvider(userData, context);
+
         AppUtils.showSnackBar(
-          ctx,
-          ContentType.success,
-          'Profile updated successfully.',
+            context, ContentType.success, decodedResponse["message"]);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeNav(),
+          ),
+          (route) => false,
         );
       } else {
-        print(result.body);
-        setState(() {
-          isLoading = false;
-        });
-        if (!mounted) return;
         AppUtils.showSnackBar(
-          ctx,
-          ContentType.failure,
-          'Network Error, please try again.',
-        );
+            context, ContentType.failure, decodedResponse["message"]);
       }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> getfirstname() async {
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     print(prefs.getString('lastName'));
   }
@@ -179,10 +104,10 @@ class _EditProfileState extends State<EditProfile> {
       phoneController.text = userProvider.userData.phone ?? '';
     });
   }
+
   Future<void> requestPermission() async {
     var status = await Permission.photos.request();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -239,16 +164,26 @@ class _EditProfileState extends State<EditProfile> {
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 20, horizontal: 20),
-                          constraints: const BoxConstraints(minHeight: 400),
-                          decoration: BoxDecoration(
-                              color: AppUtils.White,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              )),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                'Phone Number *',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(height: 5),
+                              TextInputField(
+                                placeholderText: '+237653251366',
+                                inputController: phoneController,
+                                enabled: false,
+                              ),
+                              const SizedBox(height: 20),
                               Text(
                                 'Full Names *',
                                 textAlign: TextAlign.center,
@@ -307,32 +242,7 @@ class _EditProfileState extends State<EditProfile> {
                                 },
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Phone Number *',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 5),
-                              TextInputField(
-                                placeholderText: '+237 698 938 982 ...',
-                                textInputType: TextInputType.phone,
-                                inputController: phoneController,
-                                inputValidator: (val) {
-                                  if (val!.isEmpty) {
-                                    return 'Phone Number is required';
-                                  }
-                                  if (val.length < 9) {
-                                    return 'Phone must contain atleast 9 characters';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 115),
+
                             ],
                           ),
                         ),

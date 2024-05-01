@@ -40,47 +40,41 @@ class _ChangePasswordState extends State<ChangePassword> {
       };
       final response = await APIRequest()
           .postRequest(route: '/profile/change_password', data: data);
-      final decodedResponse = jsonDecode(response.body);
-      print('response: $decodedResponse');
-      if (response.statusCode == 200) {
-        updateSharedPreference(decodedResponse['user']);
-        if (!mounted) return;
-        updateUserProvider(decodedResponse['user'], context);
 
-        setState(() {
-          isLoading = false;
-        });
-
+      if (response == "error") {
         AppUtils.showSnackBar(
-          context,
-          ContentType.success,
-          'Password Modified Successfully.',
+            context,
+            ContentType.failure,
+            'Network error. Please try again.'
         );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeNav(
-              navIndex: 1,
-            ),
-          ),
-        );
-      } else if (response.statusCode == 401) {
-        setState(() {
-          isLoading = false;
-          showCurrentPinMatchError = true;
-        });
-        AppUtils.showSnackBar(
-          context,
-          ContentType.failure,
-          'Invalid Old Password.',
-        );
-      } else {
-        print(response.body);
-        setState(() {
-          isLoading = false;
-        });
-        print('Change pin failed');
       }
+      else {
+        final decodedResponse = jsonDecode(response.body);
+        if (decodedResponse["success"]) {
+          AppUtils.showSnackBar(
+              context,
+              ContentType.success,
+              decodedResponse["message"]
+          );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+                (route) => false,
+          );
+        } else {
+          AppUtils.showSnackBar(
+              context,
+              ContentType.failure,
+              decodedResponse["message"]
+          );
+        }
+      }
+      setState(() {
+        isLoading = false;
+      });
+
     } else {
       setState(() {
         isLoading = false;
