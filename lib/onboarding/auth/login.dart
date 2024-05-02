@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:emoneytransfer/api/url.dart';
 import 'package:emoneytransfer/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -284,9 +285,7 @@ class _LogInState extends State<LogIn> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                final Uri url = Uri.parse(
-                                    'https://google.com'); // Replace with your desired URL
-
+                                final Uri url = Uri.parse(AppUrl.appUrl+"admin/forget-password"); // Replace with your desired URL
                                 launchInApp(url);
                               },
                               child: Align(

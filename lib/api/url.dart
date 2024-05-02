@@ -1,3 +1,4 @@
 class AppUrl {
   static const baseUrl = 'http://localhost:8000/api';
+  static const appUrl = 'http://localhost:8000/';
 }

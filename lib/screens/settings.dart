@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:emoneytransfer/api/url.dart';
 import 'package:emoneytransfer/helper/app_utils.dart';
@@ -86,7 +87,7 @@ class _SettingsState extends State<Settings> {
         setState(() {
           isLoading = false;
         });
-        print(response.body);
+
         if (!mounted) return;
         AppUtils.showSnackBar(
           context,
@@ -102,15 +103,21 @@ class _SettingsState extends State<Settings> {
           'No image has been uploaded, please upload one.');
     }
   }
+  String appName = "";
+
 
   @override
   void initState() {
     super.initState();
     _imagePicker = ImagePicker();
+     PackageInfo.fromPlatform().then((value){
+        appName = value.appName;
+     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<UserProvider>(builder: (_, data, __) {
       final userData = data.userData;
       return Stack(
@@ -239,17 +246,26 @@ class _SettingsState extends State<Settings> {
                         profileModificationLink(
                             'Change Password', Icons.lock_outline,
                             navTo: const ChangePassword()),
+
+                        profileModificationLink(
+                            'About', Icons.info_outline,
+                            browseTo: AppUrl.appUrl+"about_app/"+appName),
+
                         profileModificationLink(
                             'Contact Us', Icons.phone_outlined,
-                            browseTo: "https://google.com"),
-                        profileModificationLink('FAQs', Icons.help_outline,
-                            browseTo: "https://google.com"),
+                            browseTo: AppUrl.appUrl+"about_app/"+appName),
+
+                        profileModificationLink('FAQs', Icons.question_mark,
+                            browseTo: AppUrl.appUrl+"faq/"+appName),
+
                         profileModificationLink(
                             'Privacy Policy', Icons.privacy_tip_outlined,
-                            browseTo: "https://google.com"),
+                            browseTo: AppUrl.appUrl+"privacy_and_policy/"+appName),
+
                         profileModificationLink(
                             'Terms and Conditions', Icons.description_outlined,
-                            browseTo: "https://google.com"),
+                            browseTo: AppUrl.appUrl+"terms_of_use/"+appName),
+
                         profileModificationLink('Logout', Icons.logout,
                             onClick: () async {
                           await appLogOut(context);
