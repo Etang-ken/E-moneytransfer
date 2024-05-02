@@ -87,6 +87,7 @@ class _HomeNavState extends State<HomeNav> {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: AppUtils.SecondaryGrayExtraLight,
             resizeToAvoidBottomInset: false,
             extendBody: true,
             body: IndexedStack(

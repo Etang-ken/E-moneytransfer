@@ -115,6 +115,9 @@ class _RegisterState extends State<Register> {
         showPasswordsUnmatched = true;
       });
     }
+    setState(() {
+
+    });
   }
 
   @override

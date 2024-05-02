@@ -10,45 +10,32 @@ class TransactionProvider extends ChangeNotifier {
   void updateTransactionsData(List<dynamic> dataList) {
     _transactions = dataList
         .map((data) => TransactionData(
-              id: data['id'],
-              userId: data['user_id'],
-              clientId: data['client_id'],
-              clientInstitutionId: data['client_institution_id'],
-              type: data['type'],
-              status: data['status'],
-              createdAt: data['created_at'],
-              items: data['items'],
-            ))
+            id: data['id'],
+            type: data['type'],
+            payload: data['payload'],
+            date: data['date']))
         .toList();
-
+    debugPrint("provider transactions: $_transactions");
     notifyListeners();
   }
 
   void updateTransactionDetail(dynamic dataDetail) {
     transactionDetail = TransactionData(
       id: dataDetail.id,
-      userId: dataDetail.userId,
-      clientId: dataDetail.clientId,
-      clientInstitutionId: dataDetail.clientInstitutionId,
       type: dataDetail.type,
-      status: dataDetail.status,
-      createdAt: dataDetail.createdAt,
-      items: dataDetail.items,
+      payload: dataDetail.payload,
+      date: dataDetail.date,
     );
-     notifyListeners();
+    notifyListeners();
   }
 
   void updateTransactionDetailUsingBrackets(dynamic dataDetail) {
     transactionDetail = TransactionData(
       id: dataDetail['id'],
-      userId: dataDetail['user_id'],
-      clientId: dataDetail['client_id'],
-      clientInstitutionId: dataDetail['client_institution_id'],
       type: dataDetail['type'],
-      status: dataDetail['status'],
-      createdAt: dataDetail['created_at'],
-      items: dataDetail['items'],
+      payload: dataDetail['payload'],
+      date: dataDetail['date'],
     );
-     notifyListeners();
+    notifyListeners();
   }
 }
