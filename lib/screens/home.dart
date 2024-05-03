@@ -27,13 +27,13 @@ class _DashboardState extends State<Dashboard> {
 
   Future<void> getTransactions() async {
     final TransactionProvider transactionProvider =
-    Provider.of<TransactionProvider>(context, listen: false);
+        Provider.of<TransactionProvider>(context, listen: false);
     setState(() {
       isLoading = true;
     });
     try {
       final response =
-      await APIRequest().getRequest(route: "/transactions?type=crypto");
+          await APIRequest().getRequest(route: "/transactions?type=crypto");
       final decodedResponse = jsonDecode(response.body);
       transactionProvider
           .updateTransactionsData(decodedResponse['transactions']);
@@ -66,8 +66,7 @@ class _DashboardState extends State<Dashboard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("Dashboard",
-                  style: Theme
-                      .of(context)
+                  style: Theme.of(context)
                       .textTheme
                       .headline4
                       ?.copyWith(color: Colors.white)),
@@ -79,10 +78,7 @@ class _DashboardState extends State<Dashboard> {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 20),
           // margin: EdgeInsets.only(bottom: 100),
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -91,8 +87,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Text(
                   "Transactions",
-                  style: Theme
-                      .of(context)
+                  style: Theme.of(context)
                       .textTheme
                       .headline4!
                       .copyWith(fontWeight: FontWeight.w700),
@@ -104,25 +99,29 @@ class _DashboardState extends State<Dashboard> {
                   children: isLoading
                       ? [const Text('Loading transactions...')]
                       : transactions.isEmpty
-                      ? [const Text("No transaction has been added.")]
-                      : transactions.map<Widget>((transaction) {
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                        transactionCard(
-                          id: transaction.id!,
-                            context,
-                        transaction.payload['wallet_id'] ?? '-',
-                        transaction.payload['amount_received'] ?? '',
-                        transaction.payload['amount_paid'].toString() ??
-                        '', transaction.payload['currency'] ?? '', 'Success', formatDateWithSlash(transaction.date!)),
-                    const SizedBox(
-                    height: 30
-                    ,
-                    )
-                    ]
-                    );
-                  }).toList(),
+                          ? [const Text("No transaction has been added.")]
+                          : transactions.map<Widget>((transaction) {
+                              return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    transactionCard(
+                                        id: transaction.id!,
+                                        context,
+                                        transaction.payload['wallet_id'] ?? '-',
+                                        transaction
+                                                .payload['amount_received'] ??
+                                            '',
+                                        transaction.payload['amount_paid']
+                                                .toString() ??
+                                            '',
+                                        transaction.payload['currency'] ?? '',
+                                        'Success',
+                                        formatDateWithSlash(transaction.date!)),
+                                    const SizedBox(
+                                      height: 30,
+                                    )
+                                  ]);
+                            }).toList(),
                 ),
                 const SizedBox(
                   height: 100,
@@ -153,8 +152,8 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Widget transactionCard(BuildContext context, String productName, String email,
-      String price, String currency,
-      String status, String date, {required int id}) {
+      String price, String currency, String status, String date,
+      {required int id}) {
     Color statusColor() {
       if (status == 'Success') {
         return AppUtils.GreenColor;
@@ -192,26 +191,20 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Text(
                         productName,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(
-                          // fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              // fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       Text(
                         '$currency $price',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(
-                          fontSize: 11,
-                          color: AppUtils.DarkColor.withOpacity(0.9),
-                        ),
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              fontSize: 11,
+                              color: AppUtils.DarkColor.withOpacity(0.9),
+                            ),
                       ),
                     ],
                   ),
@@ -220,14 +213,10 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Text(
                     email,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(
-                      fontSize: 13,
-                      color: AppUtils.DarkColor.withOpacity(0.7),
-                    ),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontSize: 13,
+                          color: AppUtils.DarkColor.withOpacity(0.7),
+                        ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -258,15 +247,14 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               Text(
                                 status,
-                                style: Theme
-                                    .of(context)
+                                style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
                                     .copyWith(
-                                  fontSize: 11,
-                                  color:
-                                  AppUtils.DarkColor.withOpacity(0.9),
-                                ),
+                                      fontSize: 11,
+                                      color:
+                                          AppUtils.DarkColor.withOpacity(0.9),
+                                    ),
                               ),
                             ],
                           ),
@@ -277,28 +265,27 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       IntrinsicWidth(
                           child: Row(
-                            children: [
-                              const Icon(
-                                Icons.circle,
-                                color: AppUtils.SecondaryGray,
-                                size: 5,
-                              ),
-                              const SizedBox(
-                                width: 7,
-                              ),
-                              Text(
-                                date,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
+                        children: [
+                          const Icon(
+                            Icons.circle,
+                            color: AppUtils.SecondaryGray,
+                            size: 5,
+                          ),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Text(
+                            date,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(
                                   fontSize: 11,
                                   color: AppUtils.DarkColor.withOpacity(0.9),
                                 ),
-                              ),
-                            ],
-                          )),
+                          ),
+                        ],
+                      )),
                     ],
                   ),
                   const SizedBox(
