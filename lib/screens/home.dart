@@ -33,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
     });
     try {
       final response =
-      await APIRequest().getRequest(route: "/transactions?type=crypto");
+      await APIRequest().getRequest(route: "/transactions?type=momo");
       final decodedResponse = jsonDecode(response.body);
       transactionProvider
           .updateTransactionsData(decodedResponse['transactions']);
