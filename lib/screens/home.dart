@@ -33,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
     });
     try {
       final response =
-      await APIRequest().getRequest(route: "/transactions?type=momo");
+      await APIRequest().getRequest(route: "/transactions?type=crypto");
       final decodedResponse = jsonDecode(response.body);
       transactionProvider
           .updateTransactionsData(decodedResponse['transactions']);
@@ -112,9 +112,9 @@ class _DashboardState extends State<Dashboard> {
                         transactionCard(
                           id: transaction.id!,
                             context,
-                        transaction.payload['name'] ?? '-',
-                        transaction.payload['email'] ?? '',
-                        transaction.payload['amount'].toString() ??
+                        transaction.payload['wallet_id'] ?? '-',
+                        transaction.payload['amount_received'] ?? '',
+                        transaction.payload['amount_paid'].toString() ??
                         '', transaction.payload['currency'] ?? '', 'Success', formatDateWithSlash(transaction.date!)),
                     const SizedBox(
                     height: 30

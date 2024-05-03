@@ -23,11 +23,8 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isSavingTransaction = false;
   final formData = {
-    "type": "momo",
-    "name": "",
-    "phone": "",
-    "receiver_name": "",
-    "receiver_phone": "",
+    "type": "crypto",
+    "wallet_id": "",
     "amount_send": "",
     "amount_received": ""
   };
@@ -40,6 +37,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     });
     final response = await APIRequest()
         .postRequest(route: "/transactions/create", data: formData);
+    print(response.body);
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
       transactionProvider
@@ -136,16 +134,6 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Add New Transaction',
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3!
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      Text(
                                         "Wallet ID",
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
@@ -157,10 +145,20 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                       ),
                                       const SizedBox(height: 5),
                                       TextInputField(
-                                          placeholderText: '***********2342'),
+                                        placeholderText: '***********2342',
+                                        onChanged: (val) {
+                                          formData['wallet_id'] = val!;
+                                        },
+                                        inputValidator: (val) {
+                                          if (val!.isEmpty) {
+                                            return 'Wallet ID is required';
+                                          }
+                                          return null;
+                                        },
+                                      ),
                                       const SizedBox(height: 10),
                                       Text(
-                                        "Amount to receive",
+                                        "Amount",
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
@@ -173,24 +171,46 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                       TextInputField(
                                         placeholderText: '50000',
                                         textInputType: TextInputType.number,
+                                        onChanged: (val) {
+                                          formData['amount_send'] = val!;
+                                          formData['amount_received'] = val!;
+                                        },
+                                        inputValidator: (val) {
+                                          if (val!.isEmpty) {
+                                            return 'Amount is required';
+                                          }
+                                          if(int.parse(val) < 100) {
+                                            return 'Amount must be at least 100.';
+                                          }
+                                          return null;
+                                        },
                                       ),
                                       const SizedBox(height: 10),
-                                      Text(
-                                        'Amount to send',
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .copyWith(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      TextInputField(
-                                        placeholderText: '50000',
-                                        textInputType: TextInputType.number,
-                                      ),
+                                      // Text(
+                                      //   'Amount to send',
+                                      //   textAlign: TextAlign.center,
+                                      //   style: Theme.of(context)
+                                      //       .textTheme
+                                      //       .bodyText1!
+                                      //       .copyWith(
+                                      //           fontSize: 12,
+                                      //           fontWeight: FontWeight.w700),
+                                      // ),
+                                      // const SizedBox(height: 5),
+                                      // TextInputField(
+                                      //   placeholderText: '50000',
+                                      //   textInputType: TextInputType.number,
+                                      // ),
                                       const SizedBox(height: 40),
+                                      PrimaryButton(
+                                        buttonText: 'Save & Continue',
+                                        onClickBtn: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            saveTransaction();
+                                          }
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
