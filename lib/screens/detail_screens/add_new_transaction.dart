@@ -29,7 +29,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     "receiver_name": "",
     "receiver_phone": "",
     "amount_send": "",
-    "amount_receive": ""
+    "amount_received": ""
   };
 
   Future<void> saveTransaction() async {
