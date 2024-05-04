@@ -1,4 +1,4 @@
-package com.emoneytransfer.app
+package com.eltransfer.app
 
 import io.flutter.embedding.android.FlutterActivity
 

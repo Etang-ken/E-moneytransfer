@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/screens/widgets/notification_icon.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});

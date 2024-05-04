@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/onboarding/auth/register.dart';
+import 'package:eltransfer/api/url.dart';
+import 'package:eltransfer/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/validator.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class LogIn extends StatefulWidget {
@@ -116,22 +116,19 @@ class _LogInState extends State<LogIn> {
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 35),
                       constraints: const BoxConstraints(minHeight: 245),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/top_bg.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [AppUtils.PrimaryColor.withOpacity(0.6), AppUtils.White], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                      ),
                       child: Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 0.0),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/images/logo/elcrypto.png',
-                                height: 150,
-                              ),
-                            ),
-                          )),
+                        padding: EdgeInsets.only(top: 0.0),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/logo/eltransfer.png',
+                            height: 150,
+                          ),
+                        ),
+                      )),
                     ),
                     const SizedBox(
                       height: 50,
@@ -155,9 +152,8 @@ class _LogInState extends State<LogIn> {
                               height: 8.0,
                             ),
                             Text(
-                              'Login into your ElCrypto account...',
-                              style: Theme
-                                  .of(context)
+                              'Login into your eltransfer account...',
+                              style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
                                   .copyWith(

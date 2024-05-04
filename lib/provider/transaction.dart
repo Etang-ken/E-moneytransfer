@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/models/transaction.dart';
+import 'package:eltransfer/models/transaction.dart';
 
 class TransactionProvider extends ChangeNotifier {
   List<TransactionData> _transactions = [];

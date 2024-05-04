@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/screens/detail_screens/select_payment_method.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/provider/transaction.dart';
+import 'package:eltransfer/screens/detail_screens/select_payment_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/widgets/general_button.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 import 'package:provider/provider.dart';
 
 class AddNewTransaction extends StatefulWidget {

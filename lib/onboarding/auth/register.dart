@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/validator.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Register extends StatefulWidget {
@@ -62,8 +62,31 @@ class _RegisterState extends State<Register> {
         };
         final response =
             await APIRequest().postRequest(route: '/register', data: data);
-
-        if (response == "error") {
+        final decodedResponse = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          final userData = decodedResponse['user'];
+          setState(() {
+            isLoading = false;
+          });
+          await storage.write(
+              key: 'authToken', value: decodedResponse['token']);
+          await updateSharedPreference(userData);
+          if (!mounted) return;
+          updateUserProvider(userData, context);
+          print('Successful Registration');
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+            (route) => false,
+          );
+        } else if (response.statusCode == 409) {
+          setState(() {
+            isLoading = false;
+          });
+          if (!mounted) return;
           AppUtils.showSnackBar(
               context,
               ContentType.failure,
@@ -151,12 +174,15 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 35),
                       constraints: const BoxConstraints(minHeight: 245),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/top_bg.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              AppUtils.PrimaryColor.withOpacity(0.6),
+                              AppUtils.White
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
                       child: Center(
                           child: Padding(
                         padding: EdgeInsets.only(top: 0.0),
@@ -189,7 +215,7 @@ class _RegisterState extends State<Register> {
                               height: 8.0,
                             ),
                             Text(
-                              'Create your ElCrypto account...',
+                              'Create your eltransfer account...',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
