@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:elcrypto/screens/detail_screens/add_payment_proof.dart';
+import 'package:elcrypto/screens/detail_screens/cinetpay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -91,6 +92,12 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
                   GestureDetector(
                     onTap: () {
                       setActivePayment(1);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LaunchCinetpay(),
+                        ),
+                      );
                     },
                     child: Container(
                       padding:
@@ -313,7 +320,10 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
                   PrimaryButton(
                     buttonText: 'Continue',
                     onClickBtn: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddPaymentProof()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddPaymentProof()));
                     },
                   ),
                   const SizedBox(height: 35),

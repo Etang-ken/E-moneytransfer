@@ -5,7 +5,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:elcrypto/api/request.dart';
 import 'package:elcrypto/provider/transaction.dart';
 import 'package:provider/provider.dart';
-import 'package:elcrypto/screens/detail_screens/select_payment_method.dart';
+import 'package:elcrypto/screens/detail_screens/choose_payment_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
