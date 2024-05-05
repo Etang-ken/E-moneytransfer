@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:elcrypto/firebase_options.dart';
 import 'package:elcrypto/onboarding/auth/register.dart';
+import 'package:elcrypto/provider/phone_otp.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +37,10 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => TransactionProvider()),
+        ChangeNotifierProvider(
+          create: (context) => TransactionProvider(),
+        ),
+        ChangeNotifierProvider(create: (context) => PhoneOTPProvider()),
       ],
       child: MyApp(),
     ),
@@ -163,8 +169,8 @@ class MyApp extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppUtils.PrimaryColor.withOpacity(0.3),
-      //   image: const DecorationImage(
-      //       image: AssetImage('assets/images/splash_bg.png'), fit: BoxFit.fill),
+        //   image: const DecorationImage(
+        //       image: AssetImage('assets/images/splash_bg.png'), fit: BoxFit.fill),
       ),
       width: double.infinity,
       height: double.infinity,

@@ -31,7 +31,7 @@ class _RegisterState extends State<Register> {
     'password': '',
   };
 
-  void registerUser() async {
+  void registerUser(BuildContext context) async {
     setState(() {
       showPasswordsUnmatched = false;
     });
@@ -300,11 +300,11 @@ class _RegisterState extends State<Register> {
                               onClickBtn: () {
                                 if (_formkey.currentState!.validate()) {
                                   print('All Good');
-                                  registerUser();
+                                  registerUser(context);
                                 } else {
                                   print("Invalid form Data");
-                                }
-                              },
+                                 }
+                              }
                             ),
                             const SizedBox(
                               height: 30,
