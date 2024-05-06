@@ -1,5 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:eltransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/provider/transaction.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -278,4 +279,10 @@ Future<void> appLogOut(BuildContext context) async {
   await prefs.clear();
   Navigator.pushAndRemoveUntil(context,
       MaterialPageRoute(builder: (context) => LogIn()), (route) => false);
+}
+
+void updateTransactionDetail(BuildContext context, dynamic transactionDetail) {
+  final TransactionProvider transactionProvider =
+      Provider.of<TransactionProvider>(context, listen: false);
+  transactionProvider.updateTransactionDetail(transactionDetail);
 }

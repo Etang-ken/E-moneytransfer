@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eltransfer/helper/app_utils.dart';
-import 'package:eltransfer/screens/detail_screens/invoice_detail.dart';
+import 'package:eltransfer/screens/detail_screens/transaction_detail.dart';
 import 'package:eltransfer/screens/widgets/notification_icon.dart';
 
 class ClientInvoices extends StatefulWidget {
@@ -93,7 +93,7 @@ class _ClientInvoicesState extends State<ClientInvoices> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const InvoiceDetails(),
+            builder: (context) => const TransactionDetails(),
           ),
         );
       },

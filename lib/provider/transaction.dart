@@ -26,6 +26,7 @@ class TransactionProvider extends ChangeNotifier {
       payload: dataDetail.payload,
       date: dataDetail.date,
     );
+    debugPrint("Trnsaction detail: ${transactionDetail.id}");
     notifyListeners();
   }
 

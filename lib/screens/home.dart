@@ -4,6 +4,7 @@ import 'package:eltransfer/api/request.dart';
 import 'package:eltransfer/api/url.dart';
 import 'package:eltransfer/provider/transaction.dart';
 import 'package:eltransfer/screens/detail_screens/add_new_transaction.dart';
+import 'package:eltransfer/screens/detail_screens/transaction_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eltransfer/helper/app_utils.dart';
@@ -107,12 +108,14 @@ class _DashboardState extends State<Dashboard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     transactionCard(
-                                        id: transaction.id!,
+                                        transaction: transaction,
                                         context,
                                         transaction.payload['receiver']
                                                 ['name'] ??
                                             '-',
-                                        transaction.payload['receiver']['phone'] ?? '',
+                                        transaction.payload['receiver']
+                                                ['phone'] ??
+                                            '',
                                         transaction.payload['amount_to_send']
                                                 .toString() ??
                                             '',
@@ -155,7 +158,7 @@ class _DashboardState extends State<Dashboard> {
 
   Widget transactionCard(BuildContext context, String productName, String email,
       String price, String currency, String status, String date,
-      {required int id}) {
+      {required dynamic transaction}) {
     Color statusColor() {
       if (status == 'Success') {
         return AppUtils.GreenColor;
@@ -166,8 +169,11 @@ class _DashboardState extends State<Dashboard> {
 
     return GestureDetector(
       onTap: () {
-        Uri url = Uri.parse("${AppUrl.baseUrl}/transactions/$id");
-        launchInApp(url);
+        // Uri url = Uri.parse("${AppUrl.baseUrl}/transactions/$id");
+        // launchInApp(url);
+        updateTransactionDetail(context, transaction);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => TransactionDetails()));
       },
       child: Container(
         width: double.infinity,
