@@ -145,7 +145,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                                 ),
                                           ),
                                           TextSpan(
-                                            text: '987238479874278 ',
+                                            text:  transaction.payload['receiver']['phone'],
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyText1!
@@ -156,7 +156,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                                 ),
                                           ),
                                           TextSpan(
-                                            text: 'was successful ',
+                                            text: ' was successful ',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyText1!
