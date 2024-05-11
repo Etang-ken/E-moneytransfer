@@ -291,6 +291,7 @@ class _SettingsState extends State<Settings> {
       {Widget? navTo, String? browseTo, VoidCallback? onClick}) {
     return GestureDetector(
       onTap: () {
+        print(AppUrl.appUrl+"about_app/"+appName);
         if (navTo != null) {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => navTo),
