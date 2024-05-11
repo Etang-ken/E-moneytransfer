@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:emoneytransfer/onboarding/auth/phone_number.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,11 +24,9 @@ class _RegisterState extends State<Register> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController repeatPasswordController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   bool hidePassword = true;
-  bool hideRepeatPassword = true;
   bool isLoading = false;
   bool phoneNumberTaken = false;
   bool showPasswordsUnmatched = false;
@@ -40,98 +39,38 @@ class _RegisterState extends State<Register> {
 
   void registerUser() async {
     setState(() {
-      isLoading = true;
       showPasswordsUnmatched = false;
     });
 
     final hasConnectivity = await hasInternetConnectivity(context);
     final email = emailController.text;
     final password = passwordController.text;
-    final repeatPassword = repeatPasswordController.text;
-    final phoneNumber = phoneController.text;
     final firstName = firstNameController.text;
     final lastName = lastNameController.text;
-    if (password == repeatPassword) {
-      if (hasConnectivity) {
-        final data = {
-          'email': email,
-          'phone': phoneNumber,
-          'password': password,
-          'first_name': firstName,
-          'last_name': lastName
-        };
-        final response =
-            await APIRequest().postRequest(route: '/register', data: data);
+    if (hasConnectivity) {
+      final data = {
+        'email': email,
+        'password': password,
+        'first_name': firstName,
+        'last_name': lastName
+      };
 
-        if (response == "error") {
-          AppUtils.showSnackBar(
-              context,
-              ContentType.failure,
-              'Network error. Please try again.'
-          );
-        }
-        else {
-          final decodedResponse = jsonDecode(response.body);
-          if (decodedResponse["success"]) {
-            final userData = decodedResponse['user'];
-            AppUtils.showSnackBar(
-                context,
-                ContentType.success,
-                decodedResponse["message"]
-            );
-            await storage.write(
-                key: 'authToken', value: decodedResponse['token']);
-            await updateSharedPreference(userData);
-
-            updateUserProvider(userData, context);
-
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeNav(),
-              ),
-                  (route) => false,
-            );
-          } else {
-            AppUtils.showSnackBar(
-                context,
-                ContentType.failure,
-                decodedResponse["message"]
-            );
-          }
-        }
-
-        setState(() {
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-      }
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfilePhoneNumber(user: data)));
     } else {
       setState(() {
         isLoading = false;
         showPasswordsUnmatched = true;
       });
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw Exception('Could not launch $url');
-    }
   }
 
   @override
@@ -201,72 +140,6 @@ class _RegisterState extends State<Register> {
                             ),
                             const SizedBox(
                               height: 50.0,
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Stack(
-                              children: [
-                                TextInputField(
-                                  placeholderText: 'Phone Number *',
-                                  inputController: phoneController,
-                                  textInputType: TextInputType.number,
-                                  onChanged: (value) {
-                                    formData['phone'] = value ?? "";
-                                  },
-                                  contentPadding: const EdgeInsets.only(
-                                      left: 45, top: 17, bottom: 17),
-                                  inputValidator: (val) {
-                                    if (val!.isEmpty) {
-                                      return 'Phone is Required';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Positioned(
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 15),
-                                      child: Icon(
-                                        Icons.call_outlined,
-                                        color:
-                                            AppUtils.DarkColor.withOpacity(0.8),
-                                      )),
-                                ),
-                              ],
-                            ),
-                            if (phoneNumberTaken)
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10, top: 5),
-                                alignment: Alignment.topLeft,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.info_outline,
-                                      color: AppUtils.RedColor,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      'Phone number has been taken.',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                            fontSize: 11,
-                                            color: AppUtils.RedColor,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            const SizedBox(
-                              height: 15,
                             ),
                             Stack(
                               children: [
@@ -422,69 +295,6 @@ class _RegisterState extends State<Register> {
                             const SizedBox(
                               height: 15.0,
                             ),
-                            Stack(
-                              children: [
-                                TextInputField(
-                                    placeholderText: 'Repeat Password *',
-                                    inputController: repeatPasswordController,
-                                    onChanged: (value) {
-                                      formData['password'] = value ?? "";
-                                    },
-                                    inputValidator: (val) {
-                                      if (val!.isEmpty) {
-                                        return 'Repeat Password is Required';
-                                      }
-                                      if (val.length < 6) {
-                                        return 'Repeat Password must contain atleast 6 characters.';
-                                      }
-                                      return null;
-                                    },
-                                    hideText: hideRepeatPassword,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 45, vertical: 17)),
-                                Positioned(
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 15),
-                                      child: Icon(Icons.lock_outline_rounded,
-                                          color: AppUtils.DarkColor.withOpacity(
-                                              0.8))),
-                                ),
-                                Positioned(
-                                  right: 3,
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 5, top: 15),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            hideRepeatPassword =
-                                                !hideRepeatPassword;
-                                          });
-                                        },
-                                        child: Icon(
-                                          hideRepeatPassword
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          size: 27,
-                                          color: AppUtils.DarkColor.withOpacity(
-                                              0.7),
-                                        ),
-                                      )),
-                                ),
-                              ],
-                            ),
-                            if (showPasswordsUnmatched)
-                              Text(
-                                'Passwords do not match.',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                      fontSize: 12,
-                                      color: AppUtils.RedColor,
-                                    ),
-                              ),
                             const SizedBox(
                               height: 65,
                             ),
@@ -494,13 +304,6 @@ class _RegisterState extends State<Register> {
                                 if (_formkey.currentState!.validate()) {
                                   print('All Good');
                                   registerUser();
-                                  // Navigator.pushAndRemoveUntil(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => HomeNav(),
-                                  //   ),
-                                  //   (route) => false,
-                                  // );
                                 } else {
                                   print("Invalid form Data");
                                 }

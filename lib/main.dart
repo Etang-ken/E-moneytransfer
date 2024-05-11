@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:emoneytransfer/onboarding/auth/register.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +12,18 @@ import 'package:emoneytransfer/provider/transaction.dart';
 import 'package:emoneytransfer/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //print('User granted permission: ${settings.authorizationStatus}');
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.playIntegrity,
+  );
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Color(0xff0488DD), // navigation bar color
     statusBarColor: Color(0xff0488DD), // status bar color

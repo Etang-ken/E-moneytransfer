@@ -1,257 +1,234 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'dart:async';
+import 'dart:convert';
 
-class VerifyPhoneOrEmail extends StatefulWidget {
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:emoneytransfer/onboarding/auth/register.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../helper/custom_snack_bar.dart';
+import '../../helper/session_manager.dart';
+import '../../helper/shared_preference.dart';
+import '../../home_nav.dart';
+import '../../models/user.dart';
+import 'login.dart';
+
+class ProfileVerifyPhone extends StatefulWidget {
+  static const routeName = "/verify_phone";
+  final verificationId;
+  final phone_number;
+  final user;
+
+  ProfileVerifyPhone(
+      {required this.verificationId, this.phone_number, this.user});
+
   @override
-  _VerifyPhoneOrEmailState createState() => new _VerifyPhoneOrEmailState();
+  _ProfileVerifyPhoneState createState() => new _ProfileVerifyPhoneState();
 }
 
-class _VerifyPhoneOrEmailState extends State<VerifyPhoneOrEmail> {
-  final formKey = GlobalKey<FormState>();
-  bool isChecked = false;
-  bool showPassword = true;
-  bool showRepeatPassword = true;
+class _ProfileVerifyPhoneState extends State<ProfileVerifyPhone> {
+  String code = '';
+
+  late bool isFirstTime;
+  late bool profile_status;
 
   @override
   void initState() {
     super.initState();
+    SessionManager ss = SessionManager();
+    Future<bool> isFirst = ss.isFirstTime();
+    isFirst.then((data) {
+      isFirstTime = data;
+    });
+
+    Future<bool> profileStatus = ss.getProfileStatus();
+    profileStatus.then((data) {
+      profile_status = data;
+    });
   }
 
-  submitForm() {
-    if (!formKey.currentState!.validate()) {
-      return "form data invalid";
-    }
-    if (formKey.currentState != null) {
-      formKey.currentState!.save();
-    }
+  verifyPhone() {
+    fb.FirebaseAuth auth = fb.FirebaseAuth.instance;
+    fb.AuthCredential credential = fb.PhoneAuthProvider.credential(
+        verificationId: widget.verificationId, smsCode: code);
+
+    auth.signInWithCredential(credential).catchError((error) {
+      Navigator.pop(context);
+      var data = {
+        "title": "Something went wrong",
+        "message": "Request failed, Please try again !!",
+      };
+      Navigator.of(context).pop();
+      final snackBar = customSnackBar(
+          context: context, type: ContentType.failure, data: data);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }).then((value) async {
+      // Navigator.pop(context);
+      // AppUtils().showProgressDialog(context);
+      final response = await User.registerUser(widget.user);
+      if (response.statusCode == 201) {
+        Map data = json.decode(response.body);
+        Map user = data['user'];
+        String token = data['token'];
+        saveUser(user, token);
+
+
+        Navigator.of(context).pop();
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeNav()),
+                (Route<dynamic> route) => false);
+
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.success, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      } else if (response.statusCode == 409) {
+        Map data = json.decode(response.body);
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.failure, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LogIn()));
+      } else if (response.statusCode == 500) {
+        Map data = json.decode(response.body);
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.failure, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        Navigator.of(context).pop();
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Register()));
+      } else {
+        var data = {
+          "title": "Something went wrong",
+          "message": "Request failed, Please try again !!",
+        };
+        Navigator.of(context).pop();
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.failure, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
+    var phoneHeight = mediaQuery.size.height;
+    var phoneWidth = mediaQuery.size.width;
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Container(
-          padding: EdgeInsets.symmetric(vertical: 50),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/verification_bg2.png'),
-                fit: BoxFit.fill),
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).backgroundColor,
+            elevation: 0,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(top: 15),
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      child: Image.asset('assets/images/Pro4Home_logo_sm.png'),
-                    ))),
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 18.0,
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Verify Phone \n Number',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(fontWeight: FontWeight.w800),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          'A verification code has been sent to ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                  fontSize: 13, color: AppUtils.SecondaryGray),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          '+237 698789899',
-                          style:
-                              Theme.of(context).textTheme.bodyText1!.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppUtils.DarkColor.withOpacity(0.8),
-                                  ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 60.0,
-                        ),
-                        TextInputField(
-                          placeholderText: 'Enter Verificaion Code',
-                          contentPadding:
-                              EdgeInsets.only(top: 17, bottom: 17, left: 10),
-                        ),
-                        SizedBox(
-                          height: 55,
-                        ),
-                        PrimaryButton(
-                          buttonText: 'Verify Phone',
-                          onClickBtn: () {
-                            showRegistrationSuccess();
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        GeneralButton(
-                          buttonText: 'Resend Code',
-                          btnBgColor: AppUtils.White,
-                          btnTextColor: AppUtils.PrimaryColor,
-                          borderColor: AppUtils.PrimaryColor,
-                          onClickBtn: () {
-                            AppUtils.showSnackBar(context, ContentType.success,
-                                'Code has been resent');
-                          },
-                        ),
-                        SizedBox(
-                          height: 60,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            'Change to Phone Verification',
-                            style:
-                                Theme.of(context).textTheme.bodyText2!.copyWith(
-                                      color: AppUtils.AccentColor,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor:
-                                          AppUtils.AccentColor.withOpacity(0.5),
-                                      decorationThickness: 1.5,
-                                    ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 60,
-                        ),
-                      ],
-                    ))
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void showRegistrationSuccess() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return IntrinsicHeight(
-          child: Center(
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-              constraints: BoxConstraints(maxHeight: 450),
+          body: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
+                color: Theme.of(context).backgroundColor,
               ),
-              child: Column(
-                children: [
-                  SingleChildScrollView(
-                    child: Container(
-                      child: Column(children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
-                          child: Column(children: [
-                            Image.asset('assets/icons/icon-checkmark.png'),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              'Phone Number Verified Successfully',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline3!
-                                  .copyWith(color: AppUtils.DarkColor),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Your phone number ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                            color:
-                                                AppUtils.DarkColor.withOpacity(
-                                                    0.8),
-                                          ),
-                                    ),
-                                    TextSpan(
-                                      text: '+237 698789899 ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                              color: AppUtils.DarkColor,
-                                              fontWeight: FontWeight.w600),
-                                    ),
-                                    TextSpan(
-                                      text: 'has been successfully verified',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(
-                                            color:
-                                                AppUtils.DarkColor.withOpacity(
-                                                    0.8),
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
-                          ]),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        PrimaryButton(
-                          buttonText: 'Proceed to Verify your Email',
-                          btnIcon: Icon(
-                            Icons.arrow_forward_outlined,
-                            color: Colors.white,
+              width: phoneWidth,
+              height: phoneHeight,
+              alignment: Alignment.center,
+              child: Center(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: phoneWidth,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: phoneWidth * 0.05),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Verify Phone Number",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24),
                           ),
-                          onClickBtn: () {},
-                        ),
-                      ]),
-                    ),
+                          SizedBox(height: 30),
+                          Text(
+                            'Enter the 6 - digit verification code we sent to phone number ${widget.phone_number}',
+                            style: TextStyle(fontSize: 15),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 30),
+                          PinCodeTextField(
+                            appContext: context,
+                            pastedTextStyle: TextStyle(
+                              color: AppUtils.PrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            length: 6,
+                            obscureText: false,
+                            blinkWhenObscuring: false,
+                            animationType: AnimationType.fade,
+
+                            pinTheme: PinTheme(
+                                shape: PinCodeFieldShape.box,
+                                borderRadius: BorderRadius.circular(5),
+                                fieldHeight: 50,
+                                fieldWidth: 50,
+                                selectedColor: AppUtils.PrimaryColor,
+                                inactiveColor: AppUtils.PrimaryColor,
+                                activeColor: AppUtils.PrimaryColor),
+                            animationDuration: Duration(milliseconds: 300),
+                            keyboardType: TextInputType.number,
+                            onCompleted: (v) {},
+                            onChanged: (value) {
+                              code = value;
+                            },
+                            beforeTextPaste: (text) {
+                              return true;
+                            },
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: phoneWidth * 0.1),
+                            child: TextButton(
+                              onPressed: () {
+                                verifyPhone();
+                              },
+                              style: ButtonStyle(
+                                  padding:
+                                      MaterialStateProperty.all<EdgeInsets>(
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 30.0, vertical: 15)),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  )),
+                                  // alignment: AlignmentGeometry.,
+
+                                  backgroundColor: MaterialStateProperty.all(
+                                      AppUtils.PrimaryColor)),
+                              child: Text(
+                                "Verify",
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                            ),
+                          ),
+                        ]),
                   ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+                ),
+              ))),
     );
   }
 }
