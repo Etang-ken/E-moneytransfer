@@ -11,8 +11,7 @@ import 'app_utils.dart';
 import 'custom_snack_bar.dart';
 
 class Authenticate {
-
-  onVerifyPhone(BuildContext context,  String phone_number, dynamic userData) {
+  onVerifyPhone(BuildContext context, String phone_number, dynamic userData) {
     fb.FirebaseAuth _auth = fb.FirebaseAuth.instance;
     _auth.verifyPhoneNumber(
       phoneNumber: phone_number,
@@ -32,7 +31,8 @@ class Authenticate {
       verificationCompleted: (fb.AuthCredential authCredential) async {
         Navigator.pop(context);
         AppUtils().showProgressDialog(context);
-        final response =  await APIRequest().postRequest(route: '/register', data: userData);
+        final response =
+            await APIRequest().postRequest(route: '/register', data: userData);
         if (response != 'error') {
           Map user = response['user'];
           String token = response['token'];
@@ -41,10 +41,8 @@ class Authenticate {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => HomeNav()),
-                  (Route<dynamic> route) => false);
-        }
-
-        else {
+              (Route<dynamic> route) => false);
+        } else {
           var data = {
             "title": "Something went wrong",
             "message": "Something went wrong",
@@ -106,20 +104,22 @@ class Authenticate {
       Navigator.pop(context);
       AppUtils().showProgressDialog(context);
 
-      final response = await User.registerUser(userData);
-      print(response);
+      final response =
+          await APIRequest().postRequest(route: '/register', data: userData);
 
-      if (response['statusCode'] == 201) {
-        Navigator.pop(context);
+      if (response != 'error') {
+        Map user = response['user'];
+        String token = response['token'];
+        saveUser(user, token);
+        Navigator.of(context).pop();
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomeNav()),
             (Route<dynamic> route) => false);
       } else {
-        Navigator.pop(context);
         var data = {
           "title": "Something went wrong",
-          "message": "Request failed, Please try again !!",
+          "message": "Something went wrong",
         };
         Navigator.of(context).pop();
         final snackBar = customSnackBar(
