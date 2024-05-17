@@ -1,17 +1,11 @@
-import 'dart:convert';
-
-import 'package:elcrypto/api/request.dart';
-import 'package:elcrypto/api/url.dart';
-import 'package:elcrypto/provider/transaction.dart';
-import 'package:elcrypto/screens/detail_screens/add_new_transaction.dart';
+import 'package:elcrypto/screens/widgets/notification_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:elcrypto/helper/app_utils.dart';
-import 'package:elcrypto/home_nav.dart';
-import 'package:elcrypto/screens/detail_screens/client_invoices.dart';
-import 'package:elcrypto/screens/notifications.dart';
-import 'package:elcrypto/screens/widgets/notification_icon.dart';
-import 'package:elcrypto/provider/user.dart';
+
+import '../helper/app_utils.dart';
+import '../provider/transaction.dart';
+import 'detail_screens/add_new_transaction.dart';
+import 'detail_screens/transaction_detail.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -23,28 +17,13 @@ class Dashboard extends StatefulWidget {
 enum BorderLeftOrRight { left, right }
 
 class _DashboardState extends State<Dashboard> {
-  bool isLoading = false;
+  late TransactionProvider transactionProvider;
 
   Future<void> getTransactions() async {
-    final TransactionProvider transactionProvider =
+    transactionProvider =
         Provider.of<TransactionProvider>(context, listen: false);
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final response =
-          await APIRequest().getRequest(route: "/transactions?type=crypto");
-      final decodedResponse = jsonDecode(response.body);
-      transactionProvider
-          .updateTransactionsData(decodedResponse['transactions']);
-      print("response: ${response.body}");
-    } catch (e) {
-      print("Error: $e");
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+
+    transactionProvider.getTransactions();
   }
 
   void initState() {
@@ -75,61 +54,52 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         body: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20),
-          // margin: EdgeInsets.only(bottom: 100),
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Transactions",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: isLoading
-                      ? [const Text('Loading transactions...')]
-                      : transactions.isEmpty
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 20),
+            // margin: EdgeInsets.only(bottom: 100),
+            height: MediaQuery.of(context).size.height,
+            child: RefreshIndicator(
+                onRefresh: () async {
+                  transactionProvider.getTransactions();
+                },
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(child: Text(
+                      "Transactions",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(fontWeight: FontWeight.w700),
+                    ),),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      children: transactionProvider.isLoading
+                          ? [const Text('Loading transactions...')]
+                          : transactions.isEmpty
                           ? [const Text("No transaction has been added.")]
                           : transactions.map<Widget>((transaction) {
-                              return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    transactionCard(
-                                        id: transaction.id!,
-                                        context,
-                                        transaction.payload['wallet_id'] ?? '-',
-                                        transaction
-                                                .payload['amount_received'] ??
-                                            '',
-                                        transaction.payload['amount_paid']
-                                                .toString() ??
-                                            '',
-                                        transaction.payload['currency'] ?? '',
-                                        'Success',
-                                        formatDateWithSlash(transaction.date!)),
-                                    const SizedBox(
-                                      height: 30,
-                                    )
-                                  ]);
-                            }).toList(),
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-              ],
-            ),
-          ),
-        ),
+                        return Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              transactionCard(context,
+                                  transaction: transaction),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ]);
+                      }).toList(),
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                  ],
+                ))),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 100.0),
           child: FloatingActionButton(
@@ -151,11 +121,9 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  Widget transactionCard(BuildContext context, String productName, String email,
-      String price, String currency, String status, String date,
-      {required int id}) {
+  Widget transactionCard(BuildContext context, {required dynamic transaction}) {
     Color statusColor() {
-      if (status == 'Success') {
+      if (transaction.status == 'Success') {
         return AppUtils.GreenColor;
       } else {
         return AppUtils.RedColor;
@@ -164,12 +132,14 @@ class _DashboardState extends State<Dashboard> {
 
     return GestureDetector(
       onTap: () {
-        Uri url = Uri.parse("${AppUrl.baseUrl}/transactions/$id");
-        launchInApp(url);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TransactionDetails(transaction)));
       },
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        margin: const EdgeInsets.symmetric(horizontal: 15),
         padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
         decoration: BoxDecoration(
             color: AppUtils.White,
@@ -190,33 +160,19 @@ class _DashboardState extends State<Dashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        productName,
+                        transaction.title,
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              // fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          // fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(
                         width: 10,
-                      ),
-                      Text(
-                        '$currency $price',
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              fontSize: 11,
-                              color: AppUtils.DarkColor.withOpacity(0.9),
-                            ),
                       ),
                     ],
                   ),
                   const SizedBox(
                     height: 5,
-                  ),
-                  Text(
-                    email,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: 13,
-                          color: AppUtils.DarkColor.withOpacity(0.7),
-                        ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -246,15 +202,15 @@ class _DashboardState extends State<Dashboard> {
                                 width: 2,
                               ),
                               Text(
-                                status,
+                                transaction.status,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
                                     .copyWith(
-                                      fontSize: 11,
-                                      color:
-                                          AppUtils.DarkColor.withOpacity(0.9),
-                                    ),
+                                  fontSize: 11,
+                                  color:
+                                  AppUtils.DarkColor.withOpacity(0.9),
+                                ),
                               ),
                             ],
                           ),
@@ -265,27 +221,27 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       IntrinsicWidth(
                           child: Row(
-                        children: [
-                          const Icon(
-                            Icons.circle,
-                            color: AppUtils.SecondaryGray,
-                            size: 5,
-                          ),
-                          const SizedBox(
-                            width: 7,
-                          ),
-                          Text(
-                            date,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(
+                            children: [
+                              const Icon(
+                                Icons.circle,
+                                color: AppUtils.SecondaryGray,
+                                size: 5,
+                              ),
+                              const SizedBox(
+                                width: 7,
+                              ),
+                              Text(
+                                transaction.date,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
                                   fontSize: 11,
                                   color: AppUtils.DarkColor.withOpacity(0.9),
                                 ),
-                          ),
-                        ],
-                      )),
+                              ),
+                            ],
+                          )),
                     ],
                   ),
                   const SizedBox(

@@ -135,7 +135,7 @@ class _ProfilePhoneNumberState extends State<ProfilePhoneNumber> {
                         child: TextButton(
                           onPressed: () {
                             String p = county_code + phone;
-                            log("phone number t verify $p");
+                            log("phone number to verify $p");
                             widget.user!['phone'] = p;
                             userData = widget.user;
                             // firebase

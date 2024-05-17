@@ -207,7 +207,7 @@ class _RegisterState extends State<Register> {
                                   inputController: emailController,
                                   textInputType: TextInputType.emailAddress,
                                   onChanged: (value) {
-                                    formData['phone'] = value ?? "";
+                                    formData['email'] = value ?? "";
                                   },
                                   contentPadding: const EdgeInsets.only(
                                       left: 45, top: 17, bottom: 17),

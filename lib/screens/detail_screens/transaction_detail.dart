@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:elcrypto/helper/app_utils.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:elcrypto/screens/widgets/notification_icon.dart';
-import 'package:elcrypto/widgets/primary_button.dart';
+import 'package:provider/provider.dart';
 
-class InvoiceDetails extends StatefulWidget {
-  const InvoiceDetails({super.key});
+import '../../helper/app_utils.dart';
+import '../widgets/notification_icon.dart';
+
+class TransactionDetails extends StatefulWidget {
+  dynamic transaction;
+
+  TransactionDetails(this.transaction);
 
   @override
-  State<InvoiceDetails> createState() => _InvoiceDetailsState();
+  State<TransactionDetails> createState() => _TransactionDetailsState(transaction);
 }
 
-class _InvoiceDetailsState extends State<InvoiceDetails> {
+class _TransactionDetailsState extends State<TransactionDetails> {
+
+  dynamic transaction;
+
+
+  _TransactionDetailsState(this.transaction);
+
   String status = 'success';
 
   Color statusColor() {
@@ -20,6 +29,10 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
     } else {
       return AppUtils.RedColor;
     }
+  }
+
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -47,7 +60,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  "Invoice",
+                  "Transaction",
                   style: Theme.of(context)
                       .textTheme
                       .headline4
@@ -85,14 +98,15 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                 height: 30.0,
                               ),
                               Text(
-                                'Invoice Successful',
+                                'Transaction Successful',
                                 style: Theme.of(context).textTheme.headline5!,
                               ),
                               const SizedBox(
                                 height: 6,
                               ),
                               Container(
-                                constraints: const BoxConstraints(maxWidth: 250),
+                                constraints:
+                                const BoxConstraints(minWidth: 250),
                                 child: Center(
                                   child: Text.rich(
                                     TextSpan(
@@ -103,53 +117,33 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                               .textTheme
                                               .bodyText1!
                                               .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.5),
-                                              ),
+                                            fontWeight: FontWeight.w600,
+                                            color: AppUtils.DarkColor
+                                                .withOpacity(0.5),
+                                          ),
                                         ),
                                         TextSpan(
-                                          text: "-XAF 3000 ",
+                                          text:
+                                          "${transaction.payload['amount_received']} BTC ",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1!
                                               .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: statusColor(),
-                                              ),
+                                            fontWeight: FontWeight.w600,
+                                            color: statusColor(),
+                                          ),
                                         ),
+
                                         TextSpan(
-                                          text: 'to ',
+                                          text: ' is '+transaction.status,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1!
                                               .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.5),
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text: 'Wisdom Umanah ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.8),
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text: 'was successful ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppUtils.DarkColor
-                                                    .withOpacity(0.5),
-                                              ),
+                                            fontWeight: FontWeight.w600,
+                                            color: AppUtils.DarkColor
+                                                .withOpacity(0.5),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -166,25 +160,28 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                     height: 30,
                                     width: 15,
                                     decoration: BoxDecoration(
-                                        color: AppUtils.SecondaryGrayExtraLight,
+                                        color:
+                                        AppUtils.SecondaryGrayExtraLight,
                                         borderRadius: const BorderRadius.only(
                                             topRight: Radius.circular(15),
-                                            bottomRight: Radius.circular(15))),
+                                            bottomRight:
+                                            Radius.circular(15))),
                                   ),
                                   Expanded(
                                     child: DottedLine(
                                       lineThickness: 2,
                                       dashLength: 5,
                                       dashColor:
-                                          AppUtils.SecondaryGray.withOpacity(
-                                              0.7),
+                                      AppUtils.SecondaryGray.withOpacity(
+                                          0.7),
                                     ),
                                   ),
                                   Container(
                                     height: 30,
                                     width: 15,
                                     decoration: BoxDecoration(
-                                        color: AppUtils.SecondaryGrayExtraLight,
+                                        color:
+                                        AppUtils.SecondaryGrayExtraLight,
                                         borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(15),
                                             bottomLeft: Radius.circular(15))),
@@ -201,36 +198,75 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Invoice Details',
+                                        'Transaction Details',
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline6!
                                             .copyWith(
-                                                fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w500),
                                       ),
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      invoiceTitleAndDetail(
-                                          'Product Name', 'Paracetamol'),
-                                      invoiceTitleAndDetail(
-                                          'Quantity', '12 cards'),
-                                      invoiceTitleAndDetail(
-                                          'Payment Date', '12-10-2023'),
-                                      invoiceTitleAndDetail(
-                                          'Transaction Number', '237623762'),
-                                      invoiceTitleAndDetail(
-                                          'Payment Type', 'MTN MoMo'),
-                                      // invoiceTitleAndDetail('Paymnt Date', 'Paracetamol'),
-                                      invoiceTitleAndDetail(
-                                          'Payment Status',
-                                          status == 'success'
-                                              ? 'Successful'
-                                              : 'Failed',
-                                          paymentStatus: status),
-                                      invoiceTitleAndDetail(
-                                          'Amount', 'XAF 3000',
+                                      transactionTitleAndDetail(
+                                          "Status",
+                                          transaction.status ),
+                                      transactionTitleAndDetail(
+                                          "Wallet ID",
+                                          transaction.payload['wallet_id'] ??
+                                              "-"),
+
+                                      transactionTitleAndDetail(
+                                          'Transasction Date',
+                                          "Today"),
+                                      // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
+                                      transactionTitleAndDetail('Amount',
+                                          "XAF ${transaction.payload['amount_received']}",
+                                          isAmount: true),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 20,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Conversion Details',
+                                        textAlign: TextAlign.left,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+
+                                      transactionTitleAndDetail(
+                                          "Rate",
+                                          "1 ${transaction.payload['from']} -> ${transaction.payload['rate']} ${transaction.payload['to']}"),
+
+                                      transactionTitleAndDetail(
+                                          "Converted",
+                                          "${transaction.payload['from']} ${transaction.payload['amount_send']}  -> ${transaction.payload['to']} ${double.parse(transaction.payload['rate']) * double.parse(transaction.payload['amount_send'])}"),
+
+
+                                      transactionTitleAndDetail(
+                                          "Commission",
+                                          "${transaction.payload['commission']}%  (${double.parse(transaction.payload['rate']) * double.parse(transaction.payload['amount_send']) - (1- double.parse(transaction.payload['commission'])/100) * double.parse(transaction.payload['commission']) * double.parse(transaction.payload['amount_send']) } )"),
+
+
+                                      transactionTitleAndDetail('Net Amount Receivable',
+                                          "XAF ${transaction.payload['amount_received']}",
                                           isAmount: true),
                                     ],
                                   ),
@@ -241,18 +277,8 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                         ),
                       ),
                       Positioned(
-                        // top: ,
-                        left: 0,
-                        right: 0,
-                        child: Icon(
-                          Icons.receipt_sharp,
-                          color: statusColor(),
-                          size: 100,
-                        ),
-                      ),
-                      Positioned(
                         top: 75,
-                        left: 60,
+                        left: 0,
                         right: 0,
                         child: Container(
                           height: 30,
@@ -278,31 +304,12 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: const BoxDecoration(
-                color: AppUtils.TertiaryExtraLight,
-              ),
-              child: PrimaryButton(
-                buttonText: 'Download',
-                iconPosition: IconPosition.left,
-                btnIcon: const Icon(
-                  Icons.download,
-                ),
-                onClickBtn: () {},
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget invoiceTitleAndDetail(String title, String detail,
+  Widget transactionTitleAndDetail(String title, String detail,
       {String? paymentStatus, bool isAmount = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 7),

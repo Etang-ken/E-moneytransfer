@@ -131,7 +131,7 @@ class TabNavigationItem {
         TabNavigationItem(
           page: const Dashboard(),
           tab: const BottomNavigationBarItem(
-            label: "Transations",
+            label: "Transactions",
             icon: Padding(
               padding: EdgeInsets.only(top: 5),
               child: Icon(Icons.money),

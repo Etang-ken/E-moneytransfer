@@ -1,16 +1,28 @@
+import 'dart:convert';
+
+
 import 'package:cinetpay/cinetpay.dart';
 import 'package:elcrypto/api/url.dart';
 import 'package:elcrypto/helper/app_utils.dart';
 import 'package:flutter/material.dart';
 
 class LaunchCinetpay extends StatefulWidget {
-  const LaunchCinetpay({super.key});
+  dynamic formData;
+  int amount;
+
+  LaunchCinetpay(this.formData, this.amount);
 
   @override
-  State<LaunchCinetpay> createState() => _LaunchCinetpayState();
+  State<LaunchCinetpay> createState() => _LaunchCinetpayState(formData, amount);
 }
 
 class _LaunchCinetpayState extends State<LaunchCinetpay> {
+  dynamic formData;
+
+  int amount;
+
+  _LaunchCinetpayState(this.formData, this.amount);
+
   final String transactionId = DateTime.now().toString();
   IconData? icon;
   Map<String, dynamic>? response;
@@ -18,27 +30,28 @@ class _LaunchCinetpayState extends State<LaunchCinetpay> {
   bool show = false;
   String? message;
 
+  double rate = 0;
+
   @override
   Widget build(BuildContext context) {
     return CinetPayCheckout(
       title: 'Payment Checkout',
-
       titleStyle: Theme.of(context).textTheme.headline6!.copyWith(
-            color: AppUtils.DarkColor,
+            color: Colors.white,
           ),
       titleBackgroundColor: AppUtils.PrimaryColor,
       configData: <String, dynamic>{
         'apikey': AppUrl.cinetpayApiKey,
         'site_id': int.parse(AppUrl.cinetpaySiteId),
-        'notify_url': "${AppUrl.baseUrl}/subscription/cinetpay"
+        'notify_url': "${AppUrl.appUrl}api/cinetpay/callback"
       },
       paymentData: <String, dynamic>{
         'transaction_id': transactionId,
-        // 'amount': paymentAmount,
-        'amount': '100',
-        'currency': 'XAF',
+        'amount': amount,
+        'currency': "XAF",
         'channels': 'MOBILE_MONEY',
-        'description': 'Payment test',
+        'metadata': jsonEncode(formData),
+        'description': 'Buy Crypto from ElCrypto',
       },
       waitResponse: (data) {
         if (mounted) {
@@ -53,7 +66,6 @@ class _LaunchCinetpayState extends State<LaunchCinetpay> {
             show = true;
           });
         }
-        // submitForm({'status': 'ACCEPTED', 'payment_method': 'MTNCM'}, "8928977832");
       },
       onError: (data) {
         if (mounted) {

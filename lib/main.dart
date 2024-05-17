@@ -22,6 +22,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //print('User granted permission: ${settings.authorizationStatus}');
   await Firebase.initializeApp(
+    name: 'Elcrypto',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
@@ -32,6 +33,7 @@ Future<void> main() async {
     systemNavigationBarColor: Color(0xff0488DD), // navigation bar color
     statusBarColor: Color(0xff0488DD), // status bar color
   ));
+
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   runApp(
     MultiProvider(

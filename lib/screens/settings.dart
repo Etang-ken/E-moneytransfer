@@ -2,10 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:elcrypto/screens/detail_screens/contact_us.dart';
-import 'package:elcrypto/screens/detail_screens/faqs.dart';
-import 'package:elcrypto/screens/detail_screens/privacy_policy.dart';
-import 'package:elcrypto/screens/detail_screens/term_conditions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
