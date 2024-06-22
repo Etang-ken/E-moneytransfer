@@ -1,9 +1,6 @@
 class AppUrl {
   static const baseUrl = 'http://52.221.249.143/api';
   static const appUrl = 'http://52.221.249.143/';
-  static const String cinetpayApiKey = "137739369364d5f75ca311d8.02786779";
-  static const String cinetpaySiteId = "639688";
-  //
-  // static const String cinetpayApiKey = "62115444065f9bc12382d38.28560859";
-  // static const String cinetpaySiteId = "5865975";
+  static const String cinetpayApiKey = "62115444065f9bc12382d38.28560859";
+  static const String cinetpaySiteId = "5865975";
 }

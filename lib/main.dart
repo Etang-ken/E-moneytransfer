@@ -16,19 +16,16 @@ import 'package:elcrypto/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:elcrypto/helper/app_utils.dart';
 
-import 'firebase_options.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //print('User granted permission: ${settings.authorizationStatus}');
-  await Firebase.initializeApp(
-    name: 'Elcrypto',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+  await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity,
+    androidProvider: AndroidProvider.safetyNet,
+    appleProvider: AppleProvider.appAttest,
   );
+
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Color(0xff0488DD), // navigation bar color
     statusBarColor: Color(0xff0488DD), // status bar color

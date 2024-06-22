@@ -93,7 +93,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                           height: 30.0,
                         ),
                         Text(
-                          'Transaction Successful',
+                          'Transaction Details',
                           style: Theme.of(context).textTheme.headline5!,
                         ),
                         const SizedBox(
@@ -208,7 +208,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                         "-"),
 
                                 transactionTitleAndDetail(
-                                    'Transasction Date',
+                                    'Transaction Date',
                                     "Today"),
                                 // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
                                 transactionTitleAndDetail('Amount',
@@ -219,49 +219,49 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                           ),
                         ),
 
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Conversion Details',
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6!
-                                      .copyWith(
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-
-                                transactionTitleAndDetail(
-                                    "Rate",
-                                    "1 ${formData['from']} -> ${formData['rate']} ${formData['to']}"),
-
-                                transactionTitleAndDetail(
-                                    "Converted",
-                                    "${formData['from']} ${formData['amount_send']}  -> ${formData['to']} ${double.parse(formData['rate']) * double.parse(formData['amount_send'])}"),
-
-
-                                transactionTitleAndDetail(
-                                    "Commission",
-                                    "${formData['commission']}%  (${double.parse(formData['rate']) * double.parse(formData['amount_send']) - (1- double.parse(formData['commission'])/100) * double.parse(formData['commission']) * double.parse(formData['amount_send']) } )"),
-
-
-                                transactionTitleAndDetail('Net Amount Receivable',
-                                    "${formData['amount_received']} BTC",
-                                    isAmount: true),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Container(
+                        //     padding: const EdgeInsets.symmetric(
+                        //       vertical: 10,
+                        //       horizontal: 20,
+                        //     ),
+                        //     child: Column(
+                        //       children: [
+                        //         Text(
+                        //           'Conversion Details',
+                        //           textAlign: TextAlign.left,
+                        //           style: Theme.of(context)
+                        //               .textTheme
+                        //               .headline6!
+                        //               .copyWith(
+                        //               fontWeight: FontWeight.w500),
+                        //         ),
+                        //         const SizedBox(
+                        //           height: 15,
+                        //         ),
+                        //
+                        //         transactionTitleAndDetail(
+                        //             "Rate",
+                        //             "1 ${formData['from']} -> ${formData['rate']} ${formData['to']}"),
+                        //
+                        //         transactionTitleAndDetail(
+                        //             "Converted",
+                        //             "${formData['from']} ${formData['amount_send']}  -> ${formData['to']} ${double.parse(formData['rate']) * double.parse(formData['amount_send'])}"),
+                        //
+                        //
+                        //         transactionTitleAndDetail(
+                        //             "Commission",
+                        //             "${formData['commission']}%  (${double.parse(formData['rate']) * double.parse(formData['amount_send']) - (1- double.parse(formData['commission'])/100) * double.parse(formData['commission']) * double.parse(formData['amount_send']) } )"),
+                        //
+                        //
+                        //         transactionTitleAndDetail('Net Amount Receivable',
+                        //             "${formData['amount_received']} BTC",
+                        //             isAmount: true),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                     PrimaryButton(
@@ -300,7 +300,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
           const SizedBox(
             width: 15,
           ),
-          Text(
+          Expanded(child: Text(
             detail,
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                 fontSize: isAmount ? 16 : 12,
@@ -308,7 +308,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                 color: isAmount
                     ? AppUtils.DarkColor.withOpacity(0.7)
                     : AppUtils.SecondaryGray),
-          ),
+          )),
         ],
       ),
     );

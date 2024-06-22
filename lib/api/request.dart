@@ -15,7 +15,7 @@ class APIRequest {
         body: jsonEncode(data),
         headers: headers,
       );
-      return response;
+      return jsonDecode(response.body);
     }catch(e){
       return  "error";
     }

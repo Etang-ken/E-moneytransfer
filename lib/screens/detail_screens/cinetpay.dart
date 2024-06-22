@@ -5,6 +5,9 @@ import 'package:cinetpay/cinetpay.dart';
 import 'package:elcrypto/api/url.dart';
 import 'package:elcrypto/helper/app_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/transaction.dart';
 
 class LaunchCinetpay extends StatefulWidget {
   dynamic formData;
@@ -54,18 +57,11 @@ class _LaunchCinetpayState extends State<LaunchCinetpay> {
         'description': 'Buy Crypto from ElCrypto',
       },
       waitResponse: (data) {
-        if (mounted) {
-          setState(() {
-            response = data;
-            icon = data['status'] == 'ACCEPTED'
-                ? Icons.check_circle
-                : Icons.mood_bad_rounded;
-            color = data['status'] == 'ACCEPTED'
-                ? AppUtils.GreenColor
-                : AppUtils.RedColor;
-            show = true;
-          });
-        }
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Provider.of<TransactionProvider>(context, listen: false).getTransactions();
       },
       onError: (data) {
         if (mounted) {

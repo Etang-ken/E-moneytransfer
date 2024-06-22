@@ -138,7 +138,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                       ),
                                       const SizedBox(height: 5),
                                       TextInputField(
-                                        placeholderText: '***********',
+                                        placeholderText: 'paste wallet id',
                                         onChanged: (val) {
                                           formData['wallet_id'] = val!;
                                         },
@@ -202,7 +202,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                               right: 45,
                                               top: 17,
                                               bottom: 17,
-                                              left: 50,
+                                              left: 60,
                                             ),
                                             onChanged: (val) {
                                               formData['amount_send'] = val!;
@@ -219,15 +219,18 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                           ),
                                           Positioned(
                                               child: Container(
-                                            width: 60,
+                                            width: 40,
                                             child: SelectFormField(
-                                              type:
-                                                  SelectFormFieldType.dropdown,
+                                              type: SelectFormFieldType.dropdown,
                                               initialValue: formData['from'],
+                                              changeIcon: true,
                                               items: _items,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w400),
                                               decoration: InputDecoration(
+                                                suffixIconConstraints:  BoxConstraints(maxWidth: 5),
+                                                suffixIcon: Icon(Icons.keyboard_arrow_down, size: 20),
+
                                                   labelStyle: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w400),
@@ -329,8 +332,8 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
         'payable': formData['amount_send']
       });
 
-      if (response.statusCode == 200) {
-        dynamic responseBody = jsonDecode(response.body);
+      if (response != "error") {
+        dynamic responseBody = response;
 
         setState(() {
           formData['commission'] = responseBody['commission'];

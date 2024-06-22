@@ -161,6 +161,7 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
+                          Navigator.pop(context);
                           Provider.of<TransactionProvider>(context, listen: false).getTransactions();
 
                         } else {

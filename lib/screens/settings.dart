@@ -248,22 +248,22 @@ class _SettingsState extends State<Settings> {
 
                         profileModificationLink(
                             'About', Icons.info_outline,
-                            browseTo: AppUrl.appUrl+"about_app/"+appName),
+                            browseTo: AppUrl.appUrl+"about_app/elcrypto"),
 
                         profileModificationLink(
                             'Contact Us', Icons.phone_outlined,
-                            browseTo: AppUrl.appUrl+"about_app/"+appName),
+                            browseTo: AppUrl.appUrl+"contact/elcrypto"),
 
                         profileModificationLink('FAQs', Icons.question_mark,
-                            browseTo: AppUrl.appUrl+"faq/"+appName),
+                            browseTo: AppUrl.appUrl+"faq/elcrypto"),
 
                         profileModificationLink(
                             'Privacy Policy', Icons.privacy_tip_outlined,
-                            browseTo: AppUrl.appUrl+"privacy_and_policy/"+appName),
+                            browseTo: AppUrl.appUrl+"privacy_and_policy/elcrypto"),
 
                         profileModificationLink(
                             'Terms and Conditions', Icons.description_outlined,
-                            browseTo: AppUrl.appUrl+"terms_of_use/"+appName),
+                            browseTo: AppUrl.appUrl+"terms_of_use/elcrypto"),
 
                         profileModificationLink('Logout', Icons.logout,
                             onClick: () async {

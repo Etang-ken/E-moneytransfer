@@ -51,7 +51,7 @@ class _LogInState extends State<LogIn> {
         AppUtils.showSnackBar(
             context, ContentType.failure, 'Network error. Please try again.');
       } else {
-        final decodedResponse = jsonDecode(response.body);
+        final decodedResponse = response;
         if (decodedResponse["success"]) {
           final userData = decodedResponse['user'];
           AppUtils.showSnackBar(

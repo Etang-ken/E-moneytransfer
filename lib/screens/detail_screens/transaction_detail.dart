@@ -218,60 +218,60 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                               "-"),
 
                                       transactionTitleAndDetail(
-                                          'Transasction Date',
+                                          'Transaction Date',
                                           "Today"),
                                       // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
                                       transactionTitleAndDetail('Amount',
-                                          "XAF ${transaction.payload['amount_received']}",
+                                          "${transaction.payload['to']} ${transaction.payload['amount_received']}",
                                           isAmount: true),
                                     ],
                                   ),
                                 ),
                               ),
 
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 20,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Conversion Details',
-                                        textAlign: TextAlign.left,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-
-                                      transactionTitleAndDetail(
-                                          "Rate",
-                                          "1 ${transaction.payload['from']} -> ${transaction.payload['rate']} ${transaction.payload['to']}"),
-
-                                      transactionTitleAndDetail(
-                                          "Converted",
-                                          "${transaction.payload['from']} ${transaction.payload['amount_send']}  -> ${transaction.payload['to']} ${double.parse(transaction.payload['rate']) * double.parse(transaction.payload['amount_send'])}"),
-
-
-                                      transactionTitleAndDetail(
-                                          "Commission",
-                                          "${transaction.payload['commission']}%  (${double.parse(transaction.payload['rate']) * double.parse(transaction.payload['amount_send']) - (1- double.parse(transaction.payload['commission'])/100) * double.parse(transaction.payload['commission']) * double.parse(transaction.payload['amount_send']) } )"),
-
-
-                                      transactionTitleAndDetail('Net Amount Receivable',
-                                          "XAF ${transaction.payload['amount_received']}",
-                                          isAmount: true),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Align(
+                              //   alignment: Alignment.centerLeft,
+                              //   child: Container(
+                              //     padding: const EdgeInsets.symmetric(
+                              //       vertical: 10,
+                              //       horizontal: 20,
+                              //     ),
+                              //     child: Column(
+                              //       children: [
+                              //         Text(
+                              //           'Conversion Details',
+                              //           textAlign: TextAlign.left,
+                              //           style: Theme.of(context)
+                              //               .textTheme
+                              //               .headline6!
+                              //               .copyWith(
+                              //               fontWeight: FontWeight.w500),
+                              //         ),
+                              //         const SizedBox(
+                              //           height: 15,
+                              //         ),
+                              //
+                              //         transactionTitleAndDetail(
+                              //             "Rate",
+                              //             "1 ${transaction.payload['from']} -> ${transaction.payload['rate']} ${transaction.payload['to']}"),
+                              //
+                              //         transactionTitleAndDetail(
+                              //             "Converted",
+                              //             "${transaction.payload['from']} ${transaction.payload['amount_send']}  -> ${transaction.payload['to']} ${double.parse(transaction.payload['rate']) * double.parse(transaction.payload['amount_send'])}"),
+                              //
+                              //
+                              //         transactionTitleAndDetail(
+                              //             "Commission",
+                              //             "${transaction.payload['commission']}%  (${double.parse(transaction.payload['rate']) * double.parse(transaction.payload['amount_send']) - (1- double.parse(transaction.payload['commission'])/100) * double.parse(transaction.payload['commission']) * double.parse(transaction.payload['amount_send']) } )"),
+                              //
+                              //
+                              //         transactionTitleAndDetail('Net Amount Receivable',
+                              //             "XAF ${transaction.payload['amount_received']}",
+                              //             isAmount: true),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -326,7 +326,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
           const SizedBox(
             width: 15,
           ),
-          Text(
+          Expanded(child: Text(
             detail,
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                 fontSize: isAmount ? 16 : 12,
@@ -334,9 +334,10 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                 color: paymentStatus != null
                     ? statusColor()
                     : (isAmount
-                        ? AppUtils.DarkColor.withOpacity(0.7)
-                        : AppUtils.SecondaryGray)),
-          ),
+                    ? AppUtils.DarkColor.withOpacity(0.7)
+                    : AppUtils.SecondaryGray)),
+            maxLines: 2,
+          )),
         ],
       ),
     );
