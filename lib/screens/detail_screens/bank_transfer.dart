@@ -323,7 +323,7 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 "nmeneiimoh@gmail.com",
+                                 formData["email"],
                                  style: Theme
                                      .of(context)
                                      .textTheme
@@ -335,7 +335,7 @@ class _BankTransferState extends State<BankTransfer> {
                                Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard("nmeneiimoh@gmail.com");
+                                   _copyToClipboard(  formData["email"]);
                                  },
                                  child: Icon(
                                    Icons.copy,
@@ -433,6 +433,7 @@ class _BankTransferState extends State<BankTransfer> {
                    PrimaryButton(
                      buttonText: 'Continue',
                      onClickBtn: () {
+                       formData["trid"] = _textToCopy;
                        Navigator.push(
                            context,
                            MaterialPageRoute(
@@ -449,47 +450,6 @@ class _BankTransferState extends State<BankTransfer> {
         ),
       ),
     );
-  }
-
-  Future<void> convert() async {
-    if (formData['amount_send'] != "") {
-      setState(() {
-        isConverting = true;
-      });
-      final response = await APIRequest()
-          .postRequest(route: "/transactions/estimate", data: {
-        'type': 'momo',
-        'from': formData['from'],
-        'to': "XAF",
-        'payable': formData['amount_send']
-      });
-
-      if (response != "error") {
-        dynamic responseBody = response;
-        setState(() {
-         double total = double.parse( formData['amount_send']) * double.parse(responseBody['rate']);
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LaunchCinetpay(formData, total.toInt()),
-            ),
-          );
-        });
-      } else {
-        AppUtils.showSnackBar(
-            context, ContentType.failure, 'Network error. Please try again.');
-      }
-      setState(() {
-        isConverting = false;
-      });
-    } else {
-      setState(() {
-        isConverting = false;
-      });
-      AppUtils.showSnackBar(
-          context, ContentType.failure, 'Enter amount payable');
-    }
   }
 }
 

@@ -219,49 +219,6 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                           ),
                         ),
 
-                        // Align(
-                        //   alignment: Alignment.centerLeft,
-                        //   child: Container(
-                        //     padding: const EdgeInsets.symmetric(
-                        //       vertical: 10,
-                        //       horizontal: 20,
-                        //     ),
-                        //     child: Column(
-                        //       children: [
-                        //         Text(
-                        //           'Conversion Details',
-                        //           textAlign: TextAlign.left,
-                        //           style: Theme.of(context)
-                        //               .textTheme
-                        //               .headline6!
-                        //               .copyWith(
-                        //               fontWeight: FontWeight.w500),
-                        //         ),
-                        //         const SizedBox(
-                        //           height: 15,
-                        //         ),
-                        //
-                        //         transactionTitleAndDetail(
-                        //             "Rate",
-                        //             "1 ${formData['from']} -> ${formData['rate']} ${formData['to']}"),
-                        //
-                        //         transactionTitleAndDetail(
-                        //             "Converted",
-                        //             "${formData['from']} ${formData['amount_send']}  -> ${formData['to']} ${double.parse(formData['rate']) * double.parse(formData['amount_send'])}"),
-                        //
-                        //
-                        //         transactionTitleAndDetail(
-                        //             "Commission",
-                        //             "${formData['commission']}%  (${double.parse(formData['rate']) * double.parse(formData['amount_send']) - (1- double.parse(formData['commission'])/100) * double.parse(formData['commission']) * double.parse(formData['amount_send']) } )"),
-                        //
-                        //
-                        //         transactionTitleAndDetail('Net Amount Receivable',
-                        //             "${formData['amount_received']} BTC",
-                        //             isAmount: true),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                     PrimaryButton(

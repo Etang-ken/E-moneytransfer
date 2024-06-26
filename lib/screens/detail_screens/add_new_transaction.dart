@@ -338,6 +338,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
         setState(() {
           formData['commission'] = responseBody['commission'];
           formData['amount_received'] = responseBody['receivable'];
+          formData['email'] = responseBody['email'];
           formData['rate'] = responseBody['rate'];
         });
       } else {
