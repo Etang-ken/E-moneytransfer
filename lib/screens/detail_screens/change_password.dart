@@ -49,7 +49,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         );
       }
       else {
-        final decodedResponse = jsonDecode(response.body);
+        final decodedResponse = response;
         if (decodedResponse["success"]) {
           AppUtils.showSnackBar(
               context,

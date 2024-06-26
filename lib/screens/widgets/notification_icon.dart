@@ -12,9 +12,11 @@ class NotificationIcon extends StatefulWidget {
 class _NotificationIconState extends State<NotificationIcon> {
   @override
   Widget build(BuildContext context) {
+
+    return Container();
+
     return GestureDetector(
       onTap: () {
-        print('Clicked!!!');
         showDialog(
             context: context,
             // barrierDismissible: true,
@@ -58,10 +60,10 @@ class _NotificationIconState extends State<NotificationIcon> {
                 child: Text(
                   '02',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: AppUtils.White,
-                      ),
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                    color: AppUtils.White,
+                  ),
                 ),
               ),
             ),
@@ -164,7 +166,7 @@ class NotificationDialog extends StatelessWidget {
                   message,
                   // softWrap: true,
                   maxLines: 2,
-                  
+
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!

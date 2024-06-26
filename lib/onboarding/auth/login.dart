@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:eltransfer/api/url.dart';
 import 'package:eltransfer/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _LogInState extends State<LogIn> {
   bool showPassword = true;
   bool isLoading = false;
   bool showInvalidCreds = false;
+  String county_code = "";
   final storage = FlutterSecureStorage();
 
   Map<String, String> formData = {
@@ -39,7 +41,7 @@ class _LogInState extends State<LogIn> {
     });
 
     final hasConnectivity = await hasInternetConnectivity(context);
-    final phone = phoneController.text;
+    final phone =county_code+phoneController.text;
     final password = passwordController.text;
     if (hasConnectivity) {
       final data = {'phone': phone, 'password': password};
@@ -54,7 +56,7 @@ class _LogInState extends State<LogIn> {
         );
       }
       else {
-        final decodedResponse = jsonDecode(response.body);
+        final decodedResponse = response;
         if (decodedResponse["success"]) {
           final userData = decodedResponse['user'];
           AppUtils.showSnackBar(
@@ -168,12 +170,11 @@ class _LogInState extends State<LogIn> {
                             Stack(
                               children: [
                                 TextInputField(
-                                  placeholderText: 'Phone Number *',
                                   inputController: phoneController,
                                   textInputType: TextInputType.number,
                                   onChanged: (value) {},
                                   contentPadding: const EdgeInsets.only(
-                                      left: 45, top: 17, bottom: 17),
+                                      left: 105, top: 17, bottom: 17),
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
                                       return 'Phone Number is Required';
@@ -182,14 +183,16 @@ class _LogInState extends State<LogIn> {
                                   },
                                 ),
                                 Positioned(
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 15),
-                                      child: Icon(
-                                        Icons.call_outlined,
-                                        color:
-                                        AppUtils.DarkColor.withOpacity(0.8),
-                                      )),
+                                  child: CountryCodePicker(
+                                    onChanged: (element) {
+                                      county_code = element.dialCode!;
+                                    },
+                                    initialSelection: 'US',
+                                    showCountryOnly: false,
+                                    // enabled: false,
+                                    showOnlyCountryWhenClosed: false,
+                                    alignLeft: false,
+                                  ),
                                 ),
                               ],
                             ),
@@ -303,7 +306,6 @@ class _LogInState extends State<LogIn> {
                               onClickBtn: () {
                                 if (_formkey.currentState!.validate()) {
                                   loginUser();
-                                  print("Invalid form Data");
                                 }
                               },
                             ),

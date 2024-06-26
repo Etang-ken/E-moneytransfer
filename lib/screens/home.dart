@@ -1,18 +1,10 @@
-import 'dart:convert';
-
-import 'package:eltransfer/api/request.dart';
-import 'package:eltransfer/api/url.dart';
 import 'package:eltransfer/provider/transaction.dart';
 import 'package:eltransfer/screens/detail_screens/add_new_transaction.dart';
 import 'package:eltransfer/screens/detail_screens/transaction_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eltransfer/helper/app_utils.dart';
-import 'package:eltransfer/home_nav.dart';
-import 'package:eltransfer/screens/detail_screens/client_invoices.dart';
-import 'package:eltransfer/screens/notifications.dart';
 import 'package:eltransfer/screens/widgets/notification_icon.dart';
-import 'package:eltransfer/provider/user.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -24,28 +16,13 @@ class Dashboard extends StatefulWidget {
 enum BorderLeftOrRight { left, right }
 
 class _DashboardState extends State<Dashboard> {
-  bool isLoading = false;
+  late TransactionProvider transactionProvider;
 
   Future<void> getTransactions() async {
-    final TransactionProvider transactionProvider =
+    transactionProvider =
         Provider.of<TransactionProvider>(context, listen: false);
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final response =
-          await APIRequest().getRequest(route: "/transactions?type=momo");
-      final decodedResponse = jsonDecode(response.body);
-      transactionProvider
-          .updateTransactionsData(decodedResponse['transactions']);
-      print("response: ${response.body}");
-    } catch (e) {
-      print("Error: $e");
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+
+    transactionProvider.getTransactions();
   }
 
   void initState() {
@@ -76,65 +53,52 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         body: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20),
-          // margin: EdgeInsets.only(bottom: 100),
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Transactions",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: isLoading
-                      ? [const Text('Loading transactions...')]
-                      : transactions.isEmpty
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 20),
+            // margin: EdgeInsets.only(bottom: 100),
+            height: MediaQuery.of(context).size.height,
+            child: RefreshIndicator(
+                onRefresh: () async {
+                  transactionProvider.getTransactions();
+                },
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(child: Text(
+                      "Transactions",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(fontWeight: FontWeight.w700),
+                    ),),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      children: transactionProvider.isLoading
+                          ? [const Text('Loading transactions...')]
+                          : transactions.isEmpty
                           ? [const Text("No transaction has been added.")]
                           : transactions.map<Widget>((transaction) {
-                              // [{"id":12,"type":"momo","payload":{"date":"2024-05-02T18:43:32.101082Z","type":"momo","sender":{"name":null,"phone":"670260611"},"receiver":{"name":"Kenc","phone":"8623762378"},"amount_paid":"4000","amount_to_send":"4000"},"date":"2024-05-02T18:43:32.000000Z"},{"id":13,"type":"momo","payload":{"date":"2024-05-02T18:53:45.732599Z","type":"momo","sender":{"name":null,"phone":"670260611"},"receiver":{"name":"Kenc","phone":"673762378"},"amount_paid":"5000","amount_to_send":"5000"},"date":"2024-05-02T18:53:45.000000Z"},{"id":14,"type":"momo","payload":{"date":"2024-05-02T18:56:46.291695Z","type":"momo","sender":{"name":null,"phone":"670260611"},"receiver":{"name":"jkhskfjss","phone":"543534543"},"amount_paid":"535334","amount_to_send":"535334"},"date":"2024-05-02T18:56:46.000000Z"},{"id":15,"type":"momo","payload":{"date":"2024-05-02T19:01:14.491228Z","type":"momo","sender":{"name":null,"phone":"670260611"},"receiver":{"name":"whiejdkds","phone":"29038"},"amount_paid":"023
-
-                              return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    transactionCard(
-                                        transaction: transaction,
-                                        context,
-                                        transaction.payload['receiver']
-                                                ['name'] ??
-                                            '-',
-                                        transaction.payload['receiver']
-                                                ['phone'] ??
-                                            '',
-                                        transaction.payload['amount_to_send']
-                                                .toString() ??
-                                            '',
-                                        "XAF",
-                                        'Success',
-                                        formatDateWithSlash(transaction.date!)),
-                                    const SizedBox(
-                                      height: 30,
-                                    )
-                                  ]);
-                            }).toList(),
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-              ],
-            ),
-          ),
-        ),
+                        return Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              transactionCard(context,
+                                  transaction: transaction),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ]);
+                      }).toList(),
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                  ],
+                ))),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 100.0),
           child: FloatingActionButton(
@@ -156,11 +120,9 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  Widget transactionCard(BuildContext context, String productName, String email,
-      String price, String currency, String status, String date,
-      {required dynamic transaction}) {
+  Widget transactionCard(BuildContext context, {required dynamic transaction}) {
     Color statusColor() {
-      if (status == 'Success') {
+      if (transaction.status == 'Success') {
         return AppUtils.GreenColor;
       } else {
         return AppUtils.RedColor;
@@ -169,15 +131,14 @@ class _DashboardState extends State<Dashboard> {
 
     return GestureDetector(
       onTap: () {
-        // Uri url = Uri.parse("${AppUrl.baseUrl}/transactions/$id");
-        // launchInApp(url);
-        updateTransactionDetail(context, transaction);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => TransactionDetails()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TransactionDetails(transaction)));
       },
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        margin: const EdgeInsets.symmetric(horizontal: 15),
         padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
         decoration: BoxDecoration(
             color: AppUtils.White,
@@ -198,7 +159,7 @@ class _DashboardState extends State<Dashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        productName,
+                        transaction.title,
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
                               // fontSize: 11,
                               fontWeight: FontWeight.w700,
@@ -207,24 +168,10 @@ class _DashboardState extends State<Dashboard> {
                       const SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        '$currency $price',
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              fontSize: 11,
-                              color: AppUtils.DarkColor.withOpacity(0.9),
-                            ),
-                      ),
                     ],
                   ),
                   const SizedBox(
                     height: 5,
-                  ),
-                  Text(
-                    email,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: 13,
-                          color: AppUtils.DarkColor.withOpacity(0.7),
-                        ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -254,7 +201,7 @@ class _DashboardState extends State<Dashboard> {
                                 width: 2,
                               ),
                               Text(
-                                status,
+                                transaction.status,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -283,7 +230,7 @@ class _DashboardState extends State<Dashboard> {
                             width: 7,
                           ),
                           Text(
-                            date,
+                            transaction.date,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!

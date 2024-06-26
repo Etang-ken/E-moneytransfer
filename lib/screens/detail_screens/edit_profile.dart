@@ -57,7 +57,7 @@ class _EditProfileState extends State<EditProfile> {
       AppUtils.showSnackBar(
           context, ContentType.failure, 'Network error. Please try again.');
     } else {
-      final decodedResponse = jsonDecode(response.body);
+      final decodedResponse = response;
       if (decodedResponse["success"]) {
         final userData = decodedResponse['user'];
         await updateSharedPreference(userData);

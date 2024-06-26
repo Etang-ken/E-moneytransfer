@@ -1,5 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/helper/shared_preference.dart';
+import 'package:eltransfer/helper/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
@@ -13,6 +13,7 @@ import 'custom_snack_bar.dart';
 class Authenticate {
   onVerifyPhone(BuildContext context, String phone_number, dynamic userData) {
     fb.FirebaseAuth _auth = fb.FirebaseAuth.instance;
+
     _auth.verifyPhoneNumber(
       phoneNumber: phone_number,
       codeSent: (verificationId, forceResendingToken) {
@@ -34,20 +35,21 @@ class Authenticate {
         final response =
             await APIRequest().postRequest(route: '/register', data: userData);
         if (response != 'error') {
-          Map user = response['user'];
-          String token = response['token'];
-          saveUser(user, token);
-          Navigator.of(context).pop();
+
+          await storage.write( key: 'authToken', value: response['token']);
+          await updateSharedPreference(response['user']);
+
+          updateUserProvider(response['user'], context);
+
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => HomeNav()),
-              (Route<dynamic> route) => false);
+                  (Route<dynamic> route) => false);
         } else {
           var data = {
             "title": "Something went wrong",
             "message": "Something went wrong",
           };
-          Navigator.of(context).pop();
           final snackBar = customSnackBar(
               context: context, type: ContentType.failure, data: data);
           ScaffoldMessenger.of(context)
@@ -108,20 +110,21 @@ class Authenticate {
           await APIRequest().postRequest(route: '/register', data: userData);
 
       if (response != 'error') {
-        Map user = response['user'];
-        String token = response['token'];
-        saveUser(user, token);
-        Navigator.of(context).pop();
+
+        await storage.write( key: 'authToken', value: response['token']);
+        await updateSharedPreference(response['user']);
+
+        updateUserProvider(response['user'], context);
+
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomeNav()),
-            (Route<dynamic> route) => false);
+                (Route<dynamic> route) => false);
       } else {
         var data = {
           "title": "Something went wrong",
           "message": "Something went wrong",
         };
-        Navigator.of(context).pop();
         final snackBar = customSnackBar(
             context: context, type: ContentType.failure, data: data);
         ScaffoldMessenger.of(context)

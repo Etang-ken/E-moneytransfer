@@ -38,9 +38,6 @@ customSnackBar(
                           ? AppUtils.YellowColor
                           : AppUtils.PrimaryColor,
                 ),
-                SizedBox(
-                  width: 10,
-                ),
                 Expanded(
                     child: Text(
                   data['message'],
