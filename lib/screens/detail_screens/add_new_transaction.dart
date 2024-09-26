@@ -2,17 +2,21 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/screens/detail_screens/select_payment_method.dart';
+import 'package:elcrypto/api/request.dart';
+import 'package:elcrypto/provider/transaction.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:elcrypto/screens/detail_screens/choose_payment_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
-import 'package:provider/provider.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:http/http.dart' as http;
+import 'package:elcrypto/widgets/primary_button.dart';
+import 'package:elcrypto/widgets/text_field.dart';
+import 'package:select_form_field/select_form_field.dart';
+
+import '../../api/url.dart';
+import 'confirm_screen.dart';
 
 class AddNewTransaction extends StatefulWidget {
   @override
@@ -22,43 +26,40 @@ class AddNewTransaction extends StatefulWidget {
 class _AddNewTransactionState extends State<AddNewTransaction> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isSavingTransaction = false;
+
   final formData = {
-    "type": "momo",
-    "name": "",
-    "phone": "",
-    "receiver_name": "",
-    "receiver_phone": "",
+    "type": "crypto",
+    "wallet_id": "",
     "amount_send": "",
-    "amount_received": ""
+    "amount_received": "",
+    "from": "CAD",
+    "to": "BTC",
+    "rate": "",
+    "commission": "",
   };
 
-  Future<void> saveTransaction() async {
-    final TransactionProvider transactionProvider =
-        Provider.of<TransactionProvider>(context, listen: false);
-    setState(() {
-      isSavingTransaction = true;
-    });
-    final response = await APIRequest()
-        .postRequest(route: "/transactions/create", data: formData);
-    if (response.statusCode == 200) {
-      final decodedResponse = jsonDecode(response.body);
-      transactionProvider
-          .updateTransactionsData(decodedResponse['transactions']);
+  final List<Map<String, dynamic>> _items = [
+    {
+      'value': 'CAD',
+      'label': 'CAD',
+    },
+    {
+      'value': 'USD',
+      'label': 'USD',
+    },
+    {
+      'value': 'XAF',
+      'label': 'XAF',
+    },
+  ];
 
-      setState(() {
-        isSavingTransaction = false;
-      });
-      if(!mounted) return;
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => ChoosePaymentMethod()));
-      AppUtils.showSnackBar(
-          context, ContentType.success, 'Transaction added successfully.');
-    } else {
-      setState(() {
-        isSavingTransaction = false;
-      });
-      AppUtils.showSnackBar(
-          context, ContentType.failure, 'Network error. Please try again.');
+  bool isConverting = false;
+
+  Future<void> saveTransaction() async {
+    if (formData['amount_send'] != "") {
+      await convert();
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ConfirmScreen(formData)));
     }
   }
 
@@ -111,169 +112,201 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 10),
-                            child: Column(
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 10),
+                          child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Text(
-                                //   'Add New Transaction',
-                                //   textAlign: TextAlign.center,
-                                //   style: Theme.of(context)
-                                //       .textTheme
-                                //       .headline3!
-                                //       .copyWith(fontWeight: FontWeight.w500),
-                                // ),
-                                // const SizedBox(height: 20),
-                                Text(
-                                  "Sender's Info",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6!
-                                      .copyWith(fontWeight: FontWeight.w700),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Wallet ID",
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      TextInputField(
+                                        placeholderText: 'paste wallet id',
+                                        onChanged: (val) {
+                                          formData['wallet_id'] = val!;
+                                        },
+                                        inputValidator: (val) {
+                                          if (val!.isEmpty) {
+                                            return 'Wallet ID is required';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      const SizedBox(height: 40),
+                                      Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            Text("Amount",
+                                                textAlign: TextAlign.center,
+                                                style:
+                                                Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .headline6),
+                                            GestureDetector(onTap: () {
+                                              if (!isConverting) {
+                                                convert();
+                                              }
+                                            },
+                                              child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 4, horizontal: 10),
+                                                  decoration: BoxDecoration(
+                                                      color: AppUtils.PrimaryColor,
+                                                      borderRadius: BorderRadius
+                                                          .circular(5)
+                                                  ),
+                                                  child: Text(isConverting
+                                                      ? "converting ... "
+                                                      : 'convert', style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10),)),
+                                            )
+                                          ]),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        "Amount Payable",
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Stack(
+                                        children: [
+                                          TextInputField(
+                                            textInputType: TextInputType.number,
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                              right: 45,
+                                              top: 17,
+                                              bottom: 17,
+                                              left: 60,
+                                            ),
+                                            onChanged: (val) {
+                                              formData['amount_send'] = val!;
+                                            },
+                                            inputValidator: (val) {
+                                              if (val!.isEmpty) {
+                                                return "Amount is required";
+                                              }
+                                              if (double.parse(val) < 100) {
+                                                return "Amount must be at least 100.";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          Positioned(
+                                              child: Container(
+                                            width: 40,
+                                            child: SelectFormField(
+                                              type: SelectFormFieldType.dropdown,
+                                              initialValue: formData['from'],
+                                              changeIcon: true,
+                                              items: _items,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400),
+                                              decoration: InputDecoration(
+                                                suffixIconConstraints:  BoxConstraints(maxWidth: 5),
+                                                suffixIcon: Icon(Icons.keyboard_arrow_down, size: 20),
+
+                                                  labelStyle: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 5,
+                                                          vertical: 17),
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                  )),
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  formData['from'] = val;
+                                                });
+                                              },
+                                            ),
+                                          )),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Text(
+                                        'Amount Receivable',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Stack(
+                                        children: [
+                                          TextInputField(
+                                            inputController:
+                                                TextEditingController(
+                                                    text: formData[
+                                                        'amount_received']),
+                                            textInputType: TextInputType.number,
+                                            enabled: false,
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                              right: 45,
+                                              top: 17,
+                                              bottom: 17,
+                                              left: 50,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            left: 5,
+                                            top: 16,
+                                            child: Text(
+                                              "BTC",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 40),
+                                      PrimaryButton(
+                                        buttonText: 'View Details',
+                                        onClickBtn: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            saveTransaction();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Sender's Name",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 5),
-                                TextInputField(
-                                  placeholderText: 'John Doe...',
-                                  onChanged: (val) {
-                                    formData['name'] = val!;
-                                  },
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  "Sender's Number",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 5),
-                                TextInputField(
-                                  placeholderText: '+237 673746211',
-                                  textInputType: TextInputType.number,
-                                  onChanged: (val) {
-                                    formData['phone'] = val!;
-                                  },
-                                ),
-                                const SizedBox(height: 30),
-                                Text("Receiver's Info",
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.headline6),
-                                const SizedBox(height: 10),
-                                Text(
-                                  "Receiver's Name",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 5),
-                                TextInputField(
-                                  placeholderText: 'John Doe ...',
-                                  onChanged: (val) {
-                                    formData['receiver_name'] = val!;
-                                  },
-                                  inputValidator: (val) {
-                                    if (val!.isEmpty) {
-                                      return "Receiver's Name is required";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  "Receiver's Number",
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 5),
-                                TextInputField(
-                                  placeholderText: '+237 672346634',
-                                  textInputType: TextInputType.number,
-                                  onChanged: (val) {
-                                    formData['receiver_phone'] = val!;
-                                  },
-                                  inputValidator: (val) {
-                                    if (val!.isEmpty) {
-                                      return "Receiver's Number is required";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  'Amount',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 5),
-                                TextInputField(
-                                  placeholderText: '50000',
-                                  textInputType: TextInputType.number,
-                                  onChanged: (val) {
-                                    formData['amount_send'] = val!;
-                                    formData['amount_received'] = val!;
-                                  },
-                                  inputValidator: (val) {
-                                    if (val!.isEmpty) {
-                                      return "Amount is required";
-                                    }
-                                    if (int.parse(val) < 100) {
-                                      return "Amount must be atleast 100.";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 40),
-                              ],
-                            ),
-                          ),
-                          PrimaryButton(
-                            buttonText: 'Save & Continue',
-                            onClickBtn: () {
-                              if (_formKey.currentState!.validate()) {
-                                saveTransaction();
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 35),
-                        ],
-                      ),
+                              ]),
+                        ),
+                      ]),
                     ),
                   ),
                 ),
@@ -284,6 +317,44 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
         if (isSavingTransaction) showIsLoading()
       ],
     );
+  }
+
+  Future<void> convert() async {
+    if (formData['amount_send'] != "") {
+      setState(() {
+        isConverting = true;
+      });
+      final response = await APIRequest()
+          .postRequest(route: "/transactions/estimate", data: {
+        'type': 'momo',
+        'from': formData['from'],
+        'to': formData['to'],
+        'payable': formData['amount_send']
+      });
+
+      if (response != "error") {
+        dynamic responseBody = response;
+
+        setState(() {
+          formData['commission'] = responseBody['commission'];
+          formData['amount_received'] = responseBody['receivable'];
+          formData['email'] = responseBody['email'];
+          formData['rate'] = responseBody['rate'];
+        });
+      } else {
+        AppUtils.showSnackBar(
+            context, ContentType.failure, 'Network error. Please try again.');
+      }
+      setState(() {
+        isConverting = false;
+      });
+    } else {
+      setState(() {
+        isConverting = false;
+      });
+      AppUtils.showSnackBar(
+          context, ContentType.failure, 'Enter amount payable');
+    }
   }
 }
 

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/onboarding/auth/register.dart';
+import 'package:elcrypto/api/url.dart';
+import 'package:elcrypto/onboarding/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:elcrypto/api/request.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:country_code_picker/country_code_picker.dart';
+import 'package:elcrypto/home_nav.dart';
+import 'package:elcrypto/widgets/primary_button.dart';
+import 'package:elcrypto/widgets/text_field.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class LogIn extends StatefulWidget {
@@ -24,6 +24,7 @@ class _LogInState extends State<LogIn> {
   TextEditingController passwordController = TextEditingController();
   bool showPassword = true;
   bool isLoading = false;
+  String county_code = "";
   bool showInvalidCreds = false;
   final storage = FlutterSecureStorage();
 
@@ -39,29 +40,22 @@ class _LogInState extends State<LogIn> {
     });
 
     final hasConnectivity = await hasInternetConnectivity(context);
-    final phone = phoneController.text;
+    final phone = county_code + phoneController.text;
     final password = passwordController.text;
     if (hasConnectivity) {
       final data = {'phone': phone, 'password': password};
       final response =
-      await APIRequest().postRequest(route: '/login', data: data);
+          await APIRequest().postRequest(route: '/login', data: data);
 
       if (response == "error") {
         AppUtils.showSnackBar(
-            context,
-            ContentType.failure,
-            'Network error. Please try again.'
-        );
-      }
-      else {
-        final decodedResponse = jsonDecode(response.body);
+            context, ContentType.failure, 'Network error. Please try again.');
+      } else {
+        final decodedResponse = response;
         if (decodedResponse["success"]) {
           final userData = decodedResponse['user'];
           AppUtils.showSnackBar(
-              context,
-              ContentType.success,
-              decodedResponse["message"]
-          );
+              context, ContentType.success, decodedResponse["message"]);
           await storage.write(
               key: 'authToken', value: decodedResponse['token']);
           await updateSharedPreference(userData);
@@ -73,15 +67,12 @@ class _LogInState extends State<LogIn> {
             MaterialPageRoute(
               builder: (context) => HomeNav(),
             ),
-                (route) => false,
+            (route) => false,
           );
         } else {
           showInvalidCreds = true;
           AppUtils.showSnackBar(
-              context,
-              ContentType.failure,
-              decodedResponse["message"]
-          );
+              context, ContentType.failure, decodedResponse["message"]);
         }
       }
       setState(() {
@@ -116,22 +107,25 @@ class _LogInState extends State<LogIn> {
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 35),
                       constraints: const BoxConstraints(minHeight: 245),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/top_bg.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              AppUtils.PrimaryColor.withOpacity(0.6),
+                              AppUtils.White
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
                       child: Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 0.0),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/images/logo/elcrypto.png',
-                                height: 150,
-                              ),
-                            ),
-                          )),
+                        padding: EdgeInsets.only(top: 0.0),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/logo/elcrypto.png',
+                            height: 150,
+                          ),
+                        ),
+                      )),
                     ),
                     const SizedBox(
                       height: 50,
@@ -144,8 +138,7 @@ class _LogInState extends State<LogIn> {
                           children: [
                             Text(
                               'Welcome',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .headline2!
                                   .copyWith(fontWeight: FontWeight.w800),
@@ -156,14 +149,13 @@ class _LogInState extends State<LogIn> {
                             ),
                             Text(
                               'Login into your ElCrypto account...',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
                                   .copyWith(
-                                  color:
-                                  AppUtils.DarkColor.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400),
+                                      color:
+                                          AppUtils.DarkColor.withOpacity(0.6),
+                                      fontWeight: FontWeight.w400),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(
@@ -172,12 +164,11 @@ class _LogInState extends State<LogIn> {
                             Stack(
                               children: [
                                 TextInputField(
-                                  placeholderText: 'Phone Number *',
                                   inputController: phoneController,
                                   textInputType: TextInputType.number,
                                   onChanged: (value) {},
                                   contentPadding: const EdgeInsets.only(
-                                      left: 45, top: 17, bottom: 17),
+                                      left: 105, top: 17, bottom: 17),
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
                                       return 'Phone Number is Required';
@@ -186,14 +177,16 @@ class _LogInState extends State<LogIn> {
                                   },
                                 ),
                                 Positioned(
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, top: 15),
-                                      child: Icon(
-                                        Icons.call_outlined,
-                                        color:
-                                        AppUtils.DarkColor.withOpacity(0.8),
-                                      )),
+                                  child: CountryCodePicker(
+                                    onChanged: (element) {
+                                      county_code = element.dialCode!;
+                                    },
+                                    initialSelection: 'US',
+                                    showCountryOnly: false,
+                                    // enabled: false,
+                                    showOnlyCountryWhenClosed: false,
+                                    alignLeft: false,
+                                  ),
                                 ),
                               ],
                             ),
@@ -213,14 +206,13 @@ class _LogInState extends State<LogIn> {
                                     ),
                                     Text(
                                       'Invalid Credentials.',
-                                      style: Theme
-                                          .of(context)
+                                      style: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
                                           .copyWith(
-                                        fontSize: 11,
-                                        color: AppUtils.RedColor,
-                                      ),
+                                            fontSize: 11,
+                                            color: AppUtils.RedColor,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -254,7 +246,7 @@ class _LogInState extends State<LogIn> {
                                       child: Icon(
                                         Icons.lock_outline_rounded,
                                         color:
-                                        AppUtils.DarkColor.withOpacity(0.8),
+                                            AppUtils.DarkColor.withOpacity(0.8),
                                       )),
                                 ),
                                 Positioned(
@@ -285,17 +277,15 @@ class _LogInState extends State<LogIn> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                final Uri url = Uri.parse(AppUrl.appUrl+"admin/forget-password"); // Replace with your desired URL
+                                final Uri url = Uri.parse(AppUrl.appUrl +
+                                    "admin/forget-password"); // Replace with your desired URL
                                 launchInApp(url);
                               },
                               child: Align(
                                 alignment: Alignment.topRight,
                                 child: Text(
                                   'Forgot Password ?',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .bodyText1,
+                                  style: Theme.of(context).textTheme.bodyText1,
                                 ),
                               ),
                             ),
@@ -319,8 +309,7 @@ class _LogInState extends State<LogIn> {
                               children: [
                                 Text(
                                   "Don't have an account? ",
-                                  style: Theme
-                                      .of(context)
+                                  style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
                                       .copyWith(fontSize: 12),
@@ -334,15 +323,14 @@ class _LogInState extends State<LogIn> {
                                     },
                                     child: Text(
                                       "Sign Up",
-                                      style: Theme
-                                          .of(context)
+                                      style: Theme.of(context)
                                           .textTheme
                                           .bodyText1!
                                           .copyWith(
-                                        fontSize: 12,
-                                        color: AppUtils.PrimaryColor,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                            fontSize: 12,
+                                            color: AppUtils.PrimaryColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     )),
                               ],
                             ),

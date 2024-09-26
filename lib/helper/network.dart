@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:http/http.dart' as http;
-import 'package:emoneytransfer/helper/session_manager.dart';
+import 'package:elcrypto/helper/session_manager.dart';
 
 final String liveUrl = 'http://pf-home.lehone.net/';
 final String baseUrl = 'http://pf-home.lehone.net/';

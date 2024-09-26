@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:elcrypto/api/request.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/home_nav.dart';
+import 'package:elcrypto/screens/widgets/notification_icon.dart';
+import 'package:elcrypto/widgets/primary_button.dart';
+import 'package:elcrypto/widgets/text_field.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -49,7 +49,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         );
       }
       else {
-        final decodedResponse = jsonDecode(response.body);
+        final decodedResponse = response;
         if (decodedResponse["success"]) {
           AppUtils.showSnackBar(
               context,

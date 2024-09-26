@@ -7,6 +7,64 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:91268554343:android:bf0cbc6718ab8d7aca3ec2",
+        "android_client_info": {
+          "package_name": "com.elcrypto.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp69hvL-ObWsc6PD44Roo85o878TUZ8-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91268554343:android:77a47a6b87aadeb8ca3ec2",
+        "android_client_info": {
+          "package_name": "com.eltransfer.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp69hvL-ObWsc6PD44Roo85o878TUZ8-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:91268554343:android:bcbe610c137670f7ca3ec2",
         "android_client_info": {
           "package_name": "com.emoneytransfer.app"

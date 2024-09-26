@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:elcrypto/helper/app_utils.dart';
 
 class NotificationIcon extends StatefulWidget {
   final BuildContext context;
@@ -39,29 +39,6 @@ class _NotificationIconState extends State<NotificationIcon> {
                 child: Icon(
                   Icons.notifications_outlined,
                   color: AppUtils.White,
-                ),
-              ),
-            ),
-            Positioned(
-              // bottom: 30,
-              top: 3,
-              right: 5,
-              child: Container(
-                height: 17,
-                // width: 17,
-                constraints: const BoxConstraints(minWidth: 17),
-                padding: const EdgeInsets.all(2),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: AppUtils.RedColor,
-                    borderRadius: BorderRadius.circular(19)),
-                child: Text(
-                  '02',
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: AppUtils.White,
-                      ),
                 ),
               ),
             ),
@@ -110,21 +87,8 @@ class NotificationDialog extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     child: Column(
                       children: [
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                         notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                         notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                      ],
+
+                         ],
                     ),
                   ),
                 )
@@ -164,7 +128,7 @@ class NotificationDialog extends StatelessWidget {
                   message,
                   // softWrap: true,
                   maxLines: 2,
-                  
+
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!

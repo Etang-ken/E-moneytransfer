@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:country_codes/country_codes.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../helper/app_utils.dart';
 import '../../helper/authenticate.dart';
 
 class ProfilePhoneNumber extends StatefulWidget {
@@ -138,7 +135,7 @@ class _ProfilePhoneNumberState extends State<ProfilePhoneNumber> {
                         child: TextButton(
                           onPressed: () {
                             String p = county_code + phone;
-                            log("phone number t verify $p");
+                            log("phone number to verify $p");
                             widget.user!['phone'] = p;
                             userData = widget.user;
                             // firebase

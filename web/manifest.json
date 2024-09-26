@@ -1,6 +1,6 @@
 {
-    "name": "emoneytransfer",
-    "short_name": "emoneytransfer",
+    "name": "elcrypto",
+    "short_name": "elcrypto",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

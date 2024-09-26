@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/onboarding/auth/login.dart';
 import '../models/onbording_model.dart';
 
 class OnboardingScreens extends StatefulWidget {

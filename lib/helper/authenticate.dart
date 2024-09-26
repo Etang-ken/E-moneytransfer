@@ -1,5 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/helper/shared_preference.dart';
+import 'package:elcrypto/helper/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
@@ -34,14 +34,34 @@ class Authenticate {
         final response =
             await APIRequest().postRequest(route: '/register', data: userData);
         if (response != 'error') {
-          Map user = response['user'];
-          String token = response['token'];
-          saveUser(user, token);
-          Navigator.of(context).pop();
-          Navigator.pushAndRemoveUntil(
+          if (response['success']) {
+            await storage.write(
+                key: 'authToken', value: response['token']);
+            await updateSharedPreference(response['user']);
+
+            updateUserProvider(response['user'], context);
+
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => HomeNav()),
-              (Route<dynamic> route) => false);
+              MaterialPageRoute(
+                builder: (context) => HomeNav(),
+              ),
+                  (route) => false,
+            );
+          } else {
+            var data = {
+              "title": "Something went wrong",
+              "message": response['message'],
+            };
+
+            final snackBar = customSnackBar(
+                context: context, type: ContentType.failure, data: data);
+
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(snackBar);
+
+          }
         } else {
           var data = {
             "title": "Something went wrong",
@@ -108,14 +128,34 @@ class Authenticate {
           await APIRequest().postRequest(route: '/register', data: userData);
 
       if (response != 'error') {
-        Map user = response['user'];
-        String token = response['token'];
-        saveUser(user, token);
-        Navigator.of(context).pop();
-        Navigator.pushAndRemoveUntil(
+        if (response['success']) {
+          await storage.write(
+              key: 'authToken', value: response['token']);
+          await updateSharedPreference(response['user']);
+
+          updateUserProvider(response['user'], context);
+
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomeNav()),
-            (Route<dynamic> route) => false);
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+                (route) => false,
+          );
+        } else {
+          var data = {
+            "title": "Something went wrong",
+            "message": response['message'],
+          };
+
+          final snackBar = customSnackBar(
+              context: context, type: ContentType.failure, data: data);
+
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(snackBar);
+
+        }
       } else {
         var data = {
           "title": "Something went wrong",

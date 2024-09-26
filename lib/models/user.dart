@@ -1,10 +1,10 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/network.dart';
-import 'package:emoneytransfer/helper/shared_preference.dart';
-import 'package:emoneytransfer/models/user_image.dart';
+import 'package:elcrypto/helper/network.dart';
+import 'package:elcrypto/helper/shared_preference.dart';
+import 'package:elcrypto/models/user_image.dart';
 
-import 'package:emoneytransfer/helper/custom_snack_bar.dart';
+import 'package:elcrypto/helper/custom_snack_bar.dart';
 
 class User {
   int id;
