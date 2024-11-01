@@ -94,7 +94,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                 children: [
                   Text(
                     content[i].title,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           height: 1.2,
                           color: AppUtils.PrimaryColor,
                           fontSize: 25,
@@ -104,7 +104,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                   ),
                   Text(
                     content[i].description,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: AppUtils.Secondary),
                     textAlign: TextAlign.center,
@@ -151,7 +151,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                                     "Sign Up",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headline4
+                                        .headlineLarge
                                         ?.copyWith(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
@@ -204,7 +204,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                                 "Login",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4
+                                    .headlineLarge
                                     ?.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,

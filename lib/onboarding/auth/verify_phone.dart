@@ -149,12 +149,12 @@ class _ProfileVerifyPhoneState extends State<ProfileVerifyPhone> {
           Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 elevation: 0,
               ),
               body: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                   width: phoneWidth,
                   height: phoneHeight,

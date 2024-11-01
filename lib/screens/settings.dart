@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:elcrypto/api/url.dart';
 import 'package:elcrypto/helper/app_utils.dart';
@@ -134,7 +135,7 @@ class _SettingsState extends State<Settings> {
                     "Settings",
                     style: Theme.of(context)
                         .textTheme
-                        .headline4
+                        .headlineLarge
                         ?.copyWith(color: Colors.white),
                   ),
                   NotificationIcon(context: context)
@@ -235,6 +236,7 @@ class _SettingsState extends State<Settings> {
                     ),
 
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // profileModificationLink(
                         //     'Profile', Icons.person_outlined,
@@ -270,8 +272,34 @@ class _SettingsState extends State<Settings> {
                           await appLogOut(context);
                         }),
                         const SizedBox(
+                          height: 40,
+                        ),
+
+                        Text(
+                          "Social Links",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!.copyWith(
+                              color: AppUtils.PrimaryColor,
+                          )
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        profileModificationLink(
+                            'Instagram',  FontAwesomeIcons.instagram,
+                            browseTo: AppUrl.appUrl+"instagram/elcrypto"),
+
+                        profileModificationLink(
+                            'Tiktok', Icons.tiktok,
+                            browseTo: AppUrl.appUrl+"tiktok/elcrypto"),
+
+                        const SizedBox(
                           height: 80,
-                        )
+                        ),
+
+
                       ],
                     ),
                     // ),
@@ -327,7 +355,7 @@ class _SettingsState extends State<Settings> {
                 ),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                 ),

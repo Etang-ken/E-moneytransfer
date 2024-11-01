@@ -37,7 +37,7 @@ class _DateInputFieldState extends State<DateInputField> {
           contentPadding: widget.contentPadding,
 
           labelText: 'Choose Date',
-          labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+          labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: AppUtils.DarkColor.withOpacity(0.8),
                 fontSize: 14.0,
               ),
@@ -71,7 +71,7 @@ class _DateInputFieldState extends State<DateInputField> {
         controller: widget.inputController,
         style: Theme.of(context)
             .textTheme
-            .bodyText1!
+            .bodyMedium!
             .copyWith(fontWeight: FontWeight.w500),
         cursorColor: Colors.black,
         validator: widget.inputValidator,

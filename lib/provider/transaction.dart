@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../api/request.dart';
 import '../models/transaction.dart';
@@ -8,6 +9,7 @@ import '../models/transaction.dart';
 class TransactionProvider extends ChangeNotifier {
   List<TransactionData> _transactions = [];
   TransactionData transactionDetail = TransactionData();
+  bool lockApp = false;
 
   List<TransactionData> get transactions => _transactions;
 
@@ -51,11 +53,18 @@ class TransactionProvider extends ChangeNotifier {
   getTransactions() async {
     isLoading = true;
     try {
-      final response =
-      await APIRequest().getRequest(route: "/transactions?type=crypto");
+      dynamic data = await PackageInfo.fromPlatform();
+
+
+      final response = await APIRequest().getRequest(route: "/transactions?type=crypto");
 
       final decodedResponse = jsonDecode(response.body);
+      print("//////");
+
+      lockApp = ( data.version.compareTo(decodedResponse['version']['elcrypto'])) < 0;
+
       updateTransactionsData(decodedResponse['transactions']);
+
 
     } catch (e,st) {
       isLoading = false;

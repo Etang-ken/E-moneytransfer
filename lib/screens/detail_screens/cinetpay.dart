@@ -37,9 +37,10 @@ class _LaunchCinetpayState extends State<LaunchCinetpay> {
 
   @override
   Widget build(BuildContext context) {
+    print(amount);
     return CinetPayCheckout(
       title: 'Payment Checkout',
-      titleStyle: Theme.of(context).textTheme.headline6!.copyWith(
+      titleStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(
             color: Colors.white,
           ),
       titleBackgroundColor: AppUtils.PrimaryColor,
@@ -64,6 +65,8 @@ class _LaunchCinetpayState extends State<LaunchCinetpay> {
         Provider.of<TransactionProvider>(context, listen: false).getTransactions();
       },
       onError: (data) {
+        print("////////////");
+        print(data);
         if (mounted) {
           setState(() {
             response = data;

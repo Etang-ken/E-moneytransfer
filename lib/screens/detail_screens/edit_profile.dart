@@ -134,7 +134,7 @@ class _EditProfileState extends State<EditProfile> {
                       "Edit Profile",
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headlineLarge
                           ?.copyWith(color: Colors.white),
                     ),
                   ],
@@ -165,7 +165,7 @@ class _EditProfileState extends State<EditProfile> {
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700),
@@ -182,7 +182,7 @@ class _EditProfileState extends State<EditProfile> {
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700),
@@ -215,7 +215,7 @@ class _EditProfileState extends State<EditProfile> {
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700),

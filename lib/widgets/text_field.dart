@@ -43,7 +43,7 @@ class _TextInputFieldState extends State<TextInputField> {
 
           contentPadding: widget.contentPadding,
           labelText: widget.placeholderText,
-          labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+          labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: AppUtils.DarkColor.withOpacity(0.8),
                 fontSize: 14.0,
               ),
@@ -73,7 +73,7 @@ class _TextInputFieldState extends State<TextInputField> {
         maxLines: widget.maxLines,
         style: Theme.of(context)
             .textTheme
-            .bodyText1!
+            .bodyMedium!
             .copyWith(fontWeight: FontWeight.w600),
         cursorColor: AppUtils.PrimaryColor,
         enabled: widget.enabled,

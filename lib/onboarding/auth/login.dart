@@ -140,7 +140,7 @@ class _LogInState extends State<LogIn> {
                               'Welcome',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline2!
+                                  .displayMedium!
                                   .copyWith(fontWeight: FontWeight.w800),
                               textAlign: TextAlign.center,
                             ),
@@ -151,7 +151,7 @@ class _LogInState extends State<LogIn> {
                               'Login into your ElCrypto account...',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       color:
                                           AppUtils.DarkColor.withOpacity(0.6),
@@ -165,28 +165,27 @@ class _LogInState extends State<LogIn> {
                               children: [
                                 TextInputField(
                                   inputController: phoneController,
-                                  textInputType: TextInputType.number,
+                                  placeholderText: "Email",
+                                  textInputType: TextInputType.emailAddress,
                                   onChanged: (value) {},
                                   contentPadding: const EdgeInsets.only(
-                                      left: 105, top: 17, bottom: 17),
+                                      left: 45, top: 17, bottom: 17),
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
-                                      return 'Phone Number is Required';
+                                      return 'Email is Required';
                                     }
                                     return null;
                                   },
                                 ),
                                 Positioned(
-                                  child: CountryCodePicker(
-                                    onChanged: (element) {
-                                      county_code = element.dialCode!;
-                                    },
-                                    initialSelection: 'US',
-                                    showCountryOnly: false,
-                                    // enabled: false,
-                                    showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, top: 15),
+                                      child: Icon(
+                                        Icons.email,
+                                        color:
+                                        AppUtils.DarkColor.withOpacity(0.8),
+                                      )),
                                 ),
                               ],
                             ),
@@ -208,7 +207,7 @@ class _LogInState extends State<LogIn> {
                                       'Invalid Credentials.',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyMedium!
                                           .copyWith(
                                             fontSize: 11,
                                             color: AppUtils.RedColor,
@@ -231,7 +230,7 @@ class _LogInState extends State<LogIn> {
                                       return 'Password is Required';
                                     }
                                     if (val.length < 6) {
-                                      return 'Password must contain atleast 6 characters.';
+                                      return 'Password must contain at least 6 characters.';
                                     }
                                     return null;
                                   },
@@ -278,14 +277,14 @@ class _LogInState extends State<LogIn> {
                             GestureDetector(
                               onTap: () {
                                 final Uri url = Uri.parse(AppUrl.appUrl +
-                                    "admin/forget-password"); // Replace with your desired URL
+                                    "user/forgot-password"); // Replace with your desired URL
                                 launchInApp(url);
                               },
                               child: Align(
                                 alignment: Alignment.topRight,
                                 child: Text(
                                   'Forgot Password ?',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               ),
                             ),
@@ -297,7 +296,6 @@ class _LogInState extends State<LogIn> {
                               onClickBtn: () {
                                 if (_formkey.currentState!.validate()) {
                                   loginUser();
-                                  print("Invalid form Data");
                                 }
                               },
                             ),
@@ -311,7 +309,7 @@ class _LogInState extends State<LogIn> {
                                   "Don't have an account? ",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(fontSize: 12),
                                 ),
                                 GestureDetector(
@@ -325,7 +323,7 @@ class _LogInState extends State<LogIn> {
                                       "Sign Up",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyMedium!
                                           .copyWith(
                                             fontSize: 12,
                                             color: AppUtils.PrimaryColor,

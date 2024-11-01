@@ -53,13 +53,59 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     },
   ];
 
+  final List<Map<String, dynamic>> _crypto = [
+    {
+      'value': 'BTC',
+      'label': 'Bitcoin',
+    },
+    {
+      'value': 'ETH',
+      'label': 'Ethereum',
+    },
+    {
+      'value': 'BNB',
+      'label': 'BNB',
+    },
+    {
+      'value': 'SOL',
+      'label': 'Solana',
+    },
+    {
+      'value': 'XRP',
+      'label': 'XRP',
+    },
+    {
+      'value': 'TON',
+      'label': 'Toncoin',
+    },
+    {
+      'value': 'DOGE',
+      'label': 'Dogecoin',
+    },
+    {
+      'value': 'ADA',
+      'label': 'Cardano',
+    },
+    {
+      'value': 'USDT',
+      'label': 'Tether',
+    },
+    {
+      'value': 'USDC',
+      'label': 'USD Coin',
+    },
+    {
+      'value': 'XRP',
+      'label': 'XRP',
+    }
+  ];
+
   bool isConverting = false;
 
   Future<void> saveTransaction() async {
     if (formData['amount_send'] != "") {
-      await convert();
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ConfirmScreen(formData)));
+          MaterialPageRoute(builder: (context) => ChoosePaymentMethod(formData)));
     }
   }
 
@@ -94,7 +140,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                     "Add Transaction",
                     style: Theme.of(context)
                         .textTheme
-                        .headline4
+                        .headlineLarge
                         ?.copyWith(color: Colors.white),
                   ),
                 ],
@@ -131,7 +177,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1!
+                                            .bodyMedium!
                                             .copyWith(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400),
@@ -160,26 +206,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                                 Theme
                                                     .of(context)
                                                     .textTheme
-                                                    .headline6),
-                                            GestureDetector(onTap: () {
-                                              if (!isConverting) {
-                                                convert();
-                                              }
-                                            },
-                                              child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 4, horizontal: 10),
-                                                  decoration: BoxDecoration(
-                                                      color: AppUtils.PrimaryColor,
-                                                      borderRadius: BorderRadius
-                                                          .circular(5)
-                                                  ),
-                                                  child: Text(isConverting
-                                                      ? "converting ... "
-                                                      : 'convert', style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 10),)),
-                                            )
+                                                    .headlineSmall)
                                           ]),
                                       const SizedBox(height: 10),
                                       Text(
@@ -187,7 +214,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1!
+                                            .bodyMedium!
                                             .copyWith(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400),
@@ -219,15 +246,16 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                           ),
                                           Positioned(
                                               child: Container(
+
                                             width: 40,
                                             child: SelectFormField(
                                               type: SelectFormFieldType.dropdown,
                                               initialValue: formData['from'],
                                               changeIcon: true,
                                               items: _items,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w400),
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 suffixIconConstraints:  BoxConstraints(maxWidth: 5),
                                                 suffixIcon: Icon(Icons.keyboard_arrow_down, size: 20),
 
@@ -256,7 +284,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1!
+                                            .bodyMedium!
                                             .copyWith(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400),
@@ -276,17 +304,37 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                               right: 45,
                                               top: 17,
                                               bottom: 17,
-                                              left: 50,
+                                              left: 120,
                                             ),
                                           ),
                                           Positioned(
                                             left: 5,
-                                            top: 16,
-                                            child: Text(
-                                              "BTC",
+                                            child: Container(child: SelectFormField(
+                                              type: SelectFormFieldType.dropdown,
+                                              initialValue: formData['to'],
+                                              changeIcon: true,
+                                              items: _crypto,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w400),
-                                            ),
+                                              decoration: InputDecoration(
+                                                  suffixIconConstraints:  BoxConstraints(maxWidth: 5),
+                                                  suffixIcon: Icon(Icons.keyboard_arrow_down, size: 20),
+                                                  labelStyle: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.w400),
+                                                  contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 5,
+                                                      vertical: 17),
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                  )),
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  formData['to'] = val;
+                                                });
+                                              },
+                                            ), width: 80,)
                                           ),
                                         ],
                                       ),
@@ -319,43 +367,6 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     );
   }
 
-  Future<void> convert() async {
-    if (formData['amount_send'] != "") {
-      setState(() {
-        isConverting = true;
-      });
-      final response = await APIRequest()
-          .postRequest(route: "/transactions/estimate", data: {
-        'type': 'momo',
-        'from': formData['from'],
-        'to': formData['to'],
-        'payable': formData['amount_send']
-      });
-
-      if (response != "error") {
-        dynamic responseBody = response;
-
-        setState(() {
-          formData['commission'] = responseBody['commission'];
-          formData['amount_received'] = responseBody['receivable'];
-          formData['email'] = responseBody['email'];
-          formData['rate'] = responseBody['rate'];
-        });
-      } else {
-        AppUtils.showSnackBar(
-            context, ContentType.failure, 'Network error. Please try again.');
-      }
-      setState(() {
-        isConverting = false;
-      });
-    } else {
-      setState(() {
-        isConverting = false;
-      });
-      AppUtils.showSnackBar(
-          context, ContentType.failure, 'Enter amount payable');
-    }
-  }
 }
 
 class SelectPaymentMethod extends StatelessWidget {

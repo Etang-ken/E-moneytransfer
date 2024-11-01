@@ -33,14 +33,14 @@ class _TextAreaFieldState extends State<TextAreaField> {
           contentPadding: widget.contentPadding,
 
           labelText: widget.placeholderText,
-          labelStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+          labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: AppUtils.DarkColor.withOpacity(0.8),
                 fontSize: 14.0,
-              
+
               ),
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          alignLabelWithHint: true, 
-          isDense: true, 
+          alignLabelWithHint: true,
+          isDense: true,
           border: OutlineInputBorder(
               borderSide: const BorderSide(
                 width: 1.2,
@@ -69,7 +69,7 @@ class _TextAreaFieldState extends State<TextAreaField> {
         controller: widget.inputController,
         style: Theme.of(context)
             .textTheme
-            .bodyText1!
+            .bodyMedium!
             .copyWith(fontWeight: FontWeight.w500),
         cursorColor: Colors.black,
         validator: widget.inputValidator,

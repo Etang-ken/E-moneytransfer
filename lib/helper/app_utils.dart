@@ -55,13 +55,13 @@ class AppUtils {
         barrierDismissible: false,
         builder: (context) {
           return Container(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Center(
                 child: SizedBox(
                   width: 50,
                   height: 50,
                   child: CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).backgroundColor,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     color: Color(0xffFEDD1F),
                     strokeWidth: 4,
                     // value: 0.4,
@@ -84,7 +84,7 @@ class AppUtils {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Select filters to apply',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
             content: widget,

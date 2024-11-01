@@ -16,7 +16,6 @@ import '../../provider/transaction.dart';
 class AddPaymentProof extends StatefulWidget {
   dynamic formData;
 
-
   AddPaymentProof(this.formData);
 
   @override
@@ -28,7 +27,6 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
   XFile? _imageFile;
 
   dynamic formData;
-
 
   _AddPaymentProofState(this.formData);
 
@@ -71,7 +69,7 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
               "Add Proof of Payment",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -92,6 +90,11 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
                     const SizedBox(
                       height: 20,
                     ),
+                    Text(
+                      "Please snap and upload your transaction receipt for manual verification.",
+                      style:
+                          Theme.of(context).textTheme.headlineLarge?.copyWith(),
+                    ),
                     GestureDetector(
                       onTap: _pickImage,
                       child: Container(
@@ -106,21 +109,21 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
                         ),
                         child: _imageFile != null
                             ? Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: FileImage(
-                                File(_imageFile!.path),
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                      File(_imageFile!.path),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
                             : Icon(
-                          Icons.image,
-                          size: 220,
-                          color: AppUtils.SecondaryGray.withOpacity(0.6),
-                        ),
+                                Icons.image,
+                                size: 220,
+                                color: AppUtils.SecondaryGray.withOpacity(0.6),
+                              ),
                       ),
                     ),
                     const SizedBox(
@@ -129,53 +132,64 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
                     PrimaryButton(
                       buttonText: 'Submit',
                       onClickBtn: () async {
-                        setState(() {
-                          isSavingTransaction = true;
-                        });
+                        if (_imageFile != null) {
+                          setState(() {
+                            isSavingTransaction = true;
+                          });
 
-                        var uri = Uri.parse("${AppUrl.baseUrl}/transactions/create");
-                        var request = http.MultipartRequest('POST', uri);
-                        final storage = FlutterSecureStorage();
-                        final token = await storage.read(key: 'authToken');
-                        if (token != null) {
-                          request.headers['Authorization'] = 'Bearer $token';
-                          request.headers['Content-type'] = 'application/json';
-                          request.headers['Accept'] = 'application/json';
-                        }
+                          var uri = Uri.parse(
+                              "${AppUrl.baseUrl}/transactions/create");
+                          var request = http.MultipartRequest('POST', uri);
+                          final storage = FlutterSecureStorage();
+                          final token = await storage.read(key: 'authToken');
+                          if (token != null) {
+                            request.headers['Authorization'] = 'Bearer $token';
+                            request.headers['Content-type'] =
+                                'application/json';
+                            request.headers['Accept'] = 'application/json';
+                          }
 
-                        var file = await http.MultipartFile.fromPath('image', _imageFile!.path);
-                        request.files.add(file);
-                        request.fields.addAll(formData);
+                          var file = await http.MultipartFile.fromPath(
+                              'image', _imageFile!.path);
+                          request.files.add(file);
+                          request.fields.addAll(formData);
 
-                        var streamedResponse = await request.send();
-                        var response = await http.Response.fromStream(streamedResponse);
-                        if (response.statusCode == 200) {
+                          var streamedResponse = await request.send();
+                          var response =
+                              await http.Response.fromStream(streamedResponse);
+                          if (response.statusCode == 200) {
+                            AppUtils.showSnackBar(
+                              context,
+                              ContentType.success,
+                              'Transaction created successfully.',
+                            );
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Provider.of<TransactionProvider>(context,
+                                    listen: false)
+                                .getTransactions();
+                          } else {
+                            if (!mounted) return;
+                            AppUtils.showSnackBar(
+                              context,
+                              ContentType.failure,
+                              'Error saving transaction',
+                            );
+                          }
 
-
-                          AppUtils.showSnackBar(
-                            context,
-                            ContentType.success,
-                            'Transaction created successfully.',
-                          );
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Provider.of<TransactionProvider>(context, listen: false).getTransactions();
-
+                          setState(() {
+                            isSavingTransaction = false;
+                          });
                         } else {
-                          if (!mounted) return;
                           AppUtils.showSnackBar(
                             context,
                             ContentType.failure,
-                            'Error saving transaction',
+                            'Please upload proof of payment',
                           );
                         }
-
-                        setState(() {
-                          isSavingTransaction = false;
-                        });
                       },
                     ),
                     const SizedBox(height: 35),
@@ -185,7 +199,6 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
             ),
             if (isSavingTransaction) showIsLoading()
           ],
-
         ),
       ),
     );

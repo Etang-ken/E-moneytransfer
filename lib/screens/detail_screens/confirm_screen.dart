@@ -1,17 +1,26 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../api/request.dart';
+import '../../api/url.dart';
 import '../../helper/app_utils.dart';
 import '../../helper/session_manager.dart';
+import '../../paypal/paypal_payment.dart';
+import '../../provider/transaction.dart';
 import '../../widgets/primary_button.dart';
-import 'choose_payment_method.dart';
+import 'bank_transfer.dart';
+import 'package:http/http.dart' as http;
+import '../../api/url.dart';
+import 'package:provider/provider.dart';
+import 'cinetpay.dart';
 
 class ConfirmScreen extends StatefulWidget {
   dynamic formData;
+  dynamic paymentDetails;
 
-
-  ConfirmScreen(this.formData);
+  ConfirmScreen(this.formData, this.paymentDetails);
 
   @override
   State<ConfirmScreen> createState() => _ConfirmScreenState(formData);
@@ -24,30 +33,19 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
 
   _ConfirmScreenState(this.formData);
 
-  late ImagePicker _imagePicker;
-  XFile? _imageFile;
 
-  Future<void> _pickImage() async {
-    XFile? pickedImage =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
+  GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
-    setState(() {
-      _imageFile = pickedImage;
-    });
-  }
 
   SessionManager ss = SessionManager();
 
-  @override
-  void initState() {
-    super.initState();
-    _imagePicker = ImagePicker();
-  }
+  bool isConverting = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: AppUtils.PrimaryColor,
         automaticallyImplyLeading: false,
@@ -66,7 +64,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
               "Confirm transaction details",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -94,7 +92,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                         ),
                         Text(
                           'Transaction Details',
-                          style: Theme.of(context).textTheme.headline5!,
+                          style: Theme.of(context).textTheme.headlineMedium!,
                         ),
                         const SizedBox(
                           height: 6,
@@ -110,7 +108,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     text: 'Purchase of ',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppUtils.DarkColor
@@ -119,10 +117,10 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                   ),
                                   TextSpan(
                                     text:
-                                    "${formData['amount_received']} BTC ",
+                                    "${formData['amount_received']} ${formData['to']} ",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -131,7 +129,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     text: ' is about to be initiated ',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppUtils.DarkColor
@@ -195,7 +193,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                   textAlign: TextAlign.left,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline6!
+                                      .headlineSmall!
                                       .copyWith(
                                       fontWeight: FontWeight.w500),
                                 ),
@@ -206,13 +204,21 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     "Wallet ID",
                                     formData['wallet_id'] ??
                                         "-"),
+                                transactionTitleAndDetail(
+                                    "Payment Method",
+                                    formData['payment_method'] ??
+                                        "-"),
 
                                 transactionTitleAndDetail(
                                     'Transaction Date',
                                     "Today"),
-                                // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
+
+                                transactionTitleAndDetail(
+                                    "Amount Payable",
+                                    "${formData['amount_send']} ${formData['from']}"),
+
                                 transactionTitleAndDetail('Amount',
-                                    "${formData['amount_received']} BTC",
+                                    "${formData['amount_received']} ${formData['to']}",
                                     isAmount: true),
                               ],
                             ),
@@ -224,8 +230,97 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                     PrimaryButton(
                       buttonText: 'Continue',
                       onClickBtn: () async {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => ChoosePaymentMethod(formData)));
+                        if(widget.formData['payment_method'] == "Paypal"){
+                          // make PayPal payment
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => PaypalPayment(
+                                onFinish: (number) async {
+                                  if(number != null){
+                                    final snackBar = SnackBar(
+                                      content: const Text("Payment done Successfully"),
+                                      duration: const Duration(seconds: 5),
+                                      action: SnackBarAction(
+                                        label: 'Close',
+                                        onPressed: () {
+
+                                        },
+                                      ),
+                                    );
+                                    _scaffoldKey.currentState?.showSnackBar(snackBar);
+
+                                    setState(() {
+                                      isSavingTransaction = true;
+                                    });
+
+                                    var uri = Uri.parse("${AppUrl.baseUrl}/transactions/create");
+                                    var request = http.MultipartRequest('POST', uri);
+
+                                    final token = await storage.read(key: 'authToken');
+                                    if (token != null) {
+                                      request.headers['Authorization'] = 'Bearer $token';
+                                      request.headers['Content-type'] = 'application/json';
+                                      request.headers['Accept'] = 'application/json';
+                                    }
+                                    formData["method"] = "paypal";
+                                    formData["trid"] = number;
+                                    request.fields.addAll(formData);
+                                    var streamedResponse = await request.send();
+                                    var response = await http.Response.fromStream(streamedResponse);
+                                    if (response.statusCode == 200) {
+                                      AppUtils.showSnackBar(
+                                        context,
+                                        ContentType.success,
+                                        'Transaction created successfully.',
+                                      );
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Provider.of<TransactionProvider>(context, listen: false).getTransactions();
+
+                                    } else {
+                                      if (!mounted) return;
+                                      AppUtils.showSnackBar(
+                                        context,
+                                        ContentType.failure,
+                                        'Error saving transaction',
+                                      );
+                                    }
+
+                                    setState(() {
+                                      isSavingTransaction = false;
+                                    });
+                                  }
+                                },
+                                formData: formData,
+                                paymentDetails: widget.paymentDetails,
+                              ),
+                            ),
+                          );
+                        }else if(widget.formData['payment_method'] ==  "Bank Transfer"){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BankTransfer(formData),
+                            ),
+                          );
+                        }else{
+                          SessionManager().getId().then((value) {
+                            formData['user_id'] = value;
+                            if (formData['from'] == "XAF") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LaunchCinetpay(formData,
+                                      int.parse(formData['amount_send'])),
+                                ),
+                              );
+                            } else {
+                              convert();
+                            }
+                          });
+                        }
                       },
                     ),
                     const SizedBox(height: 35),
@@ -233,12 +328,58 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                 ),
               ),
             ),
+            if (isConverting) showIsLoading(),
             if (isSavingTransaction) showIsLoading()
           ]
         ),
       ),
     );
   }
+
+  Future<void> convert() async {
+    if (formData['amount_send'] != "") {
+      setState(() {
+        isConverting = true;
+      });
+      final response = await APIRequest()
+          .postRequest(route: "/transactions/estimate", data: {
+        'type': 'momo',
+        'payment_method':"momo",
+        'from': formData['from'],
+        'to': "XAF",
+        'payable': formData['amount_send']
+      });
+
+      if (response != 'error') {
+        dynamic responseBody = response;
+        setState(() {
+          double total = double.parse(formData['amount_send']) *
+              double.parse(responseBody['rate']);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LaunchCinetpay(formData, total.toInt()),
+            ),
+          );
+
+        });
+      } else {
+        AppUtils.showSnackBar(
+            context, ContentType.failure, 'Network error. Please try again.');
+      }
+      setState(() {
+        isConverting = false;
+      });
+    } else {
+      setState(() {
+        isConverting = false;
+      });
+      AppUtils.showSnackBar(
+          context, ContentType.failure, 'Enter amount payable');
+    }
+  }
+
 
   Widget transactionTitleAndDetail(String title, String detail,
       {String? paymentStatus, bool isAmount = false}) {
@@ -249,17 +390,16 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: AppUtils.SecondaryGray),
           ),
-          const SizedBox(
-            width: 15,
-          ),
+         Spacer(),
           Expanded(child: Text(
+            textAlign: TextAlign.right,
             detail,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: isAmount ? 16 : 12,
                 fontWeight: FontWeight.w400,
                 color: isAmount

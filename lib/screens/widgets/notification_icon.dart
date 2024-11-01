@@ -12,40 +12,41 @@ class NotificationIcon extends StatefulWidget {
 class _NotificationIconState extends State<NotificationIcon> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print('Clicked!!!');
-        showDialog(
-            context: context,
-            // barrierDismissible: true,
-            barrierColor: Colors.transparent,
-            builder: (BuildContext context) {
-              return NotificationDialog();
-              // return Container(
-              //   height: 60,
-              //   width: 100,
-              //   color: Colors.white,
-              // );
-            });
-      },
-      child: Container(
-        width: 40,
-        height: 40,
-        child: Stack(
-          children: [
-            Positioned(
-              // bottom: 0,
-              child: Center(
-                child: Icon(
-                  Icons.notifications_outlined,
-                  color: AppUtils.White,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    // return GestureDetector(
+    //   onTap: () {
+    //     print('Clicked!!!');
+    //     showDialog(
+    //         context: context,
+    //         // barrierDismissible: true,
+    //         barrierColor: Colors.transparent,
+    //         builder: (BuildContext context) {
+    //           return NotificationDialog();
+    //           // return Container(
+    //           //   height: 60,
+    //           //   width: 100,
+    //           //   color: Colors.white,
+    //           // );
+    //         });
+    //   },
+    //   child: Container(
+    //     width: 40,
+    //     height: 40,
+    //     child: Stack(
+    //       children: [
+    //         Positioned(
+    //           // bottom: 0,
+    //           child: Center(
+    //             child: Icon(
+    //               Icons.notifications_outlined,
+    //               color: AppUtils.White,
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
+    return Container();
   }
 }
 
@@ -79,7 +80,7 @@ class NotificationDialog extends StatelessWidget {
                 // const SizedBox(height: 10,),
                 Text(
                   'Notifications',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Container(
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
@@ -131,12 +132,12 @@ class NotificationDialog extends StatelessWidget {
 
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyMedium!
                       .copyWith(fontSize: 13),
                 ),
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 10,
                         color: AppUtils.SecondaryGray.withOpacity(0.7),
                       ),

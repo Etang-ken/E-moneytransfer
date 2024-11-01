@@ -64,14 +64,13 @@ class MyApp extends StatelessWidget {
         // Define the default brightness and colors.
         primaryColor: AppUtils.PrimaryColor,
         hintColor: Color(0xffFF9719),
-        backgroundColor: Color(0xFF008100).withOpacity(0.03),
         unselectedWidgetColor: Colors.grey,
         primaryColorDark: Color(0xff000000),
         primaryColorLight: Color(0xffffffff),
         fontFamily: 'Barlow',
         textTheme: const TextTheme(
           // body text styles
-          bodyText1: TextStyle(
+          bodyMedium: TextStyle(
             color: Color(0xff212121),
             fontFamily: 'Barlow',
             fontStyle: FontStyle.normal,
@@ -79,7 +78,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.w400,
             height: 1.5,
           ),
-          bodyText2: TextStyle(
+          bodyLarge: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Barlow',
               height: 1.5,
@@ -88,7 +87,7 @@ class MyApp extends StatelessWidget {
               fontSize: 16),
 
           // heading styles
-          headline1: TextStyle(
+          displayLarge: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -96,7 +95,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700),
 
           // for secondary headers that are black
-          headline2: TextStyle(
+          displayMedium: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -104,7 +103,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700),
 
           // for secondary headers that are purple
-          headline3: TextStyle(
+          displaySmall: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -112,7 +111,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700),
 
           // used for buttons
-          headline4: TextStyle(
+          headlineLarge: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -120,14 +119,14 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700,
               letterSpacing: 0.4),
 
-          headline5: TextStyle(
+          headlineMedium: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
               fontSize: 18,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.4),
-          headline6: TextStyle(
+          headlineSmall: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,

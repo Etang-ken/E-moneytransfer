@@ -77,7 +77,7 @@ class _BankTransferState extends State<BankTransfer> {
               "Bank Transfer",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -104,7 +104,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(
                              fontSize: 13,
                              fontWeight: FontWeight.w600),
@@ -121,7 +121,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(fontSize: 13),
                              ),
                              WidgetSpan(
@@ -132,7 +132,7 @@ class _BankTransferState extends State<BankTransfer> {
                                        style: Theme
                                            .of(context)
                                            .textTheme
-                                           .bodyText1!
+                                           .bodyMedium!
                                            .copyWith(
                                          fontSize: 15,
                                          fontWeight: FontWeight.w700,
@@ -159,7 +159,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13, color: Colors.red),
                        ),
 
@@ -168,7 +168,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13, color: Colors.red),
                        ),
                        const SizedBox(
@@ -179,7 +179,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -190,7 +190,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -201,7 +201,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -212,7 +212,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -223,7 +223,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(
                              fontSize: 13,
                              fontWeight: FontWeight.w600),
@@ -237,7 +237,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -249,7 +249,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -276,7 +276,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -288,7 +288,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -315,7 +315,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -327,7 +327,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -355,7 +355,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -367,7 +367,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -395,7 +395,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -407,7 +407,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
