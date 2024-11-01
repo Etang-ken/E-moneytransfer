@@ -114,7 +114,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       "Change Password",
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headlineLarge
                           ?.copyWith(color: Colors.white),
                     ),
                   ],
@@ -151,7 +151,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -208,7 +208,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     "Invalid old password.",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText2!
+                                        .bodyLarge!
                                         .copyWith(
                                             fontSize: 12.0,
                                             color: AppUtils.RedColor),
@@ -223,7 +223,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -280,7 +280,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),

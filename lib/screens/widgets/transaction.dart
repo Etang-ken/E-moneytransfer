@@ -27,7 +27,7 @@ Widget transactionCard(BuildContext context, String transactionType,
             children: [
               Text(
                 transactionType,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       // fontSize: 11,
                       fontWeight: FontWeight.w700,
                     ),
@@ -37,7 +37,7 @@ Widget transactionCard(BuildContext context, String transactionType,
               ),
               Text(
                 'XAF $price ',
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontSize: 20,
                       color: AppUtils.DarkColor.withOpacity(0.7),
                     ),
@@ -73,7 +73,7 @@ Widget transactionCard(BuildContext context, String transactionType,
                             status,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyMedium!
                                 .copyWith(
                                   fontSize: 11,
                                   color: AppUtils.DarkColor.withOpacity(0.9),
@@ -99,7 +99,7 @@ Widget transactionCard(BuildContext context, String transactionType,
                       ),
                       Text(
                         date,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontSize: 11,
                               color: AppUtils.DarkColor.withOpacity(0.9),
                             ),

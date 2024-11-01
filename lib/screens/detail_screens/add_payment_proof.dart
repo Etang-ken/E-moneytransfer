@@ -69,7 +69,7 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
               "Add Proof of Payment",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -89,6 +89,13 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
                   children: [
                     const SizedBox(
                       height: 20,
+                    ),
+                    Text(
+                      "Please snap and upload your transaction receipt for manual verification.",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineLarge
+                          ?.copyWith(),
                     ),
                     GestureDetector(
                       onTap: _pickImage,
@@ -127,54 +134,62 @@ class _AddPaymentProofState extends State<AddPaymentProof> {
                     PrimaryButton(
                       buttonText: 'Submit',
                       onClickBtn: () async {
+                          if( _imageFile != null){
+                            setState(() {
+                              isSavingTransaction = true;
+                            });
 
-                        setState(() {
-                          isSavingTransaction = true;
-                        });
+                            var uri = Uri.parse("${AppUrl.baseUrl}/transactions/create");
+                            var request = http.MultipartRequest('POST', uri);
+                            final storage = FlutterSecureStorage();
+                            final token = await storage.read(key: 'authToken');
+                            if (token != null) {
+                              request.headers['Authorization'] = 'Bearer $token';
+                              request.headers['Content-type'] = 'application/json';
+                              request.headers['Accept'] = 'application/json';
+                            }
 
-                        var uri = Uri.parse("${AppUrl.baseUrl}/transactions/create");
-                        var request = http.MultipartRequest('POST', uri);
-                        final storage = FlutterSecureStorage();
-                        final token = await storage.read(key: 'authToken');
-                        if (token != null) {
-                          request.headers['Authorization'] = 'Bearer $token';
-                          request.headers['Content-type'] = 'application/json';
-                          request.headers['Accept'] = 'application/json';
-                        }
+                            var file = await http.MultipartFile.fromPath('image', _imageFile!.path);
+                            request.files.add(file);
+                            request.fields.addAll(formData);
 
-                        var file = await http.MultipartFile.fromPath('image', _imageFile!.path);
-                        request.files.add(file);
-                        request.fields.addAll(formData);
-
-                        var streamedResponse = await request.send();
-                        var response = await http.Response.fromStream(streamedResponse);
-                        if (response.statusCode == 200) {
+                            var streamedResponse = await request.send();
+                            var response = await http.Response.fromStream(streamedResponse);
+                            if (response.statusCode == 200) {
 
 
-                          AppUtils.showSnackBar(
-                            context,
-                            ContentType.success,
-                            'Transaction created successfully.',
-                          );
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Provider.of<TransactionProvider>(context, listen: false).getTransactions();
+                              AppUtils.showSnackBar(
+                                context,
+                                ContentType.success,
+                                'Transaction created successfully.',
+                              );
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Provider.of<TransactionProvider>(context, listen: false).getTransactions();
 
-                        } else {
-                          if (!mounted) return;
-                          AppUtils.showSnackBar(
-                            context,
-                            ContentType.failure,
-                            'Error saving transaction',
-                          );
-                        }
+                            } else {
+                              if (!mounted) return;
+                              AppUtils.showSnackBar(
+                                context,
+                                ContentType.failure,
+                                'Error saving transaction',
+                              );
+                            }
 
-                        setState(() {
-                          isSavingTransaction = false;
-                        });
+                            setState(() {
+                              isSavingTransaction = false;
+                            });
+                          }else{
+                            AppUtils.showSnackBar(
+                              context,
+                              ContentType.failure,
+                              'Please upload proof of payment',
+                            );
+                          }
+
                       },
                     ),
                     const SizedBox(height: 35),

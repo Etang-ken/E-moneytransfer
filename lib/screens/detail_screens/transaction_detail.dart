@@ -64,7 +64,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                   "Transaction",
                   style: Theme.of(context)
                       .textTheme
-                      .headline4
+                      .headlineLarge
                       ?.copyWith(color: Colors.white),
                 ),
               ],
@@ -100,7 +100,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                               ),
                               Text(
                                 'Transaction Successful',
-                                style: Theme.of(context).textTheme.headline5!,
+                                style: Theme.of(context).textTheme.headlineMedium!,
                               ),
                               const SizedBox(
                                 height: 6,
@@ -116,7 +116,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                           text: 'Transfer of ',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .bodyMedium!
                                               .copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: AppUtils.DarkColor
@@ -128,7 +128,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                           "XAF ${transaction.payload['amount_received']} ",
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .bodyMedium!
                                               .copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: statusColor(),
@@ -139,7 +139,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                           text: 'to ',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .bodyMedium!
                                               .copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: AppUtils.DarkColor
@@ -150,7 +150,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                           text:  transaction.payload['receiver_phone'],
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .bodyMedium!
                                               .copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: AppUtils.DarkColor
@@ -162,7 +162,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                           text: ' is '+transaction.status,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .bodyMedium!
                                               .copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: AppUtils.DarkColor
@@ -226,7 +226,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                         textAlign: TextAlign.left,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline6!
+                                            .headlineSmall!
                                             .copyWith(
                                             fontWeight: FontWeight.w500),
                                       ),
@@ -234,16 +234,21 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                                         height: 15,
                                       ),
                                       transactionTitleAndDetail(
-                                          "Status",
-                                          transaction.status ),
+                                          "Status", transaction.status, status: true),
                                       transactionTitleAndDetail(
-                                          "Receiver's Name",
+                                          transaction.payload["method"] != "bank"?"Receiver's Name":"Account Name",
                                           transaction.payload['receiver_name'] ??
                                               "-"),
                                       transactionTitleAndDetail(
-                                          "Receiver's Phone",
+                                          transaction.payload["method"] != "bank"?"Receiver's Phone":"Account Number",
                                           transaction.payload['receiver_phone'] ??
                                               "-"),
+                                      if(transaction.payload["method"]!= "momo")...[
+                                        transactionTitleAndDetail(
+                                            "Bank Name",
+                                            transaction.payload["bank"] ??
+                                                "-")
+                                      ],
 
                                       transactionTitleAndDetail(
                                           'Transaction Date',
@@ -296,7 +301,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
   }
 
   Widget transactionTitleAndDetail(String title, String detail,
-      {String? paymentStatus, bool isAmount = false}) {
+      {String? paymentStatus, bool isAmount = false, bool status = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
@@ -304,7 +309,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: AppUtils.SecondaryGray),
@@ -312,17 +317,26 @@ class _TransactionDetailsState extends State<TransactionDetails> {
           const SizedBox(
             width: 15,
           ),
-          Text(
-            detail,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                fontSize: isAmount ? 16 : 12,
-                fontWeight: FontWeight.w700,
-                color: paymentStatus != null
-                    ? statusColor()
-                    : (isAmount
-                        ? AppUtils.DarkColor.withOpacity(0.7)
-                        : AppUtils.SecondaryGray)),
-          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            decoration: BoxDecoration(
+              color: status?(detail == "done"?Color(0xff00ff00):Color(0xffff0000)):Colors.transparent
+            ),
+            child: Text(
+              detail,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: isAmount ? 16 : 12,
+                  fontWeight: FontWeight.w700,
+                  color: status?Color(0xffffffff):
+
+
+                  paymentStatus != null
+                      ? statusColor()
+                      : (isAmount
+                      ? AppUtils.DarkColor.withOpacity(0.7)
+                      : AppUtils.SecondaryGray)),
+            ),
+          )
         ],
       ),
     );

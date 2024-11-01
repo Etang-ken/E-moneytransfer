@@ -125,7 +125,7 @@ class _RegisterState extends State<Register> {
                               'Welcome',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline2!
+                                  .displayMedium!
                                   .copyWith(fontWeight: FontWeight.w800),
                               textAlign: TextAlign.center,
                             ),
@@ -136,7 +136,7 @@ class _RegisterState extends State<Register> {
                               'Create your eltransfer account...',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       color:
                                           AppUtils.DarkColor.withOpacity(0.6),
@@ -324,7 +324,7 @@ class _RegisterState extends State<Register> {
                                   "Already have an account? ",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(fontSize: 12),
                                 ),
                                 GestureDetector(
@@ -337,7 +337,7 @@ class _RegisterState extends State<Register> {
                                       "Sign In",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyMedium!
                                           .copyWith(
                                             fontSize: 12,
                                             color: AppUtils.PrimaryColor,

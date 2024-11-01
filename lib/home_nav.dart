@@ -134,7 +134,7 @@ class TabNavigationItem {
             label: "Transations",
             icon: Padding(
               padding: EdgeInsets.only(top: 5),
-              child: Icon(Icons.money),
+              child: Icon(Icons.currency_exchange),
             ),
           ),
         ),

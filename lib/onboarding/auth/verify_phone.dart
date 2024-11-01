@@ -81,17 +81,28 @@ class _ProfileVerifyPhoneState extends State<ProfileVerifyPhone> {
     }).then((value) async {
       final response =
           await APIRequest().postRequest(route: '/register', data: user);
+
       if (response != 'error') {
+        if(response["success"] != false){
+          await storage.write( key: 'authToken', value: response['token']);
+          await updateSharedPreference(response['user']);
 
-        await storage.write( key: 'authToken', value: response['token']);
-        await updateSharedPreference(response['user']);
+          updateUserProvider(response['user'], context);
 
-        updateUserProvider(response['user'], context);
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeNav()),
-            (Route<dynamic> route) => false);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeNav()),
+                  (Route<dynamic> route) => false);
+        }else{
+          var data = {
+            "message": response['message'],
+          };
+          final snackBar = customSnackBar(
+              context: context, type: ContentType.failure, data: data);
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(snackBar);
+        }
       } else {
         var data = {
           "title": "Something went wrong",
@@ -124,12 +135,12 @@ class _ProfileVerifyPhoneState extends State<ProfileVerifyPhone> {
           Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 elevation: 0,
               ),
               body: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                   width: phoneWidth,
                   height: phoneHeight,

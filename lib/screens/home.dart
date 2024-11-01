@@ -46,7 +46,7 @@ class _DashboardState extends State<Dashboard> {
               Text("Dashboard",
                   style: Theme.of(context)
                       .textTheme
-                      .headline4
+                      .headlineLarge
                       ?.copyWith(color: Colors.white)),
               NotificationIcon(context: context)
             ],
@@ -70,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
                       "Transactions",
                       style: Theme.of(context)
                           .textTheme
-                          .headline4!
+                          .headlineLarge!
                           .copyWith(fontWeight: FontWeight.w700),
                     ),),
                     const SizedBox(
@@ -160,7 +160,7 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Text(
                         transaction.title,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               // fontSize: 11,
                               fontWeight: FontWeight.w700,
                             ),
@@ -204,7 +204,7 @@ class _DashboardState extends State<Dashboard> {
                                 transaction.status,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                       fontSize: 11,
                                       color:
@@ -233,7 +233,7 @@ class _DashboardState extends State<Dashboard> {
                             transaction.date,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyMedium!
                                 .copyWith(
                                   fontSize: 11,
                                   color: AppUtils.DarkColor.withOpacity(0.9),

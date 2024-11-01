@@ -19,7 +19,7 @@ class AddNewTransaction extends StatefulWidget {
 
 class _AddNewTransactionState extends State<AddNewTransaction> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  dynamic paymentDetails = [];
   final formData = {
     "type": "momo",
     "name": "",
@@ -28,11 +28,28 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     "to": "XAF",
     "rate": "",
     "commission": "",
+    "method": "momo",
     "receiver_name": "",
+    "bank_name": "",
     "receiver_phone": "",
     "amount_send": "",
     "amount_received": ""
   };
+
+  final List<Map<String, dynamic>> _methods = [
+    {
+      'value': 'momo',
+      'label': 'MTN Mobile Money',
+    },
+    {
+      'value': 'omomo',
+      'label': 'Orange Mobile Money',
+    },
+    {
+      'value': 'bank',
+      'label': 'Bank Transfer',
+    },
+  ];
 
   final List<Map<String, dynamic>> _items = [
     {
@@ -53,11 +70,13 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
 
   Future<void> saveTransaction() async {
     if (formData['amount_send'] != "") {
-      await convert();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ConfirmScreen(formData)));
+      if (!isConverting) {
+        await convert();
+        Navigator.push(context,
+            MaterialPageRoute(
+                builder: (context) => ConfirmScreen(formData, paymentDetails)));
+      }
     }
-
   }
 
   @override
@@ -92,7 +111,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                     style: Theme
                         .of(context)
                         .textTheme
-                        .headline4
+                        .headlineLarge
                         ?.copyWith(color: Colors.white),
                   ),
                 ],
@@ -128,15 +147,68 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                     Theme
                                         .of(context)
                                         .textTheme
-                                        .headline6),
-                                const SizedBox(height: 10),
+                                        .headlineSmall),
+                                const SizedBox(height: 30),
+
                                 Text(
-                                  "Receiver's Name",
+                                  "Payment Method",
                                   textAlign: TextAlign.center,
                                   style: Theme
                                       .of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
+                                      .copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(height: 5),
+                                Container(
+                                  child: SelectFormField(
+                                    type: SelectFormFieldType.dropdown,
+                                    initialValue: formData['method'],
+                                    items: _methods,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            width: 1.2,
+                                            color: Color.fromARGB(
+                                                66, 65, 65, 65),
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                              8.0)),
+                                      suffixIconConstraints: BoxConstraints(
+                                          maxWidth: 5),
+                                      suffixIcon: Icon(
+                                          Icons.keyboard_arrow_down, size: 20),
+
+                                      labelStyle: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w400),
+                                      contentPadding:
+                                      EdgeInsets.symmetric(
+                                          horizontal: 5,
+                                          vertical: 17),
+                                    ),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        formData['method'] = val;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 20,),
+
+                                Text(
+                                  formData["method"] != "bank"
+                                      ? "Receiver's Name"
+                                      : "Account Name",
+                                  textAlign: TextAlign.center,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .bodyMedium!
                                       .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400),
@@ -149,37 +221,74 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                   },
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
-                                      return "Receiver's Name is required";
+                                      return "${formData["method"] != "bank"
+                                          ? "Receiver's Name"
+                                          : "Account Name"} is required";
                                     }
                                     return null;
                                   },
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  "Receiver's Number",
+                                  formData["method"] != "bank"
+                                      ? "Receiver's Number"
+                                      : "Account Number",
                                   textAlign: TextAlign.center,
                                   style: Theme
                                       .of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400),
                                 ),
                                 const SizedBox(height: 5),
                                 TextInputField(
-                                  placeholderText: '+237 672346634',
-                                  textInputType: TextInputType.number,
+                                  placeholderText: formData["method"] != "bank"
+                                      ? '+237 672346634'
+                                      : "",
+                                  textInputType: formData["method"] != "bank"?TextInputType.number:TextInputType.text,
                                   onChanged: (val) {
                                     formData['receiver_phone'] = val!;
                                   },
                                   inputValidator: (val) {
                                     if (val!.isEmpty) {
-                                      return "Receiver's Number is required";
+                                      return "${ formData["method"] != "bank"
+                                          ? "Receiver's Number"
+                                          : "Account Number"} is required";
                                     }
                                     return null;
                                   },
                                 ),
+                                if(formData["method"] == "bank")...[
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    "Bank Name",
+                                    textAlign: TextAlign.center,
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  TextInputField(
+                                    placeholderText: "Enter bank name",
+                                    textInputType: TextInputType.text,
+                                    onChanged: (val) {
+                                      formData['bank'] = val!;
+                                    },
+                                    inputValidator: (val) {
+                                      if (val!.isEmpty) {
+                                        return "Bank name is required";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ],
+
                                 const SizedBox(height: 40),
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment
@@ -191,7 +300,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                           Theme
                                               .of(context)
                                               .textTheme
-                                              .headline6),
+                                              .headlineSmall),
                                       GestureDetector(onTap: () {
                                         if (!isConverting) {
                                           convert();
@@ -220,7 +329,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                   style: Theme
                                       .of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400),
@@ -235,7 +344,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                         right: 45,
                                         top: 17,
                                         bottom: 17,
-                                        left: 50,
+                                        left: 80,
                                       ),
                                       onChanged: (val) {
                                         formData['amount_send'] = val!;
@@ -251,6 +360,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                       },
                                     ),
                                     Positioned(
+
                                         child: Container(
                                           width: 60,
                                           child: SelectFormField(
@@ -260,16 +370,21 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400),
                                             decoration: InputDecoration(
+                                                suffixIconConstraints: BoxConstraints(
+                                                    maxWidth: 5),
+                                                suffixIcon: Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    size: 20),
                                                 labelStyle: TextStyle(
-                                                    fontWeight: FontWeight
-                                                        .w400),
-                                                contentPadding: EdgeInsets
-                                                    .symmetric(horizontal: 5,
+                                                    fontWeight:
+                                                    FontWeight.w400),
+                                                contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal: 5,
                                                     vertical: 17),
                                                 border: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,)
-
-                                            ),
+                                                  borderSide: BorderSide.none,
+                                                )),
                                             onChanged: (val) {
                                               setState(() {
                                                 formData['from'] = val;
@@ -287,7 +402,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                   style: Theme
                                       .of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400),
@@ -342,10 +457,10 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
   }
 
   Future<void> convert() async {
+    setState(() {
+      isConverting = true;
+    });
     if (formData['amount_send'] != "") {
-      setState(() {
-        isConverting = true;
-      });
       final response = await APIRequest()
           .postRequest(route: "/transactions/estimate", data: {
         'type': 'momo',
@@ -355,7 +470,6 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
       });
 
       if (response != "error") {
-
         dynamic responseBody = response;
 
         setState(() {
@@ -363,7 +477,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
           formData['commission'] = responseBody['commission'];
           formData['amount_received'] = responseBody['receivable'];
           formData['rate'] = responseBody['rate'];
-
+          paymentDetails = responseBody['paypal'];
         });
       } else {
         AppUtils.showSnackBar(
@@ -372,8 +486,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
       setState(() {
         isConverting = false;
       });
-
-    }else{
+    } else {
       setState(() {
         isConverting = false;
       });

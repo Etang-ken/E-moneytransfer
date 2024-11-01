@@ -59,7 +59,7 @@ class _NotificationIconState extends State<NotificationIcon> {
                     borderRadius: BorderRadius.circular(19)),
                 child: Text(
                   '02',
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: 8,
                     fontWeight: FontWeight.w700,
                     color: AppUtils.White,
@@ -104,7 +104,7 @@ class NotificationDialog extends StatelessWidget {
                 // const SizedBox(height: 10,),
                 Text(
                   'Notifications',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Container(
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
@@ -169,12 +169,12 @@ class NotificationDialog extends StatelessWidget {
 
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyMedium!
                       .copyWith(fontSize: 13),
                 ),
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 10,
                         color: AppUtils.SecondaryGray.withOpacity(0.7),
                       ),

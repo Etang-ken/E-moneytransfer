@@ -7,16 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:eltransfer/helper/app_utils.dart';
 import 'package:eltransfer/widgets/primary_button.dart';
-import 'package:provider/provider.dart';
-import '../../api/request.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import '../../provider/transaction.dart';
 
 class ConfirmScreen extends StatefulWidget {
   dynamic formData;
+  dynamic paymentDetails;
 
-
-  ConfirmScreen(this.formData);
+  ConfirmScreen(this.formData, this.paymentDetails);
 
   @override
   State<ConfirmScreen> createState() => _ConfirmScreenState(formData);
@@ -71,7 +67,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
               "Transaction Details",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -99,7 +95,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                         ),
                         Text(
                           'Transaction Details',
-                          style: Theme.of(context).textTheme.headline5!,
+                          style: Theme.of(context).textTheme.headlineMedium!,
                         ),
                         const SizedBox(
                           height: 6,
@@ -115,7 +111,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     text: 'Transfer of ',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppUtils.DarkColor
@@ -127,7 +123,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     "XAF ${formData['amount_received']} ",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -136,7 +132,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     text: 'to ',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppUtils.DarkColor
@@ -147,7 +143,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     text:  formData['receiver_name'],
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppUtils.DarkColor
@@ -158,7 +154,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                     text: ' is about to be initiated ',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyMedium!
                                         .copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppUtils.DarkColor
@@ -222,7 +218,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                   textAlign: TextAlign.left,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline6!
+                                      .headlineSmall!
                                       .copyWith(
                                       fontWeight: FontWeight.w500),
                                 ),
@@ -231,16 +227,22 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                 ),
 
                                 transactionTitleAndDetail(
-                                    "Receiver's Name",
+                                    formData["method"] != "bank"?"Receiver's Name":"Account Name",
                                     formData['receiver_name'] ??
-                                        "-"),
-                                transactionTitleAndDetail(
-                                    "Receiver's Phone",
-                                    formData['receiver_phone'] ??
                                         "-"),
 
                                 transactionTitleAndDetail(
-                                    'Transasction Date',
+                                    formData["method"] != "bank"?"Receiver's Phone":"Account Number",
+                                    formData['receiver_phone'] ??
+                                        "-"),
+                                if(formData["method"] != "momo")...[
+                                  transactionTitleAndDetail(
+                                      "Bank Name",
+                                      formData['bank'] ??
+                                          "-")
+                                ],
+                                transactionTitleAndDetail(
+                                    'Transaction Date',
                                     "Today"),
                                 // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
                                 transactionTitleAndDetail('Amount',
@@ -256,7 +258,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                       buttonText: 'Submit',
                       onClickBtn: () async {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => ChoosePaymentMethod(formData)));
+                            MaterialPageRoute(builder: (context) => ChoosePaymentMethod(formData, widget.paymentDetails)));
                       },
                     ),
                     const SizedBox(height: 35),
@@ -280,7 +282,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: AppUtils.SecondaryGray),
@@ -290,7 +292,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
           ),
           Text(
             detail,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: isAmount ? 16 : 12,
                 fontWeight: FontWeight.w700,
                 color: isAmount

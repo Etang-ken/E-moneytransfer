@@ -49,7 +49,7 @@ class _ProfilePhoneNumberState extends State<ProfilePhoneNumber> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           leading: IconButton(
               color: Theme.of(context).primaryColor,
@@ -60,7 +60,7 @@ class _ProfilePhoneNumberState extends State<ProfilePhoneNumber> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
           width: phoneWidth,
           height: phoneHeight,
@@ -76,7 +76,7 @@ class _ProfilePhoneNumberState extends State<ProfilePhoneNumber> {
                     children: [
                       Text(
                         "Verify your \nphone number",
-                        style: Theme.of(context).textTheme.headline1,
+                        style: Theme.of(context).textTheme.displayLarge,
                         textAlign: TextAlign.center,
                       ),
                       Padding(

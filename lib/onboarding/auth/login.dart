@@ -146,7 +146,7 @@ class _LogInState extends State<LogIn> {
                               style: Theme
                                   .of(context)
                                   .textTheme
-                                  .headline2!
+                                  .displayMedium!
                                   .copyWith(fontWeight: FontWeight.w800),
                               textAlign: TextAlign.center,
                             ),
@@ -157,7 +157,7 @@ class _LogInState extends State<LogIn> {
                               'Login into your eltransfer account...',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                   color:
                                   AppUtils.DarkColor.withOpacity(0.6),
@@ -215,7 +215,7 @@ class _LogInState extends State<LogIn> {
                                       style: Theme
                                           .of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyMedium!
                                           .copyWith(
                                         fontSize: 11,
                                         color: AppUtils.RedColor,
@@ -238,7 +238,7 @@ class _LogInState extends State<LogIn> {
                                       return 'Password is Required';
                                     }
                                     if (val.length < 6) {
-                                      return 'Password must contain atleast 6 characters.';
+                                      return 'Password must contain at least 6 characters.';
                                     }
                                     return null;
                                   },
@@ -284,7 +284,7 @@ class _LogInState extends State<LogIn> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                final Uri url = Uri.parse(AppUrl.appUrl+"admin/forget-password"); // Replace with your desired URL
+                                final Uri url = Uri.parse(AppUrl.appUrl+"user/forgot-password"); // Replace with your desired URL
                                 launchInApp(url);
                               },
                               child: Align(
@@ -294,7 +294,7 @@ class _LogInState extends State<LogIn> {
                                   style: Theme
                                       .of(context)
                                       .textTheme
-                                      .bodyText1,
+                                      .bodyMedium,
                                 ),
                               ),
                             ),
@@ -320,7 +320,7 @@ class _LogInState extends State<LogIn> {
                                   style: Theme
                                       .of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(fontSize: 12),
                                 ),
                                 GestureDetector(
@@ -335,7 +335,7 @@ class _LogInState extends State<LogIn> {
                                       style: Theme
                                           .of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyMedium!
                                           .copyWith(
                                         fontSize: 12,
                                         color: AppUtils.PrimaryColor,
