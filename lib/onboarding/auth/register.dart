@@ -1,5 +1,5 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:elcrypto/onboarding/auth/login.dart';
-import 'package:elcrypto/onboarding/auth/phone_number.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,6 +7,10 @@ import 'package:elcrypto/helper/app_utils.dart';
 import 'package:elcrypto/helper/validator.dart';
 import 'package:elcrypto/widgets/primary_button.dart';
 import 'package:elcrypto/widgets/text_field.dart';
+
+import '../../api/request.dart';
+import '../../helper/custom_snack_bar.dart';
+import '../../home_nav.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -36,6 +40,9 @@ class _RegisterState extends State<Register> {
       showPasswordsUnmatched = false;
     });
 
+    setState(() {
+      isLoading = true;
+    });
     final hasConnectivity = await hasInternetConnectivity(context);
     final email = emailController.text;
     final password = passwordController.text;
@@ -49,10 +56,52 @@ class _RegisterState extends State<Register> {
         'last_name': lastName
       };
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfilePhoneNumber(user: data)));
+      final response =
+      await APIRequest().postRequest(route: '/register', data: data);
+      setState(() {
+        isLoading = false;
+      });
+      if (response != 'error') {
+        if (response['success']) {
+          await storage.write(
+              key: 'authToken', value: response['token']);
+          await updateSharedPreference(response['user']);
+
+          updateUserProvider(response['user'], context);
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+                (route) => false,
+          );
+        } else {
+          var data = {
+            "title": "Something went wrong",
+            "message": response['message'],
+          };
+
+          final snackBar = customSnackBar(
+              context: context, type: ContentType.failure, data: data);
+
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(snackBar);
+
+        }
+      } else {
+        var data = {
+          "title": "Something went wrong",
+          "message": "Something went wrong",
+        };
+        Navigator.of(context).pop();
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.failure, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
     } else {
       setState(() {
         isLoading = false;

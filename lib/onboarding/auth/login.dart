@@ -40,10 +40,10 @@ class _LogInState extends State<LogIn> {
     });
 
     final hasConnectivity = await hasInternetConnectivity(context);
-    final phone = county_code + phoneController.text;
+    final phone =  phoneController.text;
     final password = passwordController.text;
     if (hasConnectivity) {
-      final data = {'phone': phone, 'password': password};
+      final data = {'email': phone, 'password': password};
       final response =
           await APIRequest().postRequest(route: '/login', data: data);
 
@@ -51,29 +51,35 @@ class _LogInState extends State<LogIn> {
         AppUtils.showSnackBar(
             context, ContentType.failure, 'Network error. Please try again.');
       } else {
-        final decodedResponse = response;
-        if (decodedResponse["success"]) {
-          final userData = decodedResponse['user'];
-          AppUtils.showSnackBar(
-              context, ContentType.success, decodedResponse["message"]);
-          await storage.write(
-              key: 'authToken', value: decodedResponse['token']);
-          await updateSharedPreference(userData);
+       try{
+         final decodedResponse = response;
+         if (decodedResponse["success"]) {
+           final userData = decodedResponse['user'];
+           AppUtils.showSnackBar(
+               context, ContentType.success, decodedResponse["message"]);
+           await storage.write(
+               key: 'authToken', value: decodedResponse['token']);
+           await updateSharedPreference(userData);
 
-          updateUserProvider(userData, context);
+           updateUserProvider(userData, context);
 
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeNav(),
-            ),
-            (route) => false,
-          );
-        } else {
-          showInvalidCreds = true;
-          AppUtils.showSnackBar(
-              context, ContentType.failure, decodedResponse["message"]);
-        }
+           Navigator.pushAndRemoveUntil(
+             context,
+             MaterialPageRoute(
+               builder: (context) => HomeNav(),
+             ),
+                 (route) => false,
+           );
+         } else {
+           showInvalidCreds = true;
+           AppUtils.showSnackBar(
+               context, ContentType.failure, decodedResponse["message"]);
+         }
+       }catch(e){
+         setState(() {
+           isLoading = false;
+         });
+       }
       }
       setState(() {
         isLoading = false;

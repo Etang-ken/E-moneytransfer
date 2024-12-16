@@ -241,7 +241,7 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
       });
       final response = await APIRequest()
           .postRequest(route: "/transactions/estimate", data: {
-        'type': 'momo',
+        'type': 'elcrypto',
         'payment_method':activePayment == 0?"momo":"others",
         'from': formData['from'],
         'to': formData["to"],

@@ -104,6 +104,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
 
   Future<void> saveTransaction() async {
     if (formData['amount_send'] != "") {
+
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => ChoosePaymentMethod(formData)));
     }
@@ -238,9 +239,6 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                               if (val!.isEmpty) {
                                                 return "Amount is required";
                                               }
-                                              if (double.parse(val) < 100) {
-                                                return "Amount must be at least 100.";
-                                              }
                                               return null;
                                             },
                                           ),
@@ -345,7 +343,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                         onClickBtn: () {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            saveTransaction();
+                                           convert();
                                           }
                                         },
                                       ),
@@ -362,9 +360,54 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
             ),
           ),
         ),
-        if (isSavingTransaction) showIsLoading()
+        if (isSavingTransaction) showIsLoading(),
+        if (isConverting) showIsLoading(),
       ],
     );
+  }
+
+
+  Future<void> convert() async {
+    if (formData['amount_send'] != "") {
+      setState(() {
+        isConverting = true;
+      });
+      final response = await APIRequest()
+          .postRequest(route: "/transactions/check", data: {
+        'type': 'crypto' ,
+        'amount': formData['amount_send'] ,
+        'currency': formData['from'] ,
+      });
+
+      setState(() {
+        isConverting = false;
+      });
+
+      if (response != 'error') {
+        dynamic responseBody = response;
+        print(responseBody);
+        if(!responseBody["success"]){
+          AppUtils.showSnackBar(
+              context, ContentType.failure, responseBody["message"]);
+        }else{
+          setState(() {
+            saveTransaction();
+          });
+        }
+      } else {
+        AppUtils.showSnackBar(
+            context, ContentType.failure, 'Network error. Please try again.');
+      }
+      setState(() {
+        isConverting = false;
+      });
+    } else {
+      setState(() {
+        isConverting = false;
+      });
+      AppUtils.showSnackBar(
+          context, ContentType.failure, 'Enter amount payable');
+    }
   }
 
 }

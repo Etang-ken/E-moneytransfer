@@ -47,7 +47,6 @@ class _EditProfileState extends State<EditProfile> {
     var data = {
       'first_name': firstNameController.text,
       'lsat_name': lastNameController.text,
-      'email': emailController.text
     };
 
     final response = await APIRequest()
@@ -99,7 +98,6 @@ class _EditProfileState extends State<EditProfile> {
       firstNameController.text = userProvider.userData.firstName ?? '';
       lastNameController.text = userProvider.userData.lastName ?? '';
       emailController.text = userProvider.userData.email ?? '';
-      phoneController.text = userProvider.userData.phone ?? '';
     });
   }
   @override
@@ -160,22 +158,6 @@ class _EditProfileState extends State<EditProfile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Phone Number *',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 5),
-                              TextInputField(
-                                placeholderText: '+237653251366',
-                                inputController: phoneController,
-                                enabled: false,
-                              ),
                               const SizedBox(height: 20),
                               Text(
                                 'Full Names *',
@@ -222,9 +204,11 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                               const SizedBox(height: 5),
                               TextInputField(
+
                                 placeholderText: 'admin@email.com ...',
                                 textInputType: TextInputType.emailAddress,
                                 inputController: emailController,
+                                enabled: false,
                                 inputValidator: (val) {
                                   if (val!.isNotEmpty) {
                                     if (!isEmailValid(val)) {

@@ -117,7 +117,7 @@ class _BankTransferState extends State<BankTransfer> {
                            children: [
                              TextSpan(
                                text:
-                               "1. Copy the following code :",
+                               "1. Include this code in the comment/message/note field of your e-Transfer to avoid delays. Please ensure the name on your bank account matches your elCrypto account. :",
                                style: Theme
                                    .of(context)
                                    .textTheme
@@ -284,7 +284,7 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 "Francis Nzebile",
+                             formData["email"].split(',')[1],
                                  style: Theme
                                      .of(context)
                                      .textTheme
@@ -296,7 +296,7 @@ class _BankTransferState extends State<BankTransfer> {
                               Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard("Francis Nzebile");
+                                   _copyToClipboard(  formData["email"].split(',')[1]);
                                  },
                                  child: Icon(
                                    Icons.copy,
@@ -323,7 +323,7 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 formData["email"],
+                             formData["email"].split(',')[0],
                                  style: Theme
                                      .of(context)
                                      .textTheme
@@ -335,7 +335,7 @@ class _BankTransferState extends State<BankTransfer> {
                                Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard(  formData["email"]);
+                                   _copyToClipboard(    formData["email"].split(',')[0],);
                                  },
                                  child: Icon(
                                    Icons.copy,
