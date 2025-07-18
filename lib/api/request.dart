@@ -15,6 +15,8 @@ class APIRequest {
         body: jsonEncode(data),
         headers: headers,
       );
+      print("/////////////");
+      print(response.body);
       return jsonDecode(response.body);
     }catch(e, st){
       return  "error";

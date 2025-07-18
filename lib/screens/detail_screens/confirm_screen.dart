@@ -244,7 +244,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                                 transactionTitleAndDetail(
                                     'Transaction Date',
                                     "Today"),
-                                // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
+                                transactionTitleAndDetail('Rate', "1 ${formData['from']} = ${formData['rate']} ${formData['to']}"),
                                 transactionTitleAndDetail('Amount',
                                     "XAF ${formData['amount_received']}",
                                     isAmount: true),

@@ -167,22 +167,6 @@ class _EditProfileState extends State<EditProfile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Phone Number *',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 5),
-                              TextInputField(
-                                placeholderText: '+237653251366',
-                                inputController: phoneController,
-                                enabled: false,
-                              ),
                               const SizedBox(height: 20),
                               Text(
                                 'Full Names *',
@@ -230,6 +214,7 @@ class _EditProfileState extends State<EditProfile> {
                               const SizedBox(height: 5),
                               TextInputField(
                                 placeholderText: 'admin@email.com ...',
+                                enabled: false,
                                 textInputType: TextInputType.emailAddress,
                                 inputController: emailController,
                                 inputValidator: (val) {

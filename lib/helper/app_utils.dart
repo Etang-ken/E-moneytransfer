@@ -1,4 +1,4 @@
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:eltransfer/onboarding/auth/login.dart';
 import 'package:eltransfer/provider/transaction.dart';
 import "package:flutter/material.dart";
@@ -260,9 +260,9 @@ String formatDateWithHyphen(String dateStr) {
 
 Color transactionStatusColor(String status) {
   String newStatus = status.toLowerCase();
-  if (newStatus == 'completed') {
+  if (newStatus == 'completed' || newStatus == 'success') {
     return AppUtils.GreenColor;
-  } else if (newStatus == 'processing') {
+  } else if (newStatus == 'processing' || newStatus == 'paid' || newStatus == 'paid') {
     return Colors.blue[200]!;
   } else if (newStatus == 'pending') {
     return AppUtils.YellowColor;
@@ -271,6 +271,52 @@ Color transactionStatusColor(String status) {
   } else {
     return AppUtils.RedColor;
   }
+}
+
+Color statusColor(String status) {
+  return transactionStatusColor(status);
+}
+
+Widget transactionTitleAndDetail(BuildContext context , String title, String detail,
+    {String? paymentStatus, bool isAmount = false, bool status = false}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 7),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: AppUtils.SecondaryGray),
+        ),
+        const SizedBox(
+          width: 15,
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          decoration: BoxDecoration(
+              color: status?(transactionStatusColor(detail)):Colors.transparent
+          ),
+          child: Text(
+            detail,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: isAmount ? 16 : 12,
+                fontWeight: FontWeight.w700,
+                color: status?Color(0xffffffff):
+
+
+                paymentStatus != null
+                    ? statusColor(detail)
+                    : (isAmount
+                    ? AppUtils.DarkColor.withOpacity(0.7)
+                    : AppUtils.SecondaryGray)),
+          ),
+        )
+      ],
+    ),
+  );
 }
 
 Future<void> appLogOut(BuildContext context) async {

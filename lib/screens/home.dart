@@ -1,14 +1,16 @@
 import 'package:eltransfer/provider/transaction.dart';
 import 'package:eltransfer/screens/detail_screens/add_new_transaction.dart';
 import 'package:eltransfer/screens/detail_screens/transaction_detail.dart';
+import 'package:eltransfer/screens/widgets/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eltransfer/helper/app_utils.dart';
 import 'package:eltransfer/screens/widgets/notification_icon.dart';
 
+import '../provider/service.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
-
   @override
   State<Dashboard> createState() => _DashboardState();
 }
@@ -60,19 +62,10 @@ class _DashboardState extends State<Dashboard> {
             child: RefreshIndicator(
                 onRefresh: () async {
                   transactionProvider.getTransactions();
+                  Provider.of<ServiceProvider>(context, listen: false).setLoading(false);
                 },
                 child: ListView(
                   children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Center(child: Text(
-                      "Transactions",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge!
-                          .copyWith(fontWeight: FontWeight.w700),
-                    ),),
                     const SizedBox(
                       height: 10,
                     ),
@@ -80,42 +73,46 @@ class _DashboardState extends State<Dashboard> {
                       children: transactionProvider.isLoading
                           ? [const Text('Loading transactions...')]
                           : transactions.isEmpty
-                          ? [const Text("No transaction has been added.")]
-                          : transactions.map<Widget>((transaction) {
-                        return Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              transactionCard(context,
-                                  transaction: transaction),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ]);
-                      }).toList(),
+                              ? [
+                                  const Text(
+                                      "You haven't performed any transfer transaction"),
+                                ]
+                              : [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    features(context),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Padding(padding: EdgeInsets.symmetric(horizontal: 20),
+                                        child: Text("Transactions",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineLarge ?.copyWith(fontWeight: FontWeight.w600, fontSize: 14))),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                  Column(children: transactions.map<Widget>((transaction) {
+                                    return Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          transactionCard(context,
+                                              transaction: transaction),
+                                          const SizedBox(
+                                            height: 10,
+                                          )
+                                        ]);
+                                  }).toList(),)
+                                ],)
+                      ],
                     ),
                     const SizedBox(
                       height: 100,
                     ),
                   ],
                 ))),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 100.0),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddNewTransaction(),
-                ),
-              );
-            },
-            foregroundColor: Colors.white,
-            backgroundColor: AppUtils.PrimaryColor,
-            shape: CircleBorder(),
-            child: const Icon(Icons.add),
-          ),
-        ),
       );
     });
   }
@@ -143,12 +140,7 @@ class _DashboardState extends State<Dashboard> {
         decoration: BoxDecoration(
             color: AppUtils.White,
             borderRadius: BorderRadius.circular(8),
-            boxShadow: const [
-              BoxShadow(
-                  color: Color.fromARGB(255, 211, 211, 211),
-                  blurRadius: 10,
-                  spreadRadius: 0.5)
-            ]),
+            ),
         child: Row(
           children: [
             Expanded(
@@ -161,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
                       Text(
                         transaction.title,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              // fontSize: 11,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                             ),
                       ),

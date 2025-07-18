@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:eltransfer/onboarding/auth/phone_number.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,6 +12,7 @@ import 'package:eltransfer/widgets/primary_button.dart';
 import 'package:eltransfer/widgets/text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../helper/custom_snack_bar.dart';
 import 'login.dart';
 
 class Register extends StatefulWidget {
@@ -38,7 +38,13 @@ class _RegisterState extends State<Register> {
     'password': '',
   };
 
-  void registerUser() async {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void registerUser(BuildContext context) async {
     setState(() {
       showPasswordsUnmatched = false;
     });
@@ -48,7 +54,6 @@ class _RegisterState extends State<Register> {
     final password = passwordController.text;
     final firstName = firstNameController.text;
     final lastName = lastNameController.text;
-
     if (hasConnectivity) {
       final data = {
         'email': email,
@@ -57,10 +62,58 @@ class _RegisterState extends State<Register> {
         'last_name': lastName
       };
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfilePhoneNumber(user: data)));
+      setState(() {
+        isLoading = true;
+      });
+
+      final response =
+      await APIRequest().postRequest(route: '/register', data: data);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (response != 'error') {
+        if (response['success']) {
+          await storage.write(
+              key: 'authToken', value: response['token']);
+          await updateSharedPreference(response['user']);
+
+          updateUserProvider(response['user'], context);
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+                (route) => false,
+          );
+        } else {
+          var data = {
+            "title": "Something went wrong",
+            "message": response['message'],
+          };
+
+          final snackBar = customSnackBar(
+              context: context, type: ContentType.failure, data: data);
+
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(snackBar);
+
+        }
+      } else {
+        var data = {
+          "title": "Something went wrong",
+          "message": "Something went wrong",
+        };
+        Navigator.of(context).pop();
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.failure, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
     } else {
       setState(() {
         isLoading = false;
@@ -68,11 +121,6 @@ class _RegisterState extends State<Register> {
       });
     }
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -308,7 +356,7 @@ class _RegisterState extends State<Register> {
                               onClickBtn: () {
                                 if (_formkey.currentState!.validate()) {
                                   print('All Good');
-                                  registerUser();
+                                  registerUser(context);
                                 } else {
                                   print("Invalid form Data");
                                 }

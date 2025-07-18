@@ -1,3 +1,5 @@
+import 'package:eltransfer/netflix/netflix_home.dart';
+import 'package:eltransfer/services/services_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -38,7 +40,7 @@ class _HomeNavState extends State<HomeNav> {
         );
       });
     } else {
-      if(!mounted) return;
+      if (!mounted) return;
       updateUserProviderFromSharedPreference(context);
     }
   }
@@ -87,7 +89,7 @@ class _HomeNavState extends State<HomeNav> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: AppUtils.SecondaryGrayExtraLight,
+            backgroundColor: AppUtils.SecondaryGrayExtraLight,
             resizeToAvoidBottomInset: false,
             extendBody: true,
             body: IndexedStack(
@@ -131,13 +133,36 @@ class TabNavigationItem {
         TabNavigationItem(
           page: const Dashboard(),
           tab: const BottomNavigationBarItem(
-            label: "Transations",
+            label: "Home",
             icon: Padding(
               padding: EdgeInsets.only(top: 5),
-              child: Icon(Icons.currency_exchange),
+              child: Icon(Icons.home),
             ),
           ),
         ),
+
+    TabNavigationItem(
+      page: ServiceHome(),
+      tab: const BottomNavigationBarItem(
+        label: "Services",
+        icon: Padding(
+          padding: EdgeInsets.only(top: 5),
+          child: Icon(Icons.add_business ),
+        ),
+      ),
+    ),
+        TabNavigationItem(
+          page:  NetflixHome(),
+          tab: const BottomNavigationBarItem(
+            label: "Netflix",
+            icon: Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Icon(Icons.tv),
+            ),
+          ),
+        ),
+
+
         TabNavigationItem(
             page: const Settings(),
             tab: const BottomNavigationBarItem(

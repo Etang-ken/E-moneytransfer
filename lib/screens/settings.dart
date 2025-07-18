@@ -214,7 +214,7 @@ class _SettingsState extends State<Settings> {
                           SizedBox(width: 10),
                           Text(userData.lastName ?? ""),
                         ]),
-                        Text(userData.phone ?? "")
+                        Text(userData.email ?? "")
                       ],
                     )),
 

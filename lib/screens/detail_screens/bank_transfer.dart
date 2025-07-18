@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import '../../api/request.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import '../../api/url.dart';
 import '../../helper/app_utils.dart';
+import '../../provider/transaction.dart';
 import '../../widgets/primary_button.dart';
-import 'add_payment_proof.dart';
 
 class BankTransfer extends StatefulWidget {
   dynamic formData;
@@ -30,6 +33,8 @@ class _BankTransferState extends State<BankTransfer> {
   bool _showBankDetails = false;
 
   bool isConverting = false;
+
+  bool isSavingTransaction = false;
 
   int activePayment = 0;
 
@@ -115,7 +120,7 @@ class _BankTransferState extends State<BankTransfer> {
                            children: [
                              TextSpan(
                                text:
-                               "1. Copy the following code :",
+                               "1. Include this code in the comment/message/note field of your e-Transfer to avoid delays. Please ensure the name on your bank account matches your elTranster account. :",
                                style: Theme
                                    .of(context)
                                    .textTheme
@@ -282,7 +287,7 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 "Francis Nzebile",
+                                 formData["email"].split(',').length > 2?formData["email"].split(',')[1]:"",
                                  style: Theme
                                      .of(context)
                                      .textTheme
@@ -294,7 +299,7 @@ class _BankTransferState extends State<BankTransfer> {
                               Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard("Francis Nzebile");
+                                   _copyToClipboard(   formData["email"].split(',').length > 2?formData["email"].split(',')[1]:"");
                                  },
                                  child: Icon(
                                    Icons.copy,
@@ -321,7 +326,7 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 formData["email"],
+                                 formData["email"].split(',')[0],
                                  style: Theme
                                      .of(context)
                                      .textTheme
@@ -333,7 +338,7 @@ class _BankTransferState extends State<BankTransfer> {
                                Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard(formData["email"]);
+                                   _copyToClipboard( formData["email"].split(',')[0]);
                                  },
                                  child: Icon(
                                    Icons.copy,
@@ -430,12 +435,50 @@ class _BankTransferState extends State<BankTransfer> {
                    ),
                    PrimaryButton(
                      buttonText: 'Continue',
-                     onClickBtn: () {
+                     onClickBtn: () async {
                        formData["trid"] = _textToCopy;
-                       Navigator.push(
+                       setState(() {
+                         isSavingTransaction = true;
+                       });
+
+                       var uri = Uri.parse("${AppUrl.baseUrl}/transactions/create");
+                       var request = http.MultipartRequest('POST', uri);
+                       final storage = FlutterSecureStorage();
+                       final token = await storage.read(key: 'authToken');
+                       if (token != null) {
+                         request.headers['Authorization'] = 'Bearer $token';
+                         request.headers['Content-type'] = 'application/json';
+                         request.headers['Accept'] = 'application/json';
+                       }
+
+                       request.fields.addAll(formData);
+
+                       var streamedResponse = await request.send();
+                       var response = await http.Response.fromStream(streamedResponse);
+                       if (response.statusCode == 200) {
+                         AppUtils.showSnackBar(
                            context,
-                           MaterialPageRoute(
-                               builder: (context) => AddPaymentProof(formData)));
+                           ContentType.success,
+                           'Transaction created successfully.',
+                         );
+                         Navigator.pop(context);
+                         Navigator.pop(context);
+                         Navigator.pop(context);
+                         Navigator.pop(context);
+                         Provider.of<TransactionProvider>(context, listen: false).getTransactions();
+
+                       } else {
+                         if (!mounted) return;
+                         AppUtils.showSnackBar(
+                           context,
+                           ContentType.failure,
+                           'Error saving transaction',
+                         );
+                       }
+
+                       setState(() {
+                         isSavingTransaction = false;
+                       });
                      },
                    ),
                    const SizedBox(height: 35),
@@ -443,7 +486,8 @@ class _BankTransferState extends State<BankTransfer> {
                ),
              ),
            ),
-           if (isConverting) showIsLoading()
+           if (isConverting) showIsLoading(),
+           if (isSavingTransaction) showIsLoading()
          ],
         ),
       ),

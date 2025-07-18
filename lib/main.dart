@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eltransfer/provider/service.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ServiceProvider()),
         ChangeNotifierProvider(create: (context) => TransactionProvider()),
       ],
       child: MyApp(),
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'pro4home',
+      title: 'El-Transfer',
       theme: ThemeData(
         // primarySwatch: MaterialColor(),
         // Define the default brightness and colors.
@@ -106,7 +108,7 @@ class MyApp extends StatelessWidget {
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.4),
 

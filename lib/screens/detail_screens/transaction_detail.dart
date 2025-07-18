@@ -1,10 +1,7 @@
-import 'package:eltransfer/provider/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:eltransfer/helper/app_utils.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:eltransfer/screens/widgets/notification_icon.dart';
-import 'package:eltransfer/widgets/primary_button.dart';
-import 'package:provider/provider.dart';
 
 class TransactionDetails extends StatefulWidget {
   dynamic transaction;
@@ -21,16 +18,6 @@ class _TransactionDetailsState extends State<TransactionDetails> {
 
 
   _TransactionDetailsState(this.transaction);
-
-  String status = 'success';
-
-  Color statusColor() {
-    if (status == 'success') {
-      return AppUtils.PrimaryColor;
-    } else {
-      return AppUtils.RedColor;
-    }
-  }
 
   void initState() {
     super.initState();
@@ -73,271 +60,226 @@ class _TransactionDetailsState extends State<TransactionDetails> {
           ],
         ),
       ),
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: SingleChildScrollView(
-              child: Column(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
                 children: [
-                  Stack(
-                    children: [
-                      IntrinsicHeight(
-                        child: Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(top: 60),
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          constraints: const BoxConstraints(minHeight: 300),
-                          decoration: BoxDecoration(
-                            color: AppUtils.White,
-                            borderRadius: BorderRadius.circular(15),
+                  IntrinsicHeight(
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(top: 60),
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      constraints: const BoxConstraints(minHeight: 300),
+                      decoration: BoxDecoration(
+                        color: AppUtils.White,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 30.0,
                           ),
-                          child: Column(
+                          Text(
+                            'Transaction created successfully',
+                            style: Theme.of(context).textTheme.headlineMedium!,
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Container(
+                            constraints:
+                            const BoxConstraints(minWidth: 250),
+                            child: Center(
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Transfer of ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppUtils.DarkColor
+                                            .withOpacity(0.5),
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                      "XAF ${transaction.payload['amount_received']} ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: statusColor(transaction.status),
+                                      ),
+                                    ),
+
+                                    TextSpan(
+                                      text: 'to ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppUtils.DarkColor
+                                            .withOpacity(0.5),
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:  transaction.payload['receiver_phone'],
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppUtils.DarkColor
+                                            .withOpacity(0.8),
+                                      ),
+                                    ),
+
+                                    TextSpan(
+                                      text: ' is '+transaction.status,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppUtils.DarkColor
+                                            .withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
                             children: [
-                              const SizedBox(
-                                height: 30.0,
+                              Container(
+                                height: 30,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                    color:
+                                    AppUtils.SecondaryGrayExtraLight,
+                                    borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        bottomRight:
+                                        Radius.circular(15))),
                               ),
-                              Text(
-                                'Transaction Successful',
-                                style: Theme.of(context).textTheme.headlineMedium!,
-                              ),
-                              const SizedBox(
-                                height: 6,
+                              Expanded(
+                                child: DottedLine(
+                                  lineThickness: 2,
+                                  dashLength: 5,
+                                  dashColor:
+                                  AppUtils.SecondaryGray.withOpacity(
+                                      0.7),
+                                ),
                               ),
                               Container(
-                                constraints:
-                                const BoxConstraints(minWidth: 250),
-                                child: Center(
-                                  child: Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Transfer of ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: AppUtils.DarkColor
-                                                .withOpacity(0.5),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                          "XAF ${transaction.payload['amount_received']} ",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: statusColor(),
-                                          ),
-                                        ),
-
-                                        TextSpan(
-                                          text: 'to ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: AppUtils.DarkColor
-                                                .withOpacity(0.5),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:  transaction.payload['receiver_phone'],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: AppUtils.DarkColor
-                                                .withOpacity(0.8),
-                                          ),
-                                        ),
-
-                                        TextSpan(
-                                          text: ' is '+transaction.status,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: AppUtils.DarkColor
-                                                .withOpacity(0.5),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
+                                height: 30,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                    color:
+                                    AppUtils.SecondaryGrayExtraLight,
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15))),
                               ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 30,
-                                    width: 15,
-                                    decoration: BoxDecoration(
-                                        color:
-                                        AppUtils.SecondaryGrayExtraLight,
-                                        borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            bottomRight:
-                                            Radius.circular(15))),
-                                  ),
-                                  Expanded(
-                                    child: DottedLine(
-                                      lineThickness: 2,
-                                      dashLength: 5,
-                                      dashColor:
-                                      AppUtils.SecondaryGray.withOpacity(
-                                          0.7),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 30,
-                                    width: 15,
-                                    decoration: BoxDecoration(
-                                        color:
-                                        AppUtils.SecondaryGrayExtraLight,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15))),
-                                  ),
-                                ],
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 20,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Transaction Details',
-                                        textAlign: TextAlign.left,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      transactionTitleAndDetail(
-                                          "Status", transaction.status, status: true),
-                                      transactionTitleAndDetail(
-                                          transaction.payload["method"] != "bank"?"Receiver's Name":"Account Name",
-                                          transaction.payload['receiver_name'] ??
-                                              "-"),
-                                      transactionTitleAndDetail(
-                                          transaction.payload["method"] != "bank"?"Receiver's Phone":"Account Number",
-                                          transaction.payload['receiver_phone'] ??
-                                              "-"),
-                                      if(transaction.payload["method"]!= "momo")...[
-                                        transactionTitleAndDetail(
-                                            "Bank Name",
-                                            transaction.payload["bank"] ??
-                                                "-")
-                                      ],
-
-                                      transactionTitleAndDetail(
-                                          'Transaction Date',
-                                          transaction.date ??
-                                              "-"),
-                                      // transactionTitleAndDetail('Paymnt Date', 'Paracetamol'),
-                                      transactionTitleAndDetail('Amount',
-                                          "XAF ${transaction.payload['amount_received']}",
-                                          isAmount: true),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
                             ],
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 75,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                              color: statusColor(), shape: BoxShape.circle),
-                          child: Icon(
-                            status == 'success' ? Icons.check : Icons.close,
-                            color: AppUtils.White,
-                            // size: 40,
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Transaction Details',
+                                    textAlign: TextAlign.left,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!
+                                        .copyWith(
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  transactionTitleAndDetail(context,
+                                      "Status", transaction.status, status: true),
+                                  transactionTitleAndDetail(context,
+                                      transaction.payload["method"] != "bank"?"Receiver's Name":"Account Name",
+                                      transaction.payload['receiver_name'] ??
+                                          "-"),
+                                  transactionTitleAndDetail(context,
+                                      transaction.payload["method"] != "bank"?"Receiver's Phone":"Account Number",
+                                      transaction.payload['receiver_phone'] ??
+                                          "-"),
+                                  if(transaction.payload["method"]!= "momo")...[
+                                    transactionTitleAndDetail(context,
+                                        "Bank Name",
+                                        transaction.payload["bank"] ??
+                                            "-")
+                                  ],
+
+                                  transactionTitleAndDetail(context,
+                                      'Transaction Date',
+                                      transaction.date ??
+                                          "-"),
+                                  transactionTitleAndDetail(context,"Amount to Send", "${transaction.payload['from']} ${transaction.payload['amount_send']}"),
+                                  transactionTitleAndDetail(
+                                      context,'Amount Receivable',
+                                      "XAF ${transaction.payload['amount_received']}",
+                                      isAmount: true),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  Positioned(
+                    top: 75,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                          color: statusColor(transaction.status), shape: BoxShape.circle),
+                      child: Icon(
+                        ["completed","done"].contains(transaction.status) ? Icons.check : ["draft","pending","processing"].contains(transaction.status) ? Icons.refresh :Icons.close,
+                        color: AppUtils.White,
+                        // size: 40,
+                      ),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 80,
-                  )
                 ],
               ),
-            ),
+              const SizedBox(
+                height: 20,
+              ),
+              const SizedBox(
+                height: 80,
+              )
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget transactionTitleAndDetail(String title, String detail,
-      {String? paymentStatus, bool isAmount = false, bool status = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: AppUtils.SecondaryGray),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-            decoration: BoxDecoration(
-              color: status?(detail == "done"?Color(0xff00ff00):Color(0xffff0000)):Colors.transparent
-            ),
-            child: Text(
-              detail,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: isAmount ? 16 : 12,
-                  fontWeight: FontWeight.w700,
-                  color: status?Color(0xffffffff):
-
-
-                  paymentStatus != null
-                      ? statusColor()
-                      : (isAmount
-                      ? AppUtils.DarkColor.withOpacity(0.7)
-                      : AppUtils.SecondaryGray)),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

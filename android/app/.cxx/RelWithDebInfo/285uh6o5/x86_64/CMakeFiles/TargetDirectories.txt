@@ -1,0 +1,2 @@
+/Users/nkstore/Documents/task-worker/flutter/MOMO/android/app/.cxx/RelWithDebInfo/285uh6o5/x86_64/CMakeFiles/rebuild_cache.dir
+/Users/nkstore/Documents/task-worker/flutter/MOMO/android/app/.cxx/RelWithDebInfo/285uh6o5/x86_64/CMakeFiles/edit_cache.dir
