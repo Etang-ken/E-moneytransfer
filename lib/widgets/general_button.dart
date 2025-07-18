@@ -59,7 +59,7 @@ class GeneralButton extends StatelessWidget {
                       : Container(width: 0, height: 0),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).hintColor,
                         fontWeight: FontWeight.w600,
                         fontSize: btnFontSize),
@@ -84,7 +84,7 @@ class GeneralButton extends StatelessWidget {
                   ),
                   backgroundColor: btnBgColor,
                   foregroundColor: btnTextColor,
-                
+
                   elevation: 0.0,
                   shadowColor: Colors.transparent),
               child: Row(
@@ -99,7 +99,7 @@ class GeneralButton extends StatelessWidget {
                       : Container(width: 0, height: 0),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: btnTextColor,
                         fontWeight: FontWeight.w600,
                         fontSize: btnFontSize),

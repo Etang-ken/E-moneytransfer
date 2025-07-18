@@ -1,5 +1,13 @@
-import 'dart:convert';
+// Copyright 2013 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
+// ignore_for_file: public_member_api_docs
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:elcrypto/api/request.dart';
@@ -114,7 +122,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       "Change Password",
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headlineLarge
                           ?.copyWith(color: Colors.white),
                     ),
                   ],
@@ -151,7 +159,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -208,7 +216,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     "Invalid old password.",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText2!
+                                        .bodyLarge!
                                         .copyWith(
                                             fontSize: 12.0,
                                             color: AppUtils.RedColor),
@@ -223,7 +231,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -280,7 +288,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),

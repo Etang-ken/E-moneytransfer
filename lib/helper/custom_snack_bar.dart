@@ -46,7 +46,7 @@ customSnackBar(
                   data['message'],
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2!
+                      .bodyLarge!
                       .copyWith(fontWeight: FontWeight.w400),
                   maxLines: 5,
                 )),

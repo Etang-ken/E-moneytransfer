@@ -77,7 +77,7 @@ class _BankTransferState extends State<BankTransfer> {
               "Bank Transfer",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -104,7 +104,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(
                              fontSize: 13,
                              fontWeight: FontWeight.w600),
@@ -117,11 +117,11 @@ class _BankTransferState extends State<BankTransfer> {
                            children: [
                              TextSpan(
                                text:
-                               "1. Copy the following code :",
+                               "1. Include this code in the comment/message/note field of your e-Transfer to avoid delays. Please ensure the name on your bank account matches your elCrypto account. :",
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(fontSize: 13),
                              ),
                              WidgetSpan(
@@ -132,7 +132,7 @@ class _BankTransferState extends State<BankTransfer> {
                                        style: Theme
                                            .of(context)
                                            .textTheme
-                                           .bodyText1!
+                                           .bodyMedium!
                                            .copyWith(
                                          fontSize: 15,
                                          fontWeight: FontWeight.w700,
@@ -159,7 +159,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13, color: Colors.red),
                        ),
 
@@ -168,7 +168,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13, color: Colors.red),
                        ),
                        const SizedBox(
@@ -179,7 +179,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -190,7 +190,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -201,7 +201,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -212,7 +212,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(fontSize: 13),
                        ),
                        const SizedBox(
@@ -223,7 +223,7 @@ class _BankTransferState extends State<BankTransfer> {
                          style: Theme
                              .of(context)
                              .textTheme
-                             .bodyText1!
+                             .bodyMedium!
                              .copyWith(
                              fontSize: 13,
                              fontWeight: FontWeight.w600),
@@ -237,7 +237,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -249,7 +249,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -276,7 +276,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -284,11 +284,11 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 "Francis Nzebile",
+                             formData["email"].split(',')[1],
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -296,7 +296,7 @@ class _BankTransferState extends State<BankTransfer> {
                               Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard("Francis Nzebile");
+                                   _copyToClipboard(  formData["email"].split(',')[1]);
                                  },
                                  child: Icon(
                                    Icons.copy,
@@ -315,7 +315,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -323,11 +323,11 @@ class _BankTransferState extends State<BankTransfer> {
                              ),
                              Row(children: [
                                Text(
-                                 "nmeneiimoh@gmail.com",
+                             formData["email"].split(',')[0],
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -335,7 +335,7 @@ class _BankTransferState extends State<BankTransfer> {
                                Expanded(child:  SizedBox(width: 30),),
                                GestureDetector(
                                  onTap: () {
-                                   _copyToClipboard("nmeneiimoh@gmail.com");
+                                   _copyToClipboard(    formData["email"].split(',')[0],);
                                  },
                                  child: Icon(
                                    Icons.copy,
@@ -355,7 +355,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -367,7 +367,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -395,7 +395,7 @@ class _BankTransferState extends State<BankTransfer> {
                                style: Theme
                                    .of(context)
                                    .textTheme
-                                   .bodyText1!
+                                   .bodyMedium!
                                    .copyWith(
                                  fontSize: 15,
                                  fontWeight: FontWeight.w700,
@@ -407,7 +407,7 @@ class _BankTransferState extends State<BankTransfer> {
                                  style: Theme
                                      .of(context)
                                      .textTheme
-                                     .bodyText1!
+                                     .bodyMedium!
                                      .copyWith(
                                    fontSize: 15,
                                  ),
@@ -433,6 +433,7 @@ class _BankTransferState extends State<BankTransfer> {
                    PrimaryButton(
                      buttonText: 'Continue',
                      onClickBtn: () {
+                       formData["trid"] = _textToCopy;
                        Navigator.push(
                            context,
                            MaterialPageRoute(
@@ -449,47 +450,6 @@ class _BankTransferState extends State<BankTransfer> {
         ),
       ),
     );
-  }
-
-  Future<void> convert() async {
-    if (formData['amount_send'] != "") {
-      setState(() {
-        isConverting = true;
-      });
-      final response = await APIRequest()
-          .postRequest(route: "/transactions/estimate", data: {
-        'type': 'momo',
-        'from': formData['from'],
-        'to': "XAF",
-        'payable': formData['amount_send']
-      });
-
-      if (response != "error") {
-        dynamic responseBody = response;
-        setState(() {
-         double total = double.parse( formData['amount_send']) * double.parse(responseBody['rate']);
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LaunchCinetpay(formData, total.toInt()),
-            ),
-          );
-        });
-      } else {
-        AppUtils.showSnackBar(
-            context, ContentType.failure, 'Network error. Please try again.');
-      }
-      setState(() {
-        isConverting = false;
-      });
-    } else {
-      setState(() {
-        isConverting = false;
-      });
-      AppUtils.showSnackBar(
-          context, ContentType.failure, 'Enter amount payable');
-    }
   }
 }
 

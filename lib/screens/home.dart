@@ -1,6 +1,9 @@
 import 'package:elcrypto/screens/widgets/notification_icon.dart';
+import 'package:elcrypto/screens/widgets/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../helper/app_utils.dart';
 import '../provider/transaction.dart';
@@ -47,13 +50,13 @@ class _DashboardState extends State<Dashboard> {
               Text("Dashboard",
                   style: Theme.of(context)
                       .textTheme
-                      .headline4
+                      .headlineLarge
                       ?.copyWith(color: Colors.white)),
               NotificationIcon(context: context)
             ],
           ),
         ),
-        body: Container(
+        body:Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 20),
             // margin: EdgeInsets.only(bottom: 100),
@@ -62,60 +65,80 @@ class _DashboardState extends State<Dashboard> {
                 onRefresh: () async {
                   transactionProvider.getTransactions();
                 },
-                child: ListView(
+                child:Column(
+
                   children: [
-                    const SizedBox(
-                      height: 10,
+                  features(context),
+
+                  (transactionProvider.lockApp ?
+                  Container(padding: EdgeInsets.symmetric(horizontal: 30), child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    Center(child: Text(
-                      "Transactions",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4!
-                          .copyWith(fontWeight: FontWeight.w700),
-                    ),),
-                    const SizedBox(
-                      height: 10,
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.warning),
+                        const SizedBox(width: 10.0),
+                        Text(
+                          "An update is available!",
+                        ),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () => launchUrl(
+                            "https://play.google.com/store/apps/details?id=com.elcrypto.app" as Uri,
+                          ), // Launch Pla y Store
+                          child: Text(
+                            "Update Now",
+                            style: TextStyle(color:AppUtils.PrimaryColor),
+                          ),
+                        ),
+                      ],
                     ),
-                    Column(
-                      children: transactionProvider.isLoading
-                          ? [const Text('Loading transactions...')]
-                          : transactions.isEmpty
-                          ? [const Text("No transaction has been added.")]
-                          : transactions.map<Widget>((transaction) {
-                        return Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              transactionCard(context,
-                                  transaction: transaction),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ]);
-                      }).toList(),
-                    ),
-                    const SizedBox(
-                      height: 100,
-                    ),
-                  ],
-                ))),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 100.0),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddNewTransaction(),
-                ),
-              );
-            },
-            foregroundColor: Colors.white,
-            backgroundColor: AppUtils.PrimaryColor,
-            shape: CircleBorder(),
-            child: const Icon(Icons.add),
-          ),
+                  ),) :
+                  Flexible(child: ListView(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: Text(
+                        "Transactions",
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge!
+
+                            .copyWith(fontWeight: FontWeight.w700),
+                      )),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: transactionProvider.isLoading
+                            ? [const Text('Loading transactions...')]
+                            : transactions.isEmpty
+                            ? [const Text("No transaction has been added.")]
+                            : transactions.map<Widget>((transaction) {
+                          return Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                transactionCard(context,
+                                    transaction: transaction),
+                                const SizedBox(
+                                  height: 10,
+                                )
+                              ]);
+                        }).toList(),
+                      ),
+                      const SizedBox(
+                        height: 100,
+                      ),
+                    ],
+                  )))
+                ],)
+            )
         ),
       );
     });
@@ -143,13 +166,7 @@ class _DashboardState extends State<Dashboard> {
         padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
         decoration: BoxDecoration(
             color: AppUtils.White,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: const [
-              BoxShadow(
-                  color: Color.fromARGB(255, 211, 211, 211),
-                  blurRadius: 10,
-                  spreadRadius: 0.5)
-            ]),
+            borderRadius: BorderRadius.circular(8)),
         child: Row(
           children: [
             Expanded(
@@ -161,7 +178,7 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Text(
                         transaction.title,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           // fontSize: 11,
                           fontWeight: FontWeight.w700,
                         ),
@@ -205,7 +222,7 @@ class _DashboardState extends State<Dashboard> {
                                 transaction.status,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                   fontSize: 11,
                                   color:
@@ -234,7 +251,7 @@ class _DashboardState extends State<Dashboard> {
                                 transaction.date,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                   fontSize: 11,
                                   color: AppUtils.DarkColor.withOpacity(0.9),

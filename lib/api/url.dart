@@ -1,6 +1,7 @@
 class AppUrl {
-  static const baseUrl = 'http://52.221.249.143/api';
-  static const appUrl = 'http://52.221.249.143/';
+  static const baseUrl = 'https://eltransfer.burismahaven.com/api';
+  static const appUrl = 'https://eltransfer.burismahaven.com/';
+
   static const String cinetpayApiKey = "62115444065f9bc12382d38.28560859";
   static const String cinetpaySiteId = "5865975";
 }

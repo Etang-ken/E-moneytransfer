@@ -1,4 +1,5 @@
-import 'package:connectivity/connectivity.dart';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elcrypto/onboarding/auth/login.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -55,13 +56,13 @@ class AppUtils {
         barrierDismissible: false,
         builder: (context) {
           return Container(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Center(
                 child: SizedBox(
                   width: 50,
                   height: 50,
                   child: CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).backgroundColor,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     color: Color(0xffFEDD1F),
                     strokeWidth: 4,
                     // value: 0.4,
@@ -84,7 +85,7 @@ class AppUtils {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Select filters to apply',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
             content: widget,
@@ -200,12 +201,12 @@ Future<bool> hasInternetConnectivity(BuildContext context) async {
 }
 
 String textCapitalize(String input) {
-  if (input.isEmpty) return input;
+  if (input == "") return input;
   return input[0].toUpperCase() + input.substring(1);
 }
 
 double calculateTotalItemPrice(List<dynamic> items) {
-  if (items.isEmpty) {
+  if (items == "") {
     return 0.0;
   }
 
@@ -221,7 +222,7 @@ double calculateTotalItemPrice(List<dynamic> items) {
 }
 
 int calculateTotalItemQuantity(List<dynamic> items) {
-  if (items.isEmpty) {
+  if (items == "") {
     return 0;
   }
 

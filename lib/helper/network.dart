@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:http/http.dart' as http;
 import 'package:elcrypto/helper/session_manager.dart';
+import 'package:share_plus/share_plus.dart';
 
-final String liveUrl = 'http://pf-home.lehone.net/';
-final String baseUrl = 'http://pf-home.lehone.net/';
-// final String liveUrl = 'http://172.20.10.2/';
-// final String baseUrl = 'http://172.20.10.2/';
+final String liveUrl = 'https://eltransfer.burismahaven.com/api';
+final String baseUrl = 'https://eltransfer.burismahaven.com/';
 
 
 class HttpResource {
@@ -30,11 +28,8 @@ class HttpResource {
   }
 
   Future<void> share(String title, String text, String link) async {
-    await FlutterShare.share(
-        title: title,
-        text: text,
-        linkUrl: link,
-        chooserTitle: 'Share with ?'
+    await Share.share(text+" "+link,
+        subject: title
     );
   }
 
