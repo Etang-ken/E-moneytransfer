@@ -1,11 +1,12 @@
-import 'package:connectivity/connectivity.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/provider/transaction.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:eltransfer/provider/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'custom_snack_bar.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -13,7 +14,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 final storage = FlutterSecureStorage();
 
 class AppUtils {
-  static const Color PrimaryColor = Color(0xFF008100);
+  static const Color PrimaryColor = Color(0xFF378786);
   static Color PrimaryLight = Color(0xffEAE3E8);
   static Color GreenColor = Color(0xff019F01);
   static Color YellowColor = Color(0xffFF9719);
@@ -55,13 +56,13 @@ class AppUtils {
         barrierDismissible: false,
         builder: (context) {
           return Container(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).dialogBackgroundColor,
               child: Center(
                 child: SizedBox(
                   width: 50,
                   height: 50,
                   child: CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).backgroundColor,
+                    backgroundColor: Theme.of(context).dialogBackgroundColor,
                     color: Color(0xffFEDD1F),
                     strokeWidth: 4,
                     // value: 0.4,
@@ -84,7 +85,7 @@ class AppUtils {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Select filters to apply',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
             content: widget,
@@ -259,9 +260,9 @@ String formatDateWithHyphen(String dateStr) {
 
 Color transactionStatusColor(String status) {
   String newStatus = status.toLowerCase();
-  if (newStatus == 'completed') {
+  if (newStatus == 'completed' || newStatus == 'success') {
     return AppUtils.GreenColor;
-  } else if (newStatus == 'processing') {
+  } else if (newStatus == 'processing' || newStatus == 'paid' || newStatus == 'paid') {
     return Colors.blue[200]!;
   } else if (newStatus == 'pending') {
     return AppUtils.YellowColor;
@@ -272,10 +273,62 @@ Color transactionStatusColor(String status) {
   }
 }
 
+Color statusColor(String status) {
+  return transactionStatusColor(status);
+}
+
+Widget transactionTitleAndDetail(BuildContext context , String title, String detail,
+    {String? paymentStatus, bool isAmount = false, bool status = false}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 7),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: AppUtils.SecondaryGray),
+        ),
+        const SizedBox(
+          width: 15,
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          decoration: BoxDecoration(
+              color: status?(transactionStatusColor(detail)):Colors.transparent
+          ),
+          child: Text(
+            detail,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: isAmount ? 16 : 12,
+                fontWeight: FontWeight.w700,
+                color: status?Color(0xffffffff):
+
+
+                paymentStatus != null
+                    ? statusColor(detail)
+                    : (isAmount
+                    ? AppUtils.DarkColor.withOpacity(0.7)
+                    : AppUtils.SecondaryGray)),
+          ),
+        )
+      ],
+    ),
+  );
+}
+
 Future<void> appLogOut(BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await storage.deleteAll();
   await prefs.clear();
   Navigator.pushAndRemoveUntil(context,
       MaterialPageRoute(builder: (context) => LogIn()), (route) => false);
+}
+
+void updateTransactionDetail(BuildContext context, dynamic transactionDetail) {
+  final TransactionProvider transactionProvider =
+      Provider.of<TransactionProvider>(context, listen: false);
+  transactionProvider.updateTransactionDetail(transactionDetail);
 }

@@ -1,18 +1,19 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
-import 'package:emoneytransfer/onboarding/auth/phone_number.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/validator.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../helper/custom_snack_bar.dart';
+import 'login.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -37,7 +38,13 @@ class _RegisterState extends State<Register> {
     'password': '',
   };
 
-  void registerUser() async {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void registerUser(BuildContext context) async {
     setState(() {
       showPasswordsUnmatched = false;
     });
@@ -55,10 +62,58 @@ class _RegisterState extends State<Register> {
         'last_name': lastName
       };
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfilePhoneNumber(user: data)));
+      setState(() {
+        isLoading = true;
+      });
+
+      final response =
+      await APIRequest().postRequest(route: '/register', data: data);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (response != 'error') {
+        if (response['success']) {
+          await storage.write(
+              key: 'authToken', value: response['token']);
+          await updateSharedPreference(response['user']);
+
+          updateUserProvider(response['user'], context);
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeNav(),
+            ),
+                (route) => false,
+          );
+        } else {
+          var data = {
+            "title": "Something went wrong",
+            "message": response['message'],
+          };
+
+          final snackBar = customSnackBar(
+              context: context, type: ContentType.failure, data: data);
+
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(snackBar);
+
+        }
+      } else {
+        var data = {
+          "title": "Something went wrong",
+          "message": "Something went wrong",
+        };
+        Navigator.of(context).pop();
+        final snackBar = customSnackBar(
+            context: context, type: ContentType.failure, data: data);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
     } else {
       setState(() {
         isLoading = false;
@@ -66,11 +121,6 @@ class _RegisterState extends State<Register> {
       });
     }
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -90,12 +140,15 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 35),
                       constraints: const BoxConstraints(minHeight: 245),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/top_bg.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              AppUtils.PrimaryColor.withOpacity(0.6),
+                              AppUtils.White
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
                       child: Center(
                           child: Padding(
                         padding: EdgeInsets.only(top: 0.0),
@@ -120,7 +173,7 @@ class _RegisterState extends State<Register> {
                               'Welcome',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline2!
+                                  .displayMedium!
                                   .copyWith(fontWeight: FontWeight.w800),
                               textAlign: TextAlign.center,
                             ),
@@ -128,10 +181,10 @@ class _RegisterState extends State<Register> {
                               height: 8.0,
                             ),
                             Text(
-                              'Create your ElCrypto account...',
+                              'Create your eltransfer account...',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
+                                  .bodyMedium!
                                   .copyWith(
                                       color:
                                           AppUtils.DarkColor.withOpacity(0.6),
@@ -210,7 +263,7 @@ class _RegisterState extends State<Register> {
                                   inputController: emailController,
                                   textInputType: TextInputType.emailAddress,
                                   onChanged: (value) {
-                                    formData['phone'] = value ?? "";
+                                    formData['email'] = value ?? "";
                                   },
                                   contentPadding: const EdgeInsets.only(
                                       left: 45, top: 17, bottom: 17),
@@ -303,7 +356,7 @@ class _RegisterState extends State<Register> {
                               onClickBtn: () {
                                 if (_formkey.currentState!.validate()) {
                                   print('All Good');
-                                  registerUser();
+                                  registerUser(context);
                                 } else {
                                   print("Invalid form Data");
                                 }
@@ -319,7 +372,7 @@ class _RegisterState extends State<Register> {
                                   "Already have an account? ",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyMedium!
                                       .copyWith(fontSize: 12),
                                 ),
                                 GestureDetector(
@@ -332,7 +385,7 @@ class _RegisterState extends State<Register> {
                                       "Sign In",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyMedium!
                                           .copyWith(
                                             fontSize: 12,
                                             color: AppUtils.PrimaryColor,

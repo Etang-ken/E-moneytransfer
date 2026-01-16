@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/app_utils.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -33,7 +33,7 @@ class _NotificationsState extends State<Notifications> {
               "Notifications",
               style: Theme.of(context)
                   .textTheme
-                  .headline4
+                  .headlineLarge
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -63,7 +63,7 @@ class _NotificationsState extends State<Notifications> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // const SizedBox(height: 10,),
-            
+
               Column(
                 children: [
                   notificationItem(context,
@@ -136,12 +136,12 @@ class _NotificationsState extends State<Notifications> {
 
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyMedium!
                       .copyWith(fontSize: 15),
                 ),
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 11,
                         color: AppUtils.SecondaryGray.withOpacity(0.7),
                       ),

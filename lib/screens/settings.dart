@@ -4,16 +4,17 @@ import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/detail_screens/change_password.dart';
-import 'package:emoneytransfer/screens/detail_screens/edit_profile.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/provider/user.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
+import 'package:eltransfer/api/url.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/screens/detail_screens/change_password.dart';
+import 'package:eltransfer/screens/detail_screens/edit_profile.dart';
+import 'package:eltransfer/screens/widgets/notification_icon.dart';
+import 'package:eltransfer/provider/user.dart';
+import 'package:eltransfer/widgets/general_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -135,7 +136,7 @@ class _SettingsState extends State<Settings> {
                     "Settings",
                     style: Theme.of(context)
                         .textTheme
-                        .headline4
+                        .headlineLarge
                         ?.copyWith(color: Colors.white),
                   ),
                   NotificationIcon(context: context)
@@ -213,7 +214,7 @@ class _SettingsState extends State<Settings> {
                           SizedBox(width: 10),
                           Text(userData.lastName ?? ""),
                         ]),
-                        Text(userData.phone ?? "")
+                        Text(userData.email ?? "")
                       ],
                     )),
 
@@ -236,6 +237,7 @@ class _SettingsState extends State<Settings> {
                     ),
 
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // profileModificationLink(
                         //     'Profile', Icons.person_outlined,
@@ -270,9 +272,29 @@ class _SettingsState extends State<Settings> {
                             onClick: () async {
                           await appLogOut(context);
                         }),
+                        Text(
+                            "Social Links",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!.copyWith(
+                              color: AppUtils.PrimaryColor,
+                            )
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        profileModificationLink(
+                            'Instagram',  FontAwesomeIcons.instagram,
+                            browseTo: AppUrl.appUrl+"instagram/"+appName),
+
+                        profileModificationLink(
+                            'Tiktok', Icons.tiktok,
+                            browseTo: AppUrl.appUrl+"tiktok/"+appName),
+
                         const SizedBox(
                           height: 80,
-                        )
+                        ),
                       ],
                     ),
                     // ),
@@ -291,6 +313,7 @@ class _SettingsState extends State<Settings> {
       {Widget? navTo, String? browseTo, VoidCallback? onClick}) {
     return GestureDetector(
       onTap: () {
+        print(AppUrl.appUrl+"about_app/"+appName);
         if (navTo != null) {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => navTo),
@@ -328,7 +351,7 @@ class _SettingsState extends State<Settings> {
                 ),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                 ),

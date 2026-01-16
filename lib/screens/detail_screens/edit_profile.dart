@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/api/request.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:eltransfer/api/request.dart';
+import 'package:eltransfer/api/url.dart';
+import 'package:eltransfer/helper/app_utils.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:emoneytransfer/helper/validator.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/provider/user.dart';
-import 'package:emoneytransfer/widgets/primary_button.dart';
-import 'package:emoneytransfer/widgets/text_field.dart';
+import 'package:eltransfer/helper/validator.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/screens/widgets/notification_icon.dart';
+import 'package:eltransfer/provider/user.dart';
+import 'package:eltransfer/widgets/primary_button.dart';
+import 'package:eltransfer/widgets/text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,7 +57,7 @@ class _EditProfileState extends State<EditProfile> {
       AppUtils.showSnackBar(
           context, ContentType.failure, 'Network error. Please try again.');
     } else {
-      final decodedResponse = jsonDecode(response.body);
+      final decodedResponse = response;
       if (decodedResponse["success"]) {
         final userData = decodedResponse['user'];
         await updateSharedPreference(userData);
@@ -141,7 +141,7 @@ class _EditProfileState extends State<EditProfile> {
                       "Edit Profile",
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headlineLarge
                           ?.copyWith(color: Colors.white),
                     ),
                   ],
@@ -167,29 +167,13 @@ class _EditProfileState extends State<EditProfile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Phone Number *',
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 5),
-                              TextInputField(
-                                placeholderText: '+237653251366',
-                                inputController: phoneController,
-                                enabled: false,
-                              ),
                               const SizedBox(height: 20),
                               Text(
                                 'Full Names *',
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700),
@@ -222,7 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyMedium!
                                     .copyWith(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700),
@@ -230,6 +214,7 @@ class _EditProfileState extends State<EditProfile> {
                               const SizedBox(height: 5),
                               TextInputField(
                                 placeholderText: 'admin@email.com ...',
+                                enabled: false,
                                 textInputType: TextInputType.emailAddress,
                                 inputController: emailController,
                                 inputValidator: (val) {

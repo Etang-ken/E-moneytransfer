@@ -1,11 +1,13 @@
+import 'package:eltransfer/netflix/netflix_home.dart';
+import 'package:eltransfer/services/services_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/helper/session_manager.dart';
-import 'package:emoneytransfer/screens/home.dart';
-import 'package:emoneytransfer/screens/settings.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/session_manager.dart';
+import 'package:eltransfer/screens/home.dart';
+import 'package:eltransfer/screens/settings.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
 
 class HomeNav extends StatefulWidget {
   final int navIndex;
@@ -38,7 +40,7 @@ class _HomeNavState extends State<HomeNav> {
         );
       });
     } else {
-      if(!mounted) return;
+      if (!mounted) return;
       updateUserProviderFromSharedPreference(context);
     }
   }
@@ -87,7 +89,7 @@ class _HomeNavState extends State<HomeNav> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: AppUtils.SecondaryGrayExtraLight,
+            backgroundColor: AppUtils.SecondaryGrayExtraLight,
             resizeToAvoidBottomInset: false,
             extendBody: true,
             body: IndexedStack(
@@ -131,13 +133,36 @@ class TabNavigationItem {
         TabNavigationItem(
           page: const Dashboard(),
           tab: const BottomNavigationBarItem(
-            label: "Transations",
+            label: "Home",
             icon: Padding(
               padding: EdgeInsets.only(top: 5),
-              child: Icon(Icons.money),
+              child: Icon(Icons.home),
             ),
           ),
         ),
+
+    TabNavigationItem(
+      page: ServiceHome(),
+      tab: const BottomNavigationBarItem(
+        label: "Services",
+        icon: Padding(
+          padding: EdgeInsets.only(top: 5),
+          child: Icon(Icons.add_business ),
+        ),
+      ),
+    ),
+        TabNavigationItem(
+          page:  NetflixHome(),
+          tab: const BottomNavigationBarItem(
+            label: "Netflix",
+            icon: Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Icon(Icons.tv),
+            ),
+          ),
+        ),
+
+
         TabNavigationItem(
             page: const Settings(),
             tab: const BottomNavigationBarItem(

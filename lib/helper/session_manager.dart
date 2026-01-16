@@ -39,6 +39,11 @@ class SessionManager {
     return full_name;
   }
 
+  Future<String> getId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt("id").toString() ?? "";
+  }
+
   Future<String> getPrivacy() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     String privacy = pref.getString("privacy") ?? "";

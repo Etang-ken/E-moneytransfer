@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/app_utils.dart';
 
 class NotificationIcon extends StatefulWidget {
   final BuildContext context;
@@ -12,9 +12,11 @@ class NotificationIcon extends StatefulWidget {
 class _NotificationIconState extends State<NotificationIcon> {
   @override
   Widget build(BuildContext context) {
+
+    return Container();
+
     return GestureDetector(
       onTap: () {
-        print('Clicked!!!');
         showDialog(
             context: context,
             // barrierDismissible: true,
@@ -57,11 +59,11 @@ class _NotificationIconState extends State<NotificationIcon> {
                     borderRadius: BorderRadius.circular(19)),
                 child: Text(
                   '02',
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: AppUtils.White,
-                      ),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                    color: AppUtils.White,
+                  ),
                 ),
               ),
             ),
@@ -102,7 +104,7 @@ class NotificationDialog extends StatelessWidget {
                 // const SizedBox(height: 10,),
                 Text(
                   'Notifications',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Container(
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
@@ -164,15 +166,15 @@ class NotificationDialog extends StatelessWidget {
                   message,
                   // softWrap: true,
                   maxLines: 2,
-                  
+
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyMedium!
                       .copyWith(fontSize: 13),
                 ),
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 10,
                         color: AppUtils.SecondaryGray.withOpacity(0.7),
                       ),

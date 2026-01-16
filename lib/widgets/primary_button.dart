@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/app_utils.dart';
 
 enum IconPosition { left, right }
 
@@ -9,11 +9,13 @@ class PrimaryButton extends StatelessWidget {
   final IconPosition? iconPosition;
   final Widget? btnIcon;
   final bool btnDisabled;
+  final Color? bgColor;
 
   PrimaryButton(
       {required this.buttonText,
       this.onClickBtn,
       this.btnIcon,
+      this.bgColor,
       this.iconPosition = IconPosition.right,
       this.btnDisabled = false});
 
@@ -34,7 +36,7 @@ class PrimaryButton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   backgroundColor: Color.fromARGB(255, 196, 195, 195),
-                  foregroundColor: Theme.of(context).primaryColorLight,
+                  foregroundColor: bgColor??Theme.of(context).primaryColorLight,
                   elevation: 0.0,
                   shadowColor: Colors.transparent),
               child: Row(
@@ -49,7 +51,7 @@ class PrimaryButton extends StatelessWidget {
                       : Container(width: 0, height: 0),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppUtils.White,
                         fontWeight: FontWeight.w600,
                         fontSize: 14.5),
@@ -71,7 +73,7 @@ class PrimaryButton extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: bgColor??Theme.of(context).primaryColor,
                   foregroundColor: Colors.white,
                   elevation: 0.0,
                   shadowColor: Colors.transparent),
@@ -87,7 +89,7 @@ class PrimaryButton extends StatelessWidget {
                       : Container(width: 0, height: 0),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 14.5),

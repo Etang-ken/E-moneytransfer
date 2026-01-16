@@ -1,6 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:eltransfer/helper/app_utils.dart';
 
 customSnackBar(
     {required BuildContext context,
@@ -38,15 +38,12 @@ customSnackBar(
                           ? AppUtils.YellowColor
                           : AppUtils.PrimaryColor,
                 ),
-                SizedBox(
-                  width: 10,
-                ),
                 Expanded(
                     child: Text(
                   data['message'],
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2!
+                      .bodyLarge!
                       .copyWith(fontWeight: FontWeight.w400),
                   maxLines: 5,
                 )),

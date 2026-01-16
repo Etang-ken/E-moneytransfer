@@ -1,29 +1,27 @@
 import 'dart:async';
 
-import 'package:emoneytransfer/onboarding/auth/register.dart';
+import 'package:eltransfer/provider/service.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/onboarding/auth/login.dart';
-import 'package:emoneytransfer/provider/transaction.dart';
-import 'package:emoneytransfer/provider/user.dart';
+import 'package:eltransfer/home_nav.dart';
+import 'package:eltransfer/onboarding/auth/login.dart';
+import 'package:eltransfer/provider/transaction.dart';
+import 'package:eltransfer/provider/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'firebase_options.dart';
+import 'helper/app_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //print('User granted permission: ${settings.authorizationStatus}');
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+  await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity,
+    androidProvider: AndroidProvider.safetyNet,
+    appleProvider: AppleProvider.appAttest,
   );
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Color(0xff0488DD), // navigation bar color
     statusBarColor: Color(0xff0488DD), // status bar color
@@ -33,6 +31,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ServiceProvider()),
         ChangeNotifierProvider(create: (context) => TransactionProvider()),
       ],
       child: MyApp(),
@@ -52,20 +51,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'pro4home',
+      title: 'El-Transfer',
       theme: ThemeData(
         // primarySwatch: MaterialColor(),
         // Define the default brightness and colors.
-        primaryColor: Color(0xFF008100),
+        primaryColor: AppUtils.PrimaryColor,
         hintColor: Color(0xffFF9719),
-        backgroundColor: Color(0xFF008100).withOpacity(0.03),
         unselectedWidgetColor: Colors.grey,
         primaryColorDark: Color(0xff000000),
         primaryColorLight: Color(0xffffffff),
         fontFamily: 'Barlow',
         textTheme: const TextTheme(
           // body text styles
-          bodyText1: TextStyle(
+          bodyMedium: TextStyle(
             color: Color(0xff212121),
             fontFamily: 'Barlow',
             fontStyle: FontStyle.normal,
@@ -73,7 +71,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.w400,
             height: 1.5,
           ),
-          bodyText2: TextStyle(
+          bodyLarge: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Barlow',
               height: 1.5,
@@ -82,7 +80,7 @@ class MyApp extends StatelessWidget {
               fontSize: 16),
 
           // heading styles
-          headline1: TextStyle(
+          displayLarge: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -90,7 +88,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700),
 
           // for secondary headers that are black
-          headline2: TextStyle(
+          displayMedium: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -98,7 +96,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700),
 
           // for secondary headers that are purple
-          headline3: TextStyle(
+          displaySmall: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -106,22 +104,22 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w700),
 
           // used for buttons
-          headline4: TextStyle(
+          headlineLarge: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.4),
 
-          headline5: TextStyle(
+          headlineMedium: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
               fontSize: 18,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.4),
-          headline6: TextStyle(
+          headlineSmall: TextStyle(
               color: Color(0xff212121),
               fontFamily: 'Poppins',
               fontStyle: FontStyle.normal,
@@ -161,15 +159,16 @@ class MyApp extends StatelessWidget {
     });
     return Container(
       decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-          image: const DecorationImage(
-              image: AssetImage('assets/images/splash_bg.png'),
-              fit: BoxFit.fill)),
+        color: AppUtils.PrimaryColor.withOpacity(0.3),
+        // image: const DecorationImage(
+        //     image: AssetImage('assets/images/splash_bg.png'),
+        //     fit: BoxFit.fill)
+      ),
       width: double.infinity,
       height: double.infinity,
       child: Center(
         child: Image.asset(
-          'assets/images/logo/elcrypto.png',
+          'assets/images/logo/eltransfer.png',
           height: 250,
         ),
       ),
