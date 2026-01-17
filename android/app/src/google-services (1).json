@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "91268554343",
+    "project_id": "findme-55315",
+    "storage_bucket": "findme-55315.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91268554343:android:bcbe610c137670f7ca3ec2",
+        "android_client_info": {
+          "package_name": "com.emoneytransfer.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp69hvL-ObWsc6PD44Roo85o878TUZ8-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91268554343:android:d42af0de71a5fe5dca3ec2",
+        "android_client_info": {
+          "package_name": "com.techrepublic.findme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp69hvL-ObWsc6PD44Roo85o878TUZ8-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91268554343-7vl4md1grd1tb5845v9sjkb2athuihbg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

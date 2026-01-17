@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:elcrypto/helper/app_utils.dart';
 
 class NotificationIcon extends StatefulWidget {
   final BuildContext context;
@@ -12,63 +12,41 @@ class NotificationIcon extends StatefulWidget {
 class _NotificationIconState extends State<NotificationIcon> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print('Clicked!!!');
-        showDialog(
-            context: context,
-            // barrierDismissible: true,
-            barrierColor: Colors.transparent,
-            builder: (BuildContext context) {
-              return NotificationDialog();
-              // return Container(
-              //   height: 60,
-              //   width: 100,
-              //   color: Colors.white,
-              // );
-            });
-      },
-      child: Container(
-        width: 40,
-        height: 40,
-        child: Stack(
-          children: [
-            Positioned(
-              // bottom: 0,
-              child: Center(
-                child: Icon(
-                  Icons.notifications_outlined,
-                  color: AppUtils.White,
-                ),
-              ),
-            ),
-            Positioned(
-              // bottom: 30,
-              top: 3,
-              right: 5,
-              child: Container(
-                height: 17,
-                // width: 17,
-                constraints: const BoxConstraints(minWidth: 17),
-                padding: const EdgeInsets.all(2),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: AppUtils.RedColor,
-                    borderRadius: BorderRadius.circular(19)),
-                child: Text(
-                  '02',
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: AppUtils.White,
-                      ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    // return GestureDetector(
+    //   onTap: () {
+    //     print('Clicked!!!');
+    //     showDialog(
+    //         context: context,
+    //         // barrierDismissible: true,
+    //         barrierColor: Colors.transparent,
+    //         builder: (BuildContext context) {
+    //           return NotificationDialog();
+    //           // return Container(
+    //           //   height: 60,
+    //           //   width: 100,
+    //           //   color: Colors.white,
+    //           // );
+    //         });
+    //   },
+    //   child: Container(
+    //     width: 40,
+    //     height: 40,
+    //     child: Stack(
+    //       children: [
+    //         Positioned(
+    //           // bottom: 0,
+    //           child: Center(
+    //             child: Icon(
+    //               Icons.notifications_outlined,
+    //               color: AppUtils.White,
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
+    return Container();
   }
 }
 
@@ -102,7 +80,7 @@ class NotificationDialog extends StatelessWidget {
                 // const SizedBox(height: 10,),
                 Text(
                   'Notifications',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Container(
                   constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
@@ -110,21 +88,8 @@ class NotificationDialog extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     child: Column(
                       children: [
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                         notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                         notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                        notificationItem(context, 'New Product request has been orderer', '2 hours ago'),
-                      ],
+
+                         ],
                     ),
                   ),
                 )
@@ -164,15 +129,15 @@ class NotificationDialog extends StatelessWidget {
                   message,
                   // softWrap: true,
                   maxLines: 2,
-                  
+
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1!
+                      .bodyMedium!
                       .copyWith(fontSize: 13),
                 ),
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 10,
                         color: AppUtils.SecondaryGray.withOpacity(0.7),
                       ),

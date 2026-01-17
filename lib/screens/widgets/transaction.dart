@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:provider/provider.dart';
+
+import '../../giftcard/create/payment_method.dart';
+import '../../provider/service.dart';
+import '../detail_screens/add_new_transaction.dart';
 
 Widget transactionCard(BuildContext context, String transactionType,
     String price, String status, String date) {
@@ -9,13 +14,7 @@ Widget transactionCard(BuildContext context, String transactionType,
     padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
     decoration: BoxDecoration(
         color: AppUtils.White,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: const [
-          BoxShadow(
-              color: Color.fromARGB(255, 211, 211, 211),
-              blurRadius: 10,
-              spreadRadius: 0.5)
-        ]),
+        borderRadius: BorderRadius.circular(8)),
     child: Row(
       children: [
         const SizedBox(
@@ -27,20 +26,13 @@ Widget transactionCard(BuildContext context, String transactionType,
             children: [
               Text(
                 transactionType,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       // fontSize: 11,
                       fontWeight: FontWeight.w700,
                     ),
               ),
               const SizedBox(
                 height: 5,
-              ),
-              Text(
-                'XAF $price ',
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: 20,
-                      color: AppUtils.DarkColor.withOpacity(0.7),
-                    ),
               ),
               const SizedBox(
                 height: 10,
@@ -73,7 +65,7 @@ Widget transactionCard(BuildContext context, String transactionType,
                             status,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1!
+                                .bodyMedium!
                                 .copyWith(
                                   fontSize: 11,
                                   color: AppUtils.DarkColor.withOpacity(0.9),
@@ -99,7 +91,7 @@ Widget transactionCard(BuildContext context, String transactionType,
                       ),
                       Text(
                         date,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontSize: 11,
                               color: AppUtils.DarkColor.withOpacity(0.9),
                             ),
@@ -127,4 +119,86 @@ Widget transactionCard(BuildContext context, String transactionType,
       ],
     ),
   );
+}
+
+Widget features(BuildContext context) {
+  return Consumer<ServiceProvider>(builder: (_, data, __) {
+    return  Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: Text("Services",
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge ?.copyWith(fontWeight: FontWeight.w600, fontSize: 14))),
+          Stack(children: [
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+              decoration: BoxDecoration(
+                  color: AppUtils.White,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                children: [
+                  Wrap(
+                    direction: Axis.horizontal,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddNewTransaction(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          decoration: BoxDecoration(color: Color.fromARGB(255, 211, 211, 211) , borderRadius:BorderRadius.circular(40) ),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.currency_exchange, size: 20),
+                              Text("Buy Crypto", textAlign: TextAlign.center, style: TextStyle(fontSize: 12))
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentMethodScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          decoration: BoxDecoration(color: Color.fromARGB(255, 211, 211, 211) , borderRadius:BorderRadius.circular(40) ),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.card_giftcard_rounded, size: 20),
+                              Text("Sell Gift Card", style: TextStyle(fontSize: 12))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            if(data.isLoading)...[
+              showIsLoading()
+            ]
+          ])
+        ]);
+  });
 }

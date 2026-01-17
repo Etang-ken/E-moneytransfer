@@ -5,63 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SessionManager {
 
   final String auth_token = "token";
-//set data into shared preferences like this
-  Future<void> setLogin(
-      String auth_token,
-      String firstname,
-      String lastname,
-      String email,
-      String profile,
-      String phone,
-      String bio,
-      String privacy,
-      String terms,
-      String faq,
-      String about) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(auth_token);
-    prefs.setString(this.auth_token, auth_token);
-    prefs.setString("email", email);
-    prefs.setString("profile", profile);
-    prefs.setString("phone", phone);
-    prefs.setString("firstname", firstname);
-    prefs.setString("lastname", lastname);
-    prefs.setString("bio", bio);
-    prefs.setBool("isLoggedin", true);
-    prefs.setString("privacy", privacy);
-    prefs.setString("terms", terms);
-    prefs.setString("faq", faq);
-    prefs.setString("about", about);
-  }
 
-  Future<String> getFullName() async  {
-    String full_name =  (await this.getFirstName() +" "+await this.getLastName());
-    return full_name;
-  }
-
-  Future<String> getPrivacy() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String privacy = pref.getString("privacy") ?? "";
-    return privacy;
-  }
-
-  Future<String> getTerms() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String terms = pref.getString("terms") ?? "";
-    return terms;
-  }
-
-  Future<String> getFaq() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String faq = pref.getString("faq") ?? "";
-    return faq;
-  }
-
-  Future<String> getAbout() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String about = pref.getString("about") ?? "";
-    return about;
-  }
 
   Future<void> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -105,6 +49,11 @@ class SessionManager {
     return prefs.getBool("isFirstTime") ?? true;
   }
 
+  Future<String> getId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt("id").toString() ?? "";
+  }
+
   Future<void> setProfileStatus(bool status) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("profile_status", status);
@@ -127,29 +76,6 @@ class SessionManager {
     String auth_token;
     auth_token = pref.getString(this.auth_token) ?? "";
     return auth_token;
-  }
-
-  Future<String> getRole() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getString("role") ?? "";
-  }
-
-  Future<String> getFirstName() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String firstname = pref.getString("firstname") ?? "";
-    return firstname;
-  }
-
-  Future<String> getLastName() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String lastname = pref.getString("lastname") ?? "";
-    return lastname;
-  }
-
-  Future<String> getCartItems() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String cart = pref.getString("cart") ?? "[]";
-    return cart;
   }
 
   Future<void> setCartItems(String items) async {
@@ -226,102 +152,6 @@ class SessionManager {
     return jsonDecode(quiz);
   }
 
-  Future<void> setQuestionAnswer(String question_id, String answer_id) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    dynamic quiz = jsonDecode(prefs.getString("quiz") ?? "[]");
-    dynamic questions = quiz["questions"];
-    for (int i = 0; i < questions.length; i++) {
-      dynamic question = questions[i];
-      if (question['id'] == question_id) {
-        question['answer'] = answer_id;
-        questions[i] = question;
-      }
-    }
-    quiz["questions"] = questions;
-    await setQuiz(jsonEncode(quiz));
-  }
-
-  Future<String> quizResult() async {
-    int passed = 0;
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    dynamic quiz = jsonDecode(prefs.getString("quiz") ?? "[]");
-    dynamic questions = quiz["questions"];
-    dynamic results = questions.map<dynamic>((question) {
-      for (int i = 0; i < question['answers'].length; i++) {
-        if (question['answer'] == question['answers'][i]['id'] &&
-            question['answers'][i]['correct'] == '1') {
-          passed = passed + 1;
-        }
-      }
-      return {
-        'question_id': question['id'],
-        'answer_id': question['answer'],
-      };
-    }).toList();
-
-    return "{\"results\":" +
-        jsonEncode(results) +
-        ",\"passed\":" +
-        passed.toString() +
-        "}";
-  }
-
-  //Preferences
-  Future<void> setVideoAutoplay(bool val) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("auto_play", val);
-  }
-
-  Future<bool> getVideoAutoplay() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool("auto_play") ?? true;
-  }
-
-  Future<void> setVideoQuality(String val) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("video_quality", val);
-  }
-
-  Future<String> getVideoQuality() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getString("video_quality") ?? "360p";
-  }
-
-  Future<void> setDownloadOverWifi(bool val) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("download_over_wifi", val);
-  }
-
-  Future<bool> getDownloadOverWifi() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool("download_over_wifi") ?? false;
-  }
-
-  Future<void> setStoreVideo(bool val) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("store_video", val);
-  }
-
-  Future<bool> getStoreVideo() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool("store_video") ?? false;
-  }
-
-  Future<void> setDeleteResourceOnCoureCompletion(bool val) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("delete_resource", val);
-  }
-
-  Future<bool> getDeleteResourceOnCoureCompletion() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool("delete_resource") ?? false;
-  }
-
-  Future<String> getPhone() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    String email = pref.getString("phone") ?? "";
-    return email;
-  }
 
   Future<void> setPhone(phone_number) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:elcrypto/helper/app_utils.dart';
 class CheckBoxInput extends StatefulWidget {
   final bool isChecked;
   final Function(bool?) onChangeChecked;

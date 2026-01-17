@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
+import 'package:elcrypto/helper/app_utils.dart';
 
 enum IconPosition { left, right }
 
@@ -49,7 +49,7 @@ class PrimaryButton extends StatelessWidget {
                       : Container(width: 0, height: 0),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppUtils.White,
                         fontWeight: FontWeight.w600,
                         fontSize: 14.5),
@@ -87,7 +87,7 @@ class PrimaryButton extends StatelessWidget {
                       : Container(width: 0, height: 0),
                   Text(
                     buttonText,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 14.5),

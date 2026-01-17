@@ -16,7 +16,6 @@ Future<void> saveUser(dynamic user, String token) async {
 Future<void> saveUserWithoutToken(dynamic user) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString("userData", json.encode(user));
-  prefs.setString("role", user['role']);
   prefs.setString("phone", user['phone']);
   prefs.setString("email", user['email']??"");
   prefs.setBool("isLoggedIn", true);

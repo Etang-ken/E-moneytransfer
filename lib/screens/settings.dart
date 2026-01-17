@@ -4,16 +4,16 @@ import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:emoneytransfer/api/url.dart';
-import 'package:emoneytransfer/helper/app_utils.dart';
-import 'package:emoneytransfer/home_nav.dart';
-import 'package:emoneytransfer/screens/detail_screens/change_password.dart';
-import 'package:emoneytransfer/screens/detail_screens/edit_profile.dart';
-import 'package:emoneytransfer/screens/widgets/notification_icon.dart';
-import 'package:emoneytransfer/provider/user.dart';
-import 'package:emoneytransfer/widgets/general_button.dart';
+import 'package:elcrypto/api/url.dart';
+import 'package:elcrypto/helper/app_utils.dart';
+import 'package:elcrypto/home_nav.dart';
+import 'package:elcrypto/screens/detail_screens/change_password.dart';
+import 'package:elcrypto/screens/detail_screens/edit_profile.dart';
+import 'package:elcrypto/screens/widgets/notification_icon.dart';
+import 'package:elcrypto/provider/user.dart';
+import 'package:elcrypto/widgets/general_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
@@ -110,9 +110,9 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     _imagePicker = ImagePicker();
-     PackageInfo.fromPlatform().then((value){
-        appName = value.appName;
-     });
+     // PackageInfo.fromPlatform().then((value){
+     //    appName = value.appName;
+     // });
   }
 
   @override
@@ -135,7 +135,7 @@ class _SettingsState extends State<Settings> {
                     "Settings",
                     style: Theme.of(context)
                         .textTheme
-                        .headline4
+                        .headlineLarge
                         ?.copyWith(color: Colors.white),
                   ),
                   NotificationIcon(context: context)
@@ -213,7 +213,7 @@ class _SettingsState extends State<Settings> {
                           SizedBox(width: 10),
                           Text(userData.lastName ?? ""),
                         ]),
-                        Text(userData.phone ?? "")
+                        Text(userData.email ?? "")
                       ],
                     )),
 
@@ -236,6 +236,7 @@ class _SettingsState extends State<Settings> {
                     ),
 
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // profileModificationLink(
                         //     'Profile', Icons.person_outlined,
@@ -249,30 +250,56 @@ class _SettingsState extends State<Settings> {
 
                         profileModificationLink(
                             'About', Icons.info_outline,
-                            browseTo: AppUrl.appUrl+"about_app/"+appName),
+                            browseTo: AppUrl.appUrl+"about_app/elcrypto"),
 
                         profileModificationLink(
                             'Contact Us', Icons.phone_outlined,
-                            browseTo: AppUrl.appUrl+"about_app/"+appName),
+                            browseTo: AppUrl.appUrl+"contact/elcrypto"),
 
                         profileModificationLink('FAQs', Icons.question_mark,
-                            browseTo: AppUrl.appUrl+"faq/"+appName),
+                            browseTo: AppUrl.appUrl+"faq/elcrypto"),
 
                         profileModificationLink(
                             'Privacy Policy', Icons.privacy_tip_outlined,
-                            browseTo: AppUrl.appUrl+"privacy_and_policy/"+appName),
+                            browseTo: AppUrl.appUrl+"privacy_and_policy/elcrypto"),
 
                         profileModificationLink(
                             'Terms and Conditions', Icons.description_outlined,
-                            browseTo: AppUrl.appUrl+"terms_of_use/"+appName),
+                            browseTo: AppUrl.appUrl+"terms_of_use/elcrypto"),
 
                         profileModificationLink('Logout', Icons.logout,
                             onClick: () async {
                           await appLogOut(context);
                         }),
                         const SizedBox(
+                          height: 40,
+                        ),
+
+                        Text(
+                          "Social Links",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!.copyWith(
+                              color: AppUtils.PrimaryColor,
+                          )
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        profileModificationLink(
+                            'Instagram',  FontAwesomeIcons.instagram,
+                            browseTo: AppUrl.appUrl+"instagram/elcrypto"),
+
+                        profileModificationLink(
+                            'Tiktok', Icons.tiktok,
+                            browseTo: AppUrl.appUrl+"tiktok/elcrypto"),
+
+                        const SizedBox(
                           height: 80,
-                        )
+                        ),
+
+
                       ],
                     ),
                     // ),
@@ -328,7 +355,7 @@ class _SettingsState extends State<Settings> {
                 ),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                 ),

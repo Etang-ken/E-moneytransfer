@@ -1,0 +1,2 @@
+/Users/nkstore/Documents/task-worker/flutter/E-moneytransfer/android/app/.cxx/RelWithDebInfo/6b6e4h1r/x86/CMakeFiles/rebuild_cache.dir
+/Users/nkstore/Documents/task-worker/flutter/E-moneytransfer/android/app/.cxx/RelWithDebInfo/6b6e4h1r/x86/CMakeFiles/edit_cache.dir
